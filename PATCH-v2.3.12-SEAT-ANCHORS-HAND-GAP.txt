@@ -1,0 +1,5 @@
+BanPeeThai v2.3.12
+- Updated all five player marker positions to align with the five chair positions on the fixed stage, including the top-center seat.
+- Kept seat coordinates stage-relative so they scale with the game layout during browser zoom.
+- Increased spacing between the hand heading/count and the first row of cards to prevent overlap with the heading text.
+- Preserved the existing game logic, cards, turn flow, and assets from v2.3.11.

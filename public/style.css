@@ -1857,3 +1857,24 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
 #gameScreen .hand-zone .hand-content-layout{padding-top:28px!important;box-sizing:border-box!important;}
 #gameScreen:not(.hidden) .hand-zone #hand.hand,
 #gameScreen .hand-zone #hand.hand{margin-top:0!important;}
+
+/* v2.3.12 — chair-anchored player markers + extra hand-heading clearance.
+   Coordinates are percentages of the same fixed game stage, so browser zoom
+   scales the table and its seat markers together instead of drifting. */
+#gameScreen:not(.hidden) .players-ring{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;overflow:visible!important;}
+#gameScreen:not(.hidden) .players-ring .seat-1{left:17.4%!important;top:58%!important}
+#gameScreen:not(.hidden) .players-ring .seat-2{left:29.1%!important;top:51.5%!important}
+#gameScreen:not(.hidden) .players-ring .seat-3{left:49.7%!important;top:24.5%!important}
+#gameScreen:not(.hidden) .players-ring .seat-4{left:58.5%!important;top:51.5%!important}
+#gameScreen:not(.hidden) .players-ring .seat-5{left:69.2%!important;top:58.5%!important}
+#gameScreen:not(.hidden) .hand-zone .hand-heading{flex:0 0 12%!important;height:12%!important;min-height:36px!important;overflow:visible!important;z-index:25!important}
+#gameScreen:not(.hidden) .hand-zone .hand-content-layout{padding:48px 2% 4px!important;box-sizing:border-box!important;overflow:hidden!important;min-height:0!important}
+#gameScreen:not(.hidden) .hand-zone #hand.hand{margin-top:0!important;align-items:stretch!important;overflow:hidden!important}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .players-ring .seat-1{left:17.4%!important;top:58%!important}
+ #gameScreen:not(.hidden) .players-ring .seat-2{left:29.1%!important;top:51.5%!important}
+ #gameScreen:not(.hidden) .players-ring .seat-3{left:49.7%!important;top:24.5%!important}
+ #gameScreen:not(.hidden) .players-ring .seat-4{left:58.5%!important;top:51.5%!important}
+ #gameScreen:not(.hidden) .players-ring .seat-5{left:69.2%!important;top:58.5%!important}
+ #gameScreen:not(.hidden) .hand-zone .hand-content-layout{padding-top:38px!important}
+}
