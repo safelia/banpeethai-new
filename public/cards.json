@@ -6,9 +6,10 @@
     "icon": "❤️",
     "color": "rose",
     "copies": 0,
-    "desc": "ผู้เล่นทุกคนเริ่มต้นด้วยหัวใจ 3 ดวง ไม่มีการ์ดหัวใจในกองจั่ว",
-    "effect": "ถ้าหัวใจเหลือ 0 ดวง จะออกจากเกมทันที",
-    "image": "/assets/cards/card-15.jpg"
+    "desc": "การ์ดหัวใจแสดงพลังชีวิตของผู้เล่น",
+    "effect": "หัวใจหมด 0 ดวง จะออกจากเกมทันที การ์ดนี้ใช้เล่นไม่ได้",
+    "image": "/assets/cards/finished-special/heart-card.webp",
+    "fullArt": true
   },
   {
     "id": "guardian",
@@ -154,14 +155,15 @@
   },
   {
     "id": "friend-holy-water",
-    "name": "พรมน้ำมนต์ใส่เพื่อน",
+    "name": "พ่นน้ำมนต์ใส่เพื่อน",
     "type": "ช่วยเหลือ",
     "icon": "💧",
     "color": "cyan",
     "copies": 4,
-    "desc": "เลือกเพื่อน 1 คนในบ้านเพื่อพรมน้ำมนต์ให้กำลังใจและฟื้นฟูหัวใจ",
-    "effect": "เพิ่มหัวใจให้ผู้เล่นเป้าหมาย 1 ดวง (สูงสุด 3 ดวง) และเพิ่มการ์ดหัวใจเข้ามือ",
-    "image": "/assets/cards/card-11.jpg"
+    "desc": "เลือกเพื่อน 1 คนที่หัวใจยังไม่เต็ม เพื่อเพิ่มหัวใจให้เพื่อน",
+    "effect": "เพิ่มหัวใจให้เพื่อน 1 ดวง (สูงสุด 3 ดวง) และเพิ่มการ์ดหัวใจเข้ามือเพื่อน",
+    "image": "/assets/cards/finished-special/friend-holy-water.webp",
+    "fullArt": true
   },
   {
     "id": "blessed-rice",
@@ -195,31 +197,34 @@
     "icon": "🦎",
     "color": "green",
     "copies": 5,
-    "desc": "จิ้งจกสีมุกวิ่งผ่านเสาเรือน เป็นลางให้เลือกเส้นทางอย่างระวัง",
-    "effect": "ดูการ์ดบนสุด 2 ใบ แล้วเลือกเก็บ 1 ใบ",
-    "image": "/assets/cards/card-13.jpg"
+    "desc": "จุ๊ๆๆๆๆๆ",
+    "effect": "ดูการ์ดบนสุดได้ 2 ใบ แล้วเลือกเก็บได้ 1 ใบ",
+    "image": "/assets/cards/finished-omens/gecko-omen.webp",
+    "fullArt": true
   },
   {
     "id": "owl",
-    "name": "เสียงนกที่เท้าถนน",
+    "name": "เสียงนกแสก",
     "type": "ลางบอกเหตุ",
     "icon": "🦉",
     "color": "amber",
     "copies": 4,
-    "desc": "เสียงนกกลางคืนเตือนว่ามีบางอย่างซ่อนอยู่บนสุดของกองจั่ว",
-    "effect": "เปิดดูการ์ดบนสุดของกองจั่ว",
-    "image": "/assets/cards/card-12.jpg"
+    "desc": "แสกกกกก แสกกกกกก",
+    "effect": "ดูการ์ดบนสุดได้ 1 ใบ เลือกเก็บก็ได้ ไม่เก็บก็ได้",
+    "image": "/assets/cards/finished-omens/owl-omen.webp",
+    "fullArt": true
   },
   {
     "id": "eye",
-    "name": "ตาวาวกระจก",
+    "name": "มองผ่านกระจก",
     "type": "ลางบอกเหตุ",
     "icon": "👁️",
     "color": "teal",
     "copies": 4,
-    "desc": "ดวงตาในกระจกสะท้อนความลับของผู้มาเยือนอีกคน",
-    "effect": "สุ่มเปิดการ์ด 1 ใบจากมือผู้เล่นที่เลือก",
-    "image": "/assets/cards/card-22.jpg"
+    "desc": "ไหนขอดูหน่อยสิ",
+    "effect": "ดูการ์ดบนมือเพื่อนได้ แล้วเลือกมาเป็นของตัวเองได้ 1 ใบ",
+    "image": "/assets/cards/finished-omens/mirror-omen.webp",
+    "fullArt": true
   },
   {
     "id": "key",
@@ -230,7 +235,7 @@
     "copies": 10,
     "desc": "กุญแจนี้เก็บให้ดี ๆ ล่ะ",
     "effect": "เมื่อเก็บกุญแจครบ 3 ดอก จะสามารถหนีออกจากบ้านผีไทยได้",
-    "image": "/assets/cards/finished-helpers/thai-house-key.png",
+    "image": "/assets/cards/finished-helpers/thai-house-key.webp",
     "fullArt": true
   },
   {
@@ -242,7 +247,7 @@
     "copies": 5,
     "desc": "เชื่อแสงนี้สิ",
     "effect": "จั่วการ์ดเพิ่มได้อีก 1 ใบ แล้วจัดการผลของการ์ดที่จั่วได้ตามปกติ",
-    "image": "/assets/cards/finished-helpers/firefly-guide.png",
+    "image": "/assets/cards/finished-helpers/firefly-guide.webp",
     "fullArt": true
   },
   {
@@ -254,7 +259,7 @@
     "copies": 5,
     "desc": "ไปหยิบสิ่งนั้นมาให้หน่อยไอ้เหมียว",
     "effect": "ขโมยกุญแจเรือนไทยจากผู้เล่นคนอื่นได้ 1 ดอก",
-    "image": "/assets/cards/finished-helpers/black-lucky-cat.png",
+    "image": "/assets/cards/finished-helpers/black-lucky-cat.webp",
     "fullArt": true
   },
   {
@@ -266,7 +271,7 @@
     "copies": 5,
     "desc": "กลิ่นหอมสบายใจจริง ๆ",
     "effect": "เมื่อจั่วได้ เพิ่มหัวใจ 1 ดวง หากหัวใจเต็ม สามารถเก็บไว้ใช้ป้องกันผีได้ 1 ครั้ง",
-    "image": "/assets/cards/finished-helpers/lotus-heart.png",
+    "image": "/assets/cards/finished-helpers/lotus-heart.webp",
     "fullArt": true
   },
   {

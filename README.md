@@ -26,7 +26,7 @@ npm start
 
 ## v2.1.0 — Reference-scene interface
 
-- Uses `public/assets/game-layout-reference.png`, the supplied 1672×941 reference scene.
+- Uses `public/assets/game-layout-reference.webp`, the supplied 1672×941 reference scene.
 - Fixed 16:9 gameplay stage, no page scrolling while the game is open.
 - Transparent hit areas for menu, draw, end turn, escape, exit room and sound toggle.
 - Hand cards are dynamically sized to fit the hand panel without negative margins or horizontal overflow.
