@@ -284,5 +284,89 @@
     "desc": "ผีน้อยตัวจิ๋วอยากช่วยคุณหาทางออก",
     "effect": "ป้องกันผลร้ายครั้งถัดไป",
     "image": "/assets/cards/card-18.jpg"
+  },
+  {
+    "id": "skip",
+    "name": "ข้ามผู้เล่น",
+    "type": "แอ็กชัน",
+    "icon": "⏭️",
+    "color": "red",
+    "copies": 4,
+    "desc": "เลือกผู้เล่นที่จะอดเล่นในรอบถัดไป",
+    "effect": "เลือกผู้เล่น 1 คนให้ข้ามเทิร์นถัดไป",
+    "image": "/assets/cards/finished-actions/skip.webp",
+    "fullArt": true
+  },
+  {
+    "id": "ban",
+    "name": "ห้ามเล่น",
+    "type": "แอ็กชัน",
+    "icon": "🚫",
+    "color": "red",
+    "copies": 3,
+    "desc": "หยุดเพื่อนคนหนึ่งไม่ให้เล่นในรอบถัดไป",
+    "effect": "เลือกผู้เล่น 1 คนให้ไม่ได้เล่นในรอบถัดไป",
+    "image": "/assets/cards/finished-actions/ban.webp",
+    "fullArt": true
+  },
+  {
+    "id": "skip-next",
+    "name": "ข้ามการจั่ว",
+    "type": "แอ็กชัน",
+    "icon": "🃏",
+    "color": "red",
+    "copies": 4,
+    "desc": "ขอไม่หยิบนะ",
+    "effect": "ใช้การ์ดนี้แทนการจั่วได้ 1 ครั้ง",
+    "image": "/assets/cards/finished-actions/skip-next.webp",
+    "fullArt": true
+  },
+  {
+    "id": "vase",
+    "name": "ข้ามผู้เล่นคนถัดไป",
+    "type": "แอ็กชัน",
+    "icon": "➡️",
+    "color": "red",
+    "copies": 3,
+    "desc": "เสียงแก้วแตกดังมาก เพื่อนตกใจสุดๆ",
+    "effect": "ผู้เล่นคนถัดไปจะไม่ได้เล่นในรอบต่อไป",
+    "image": "/assets/cards/finished-actions/vase.webp",
+    "fullArt": true
+  },
+  {
+    "id": "ghost-visit",
+    "name": "ลากเพื่อนไปหาผี",
+    "type": "แอ็กชัน",
+    "icon": "👻",
+    "color": "red",
+    "copies": 3,
+    "desc": "มึงมาดูไรนี่ดิ",
+    "effect": "เลือกผู้เล่น 1 คนให้เสียหัวใจ 1 ดวง เว้นแต่มีการ์ดป้องกัน",
+    "image": "/assets/cards/finished-actions/ghost-visit.webp",
+    "fullArt": true
+  },
+  {
+    "id": "ghost-disguise",
+    "name": "ปลอมเป็นผี",
+    "type": "แอ็กชัน",
+    "icon": "👻",
+    "color": "red",
+    "copies": 3,
+    "desc": "แฮร่!! ตกใจละสิ",
+    "effect": "เลือกผู้เล่น 1 คนให้เสียหัวใจ 1 ดวงทันที ป้องกันไม่ได้",
+    "image": "/assets/cards/finished-actions/ghost-disguise.webp",
+    "fullArt": true
+  },
+  {
+    "id": "kumarn",
+    "name": "กุมารชวนไปเล่น",
+    "type": "แอ็กชัน",
+    "icon": "👶",
+    "color": "red",
+    "copies": 3,
+    "desc": "หนูเหงาไปเล่นด้วยกันสิ",
+    "effect": "เมื่อจั่วได้ จะอดเล่นรอบถัดไปทันที",
+    "image": "/assets/cards/finished-actions/kumarn.webp",
+    "fullArt": true
   }
 ]

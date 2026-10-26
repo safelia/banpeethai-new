@@ -104,3 +104,9 @@ Syntax checked with Node.js; full live multiplayer gameplay still requires deplo
 - Replaced the legacy generic `tani` ghost entry with three integrated full-art cards: ผีนางรำ, ผีเจ้ากรรมนายเวร, and ผีเปรต.
 - Each dangerous ghost immediately removes one heart on draw; protection cards cannot prevent it.
 - Draw reveal displays only the finished card image, with no duplicate title/description/action UI.
+
+
+## v2.3.7 — Finished action cards
+- Added seven finished-art action cards using the provided full-card illustrations.
+- Action card artwork is shown as a single complete card in reveal and hand views.
+- Action card effects use the existing turn/target/protection game logic.
