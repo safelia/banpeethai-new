@@ -33,3 +33,17 @@ npm start
 - Online players can always leave the room; surrender is requested only when allowed by the game rules.
 
 Deploy commands: Build `npm install`; Start `npm start`; Health check `/health`.
+
+
+## v2.1.1 click-target fix
+- Added a direct-child transparent hotspot layer aligned to the reference artwork.
+- Hotspots forward to the existing game actions for menu, sound, leave room, draw, escape, and end turn.
+- Cache-busted CSS and JS URLs to reduce stale asset loading.
+
+
+## v2.1.2 interaction and hand layout fix
+- Invisible hitboxes now call the underlying game actions directly rather than forwarding clicks through another button.
+- Hitboxes are aligned to the centered 16:9 viewport stage and elevated above the game scene.
+- Hand cards are constrained to the bottom artwork panel with wrapped text and horizontal scrolling when needed.
+- Card reveal dialog is centered instead of clipping against the left edge.
+- CSS and JS cache version bumped to v2.1.2.

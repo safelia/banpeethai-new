@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#211523">
 <title>บ้านผีไทย — Thai Spirit Card Game v2.1.0</title>
-<link rel="stylesheet" href="/style.css?v=2.1.0">
+<link rel="stylesheet" href="/style.css?v=2.1.2">
 </head>
 <body>
 <div class="ambient"></div>
@@ -55,6 +55,15 @@
  <div class="game-layout ritual-layout"><section class="table-panel ritual-panel"><div class="turn-banner" id="turnBanner">ถึงตาคุณแล้ว</div><div class="night-omen" id="nightOmen">คำทำนายประจำคืน • 🌫️ หมอกหนาทึบปกคลุมเรือนไทย…</div><div class="table-art ritual-scene"><div class="table-scene-heading"><span>🏮 บ้านผีไทย • วงพิธีสำรวจเรือน</span><span>รอบที่ <b id="roundCount">1</b></span></div><div id="playersList" class="players-ring" aria-label="ผู้เล่นรอบโต๊ะ"></div><div class="table-play-area ritual-table"><div class="table-pile discard-pile" id="discardTop"><span class="discard-empty">—</span><small>กองทิ้ง</small></div><div class="table-center"><p id="tableMessage">ถึงตาคุณแล้ว จั่วการ์ด 1 ใบ</p><button class="deck-stack" id="tableDeck" type="button" aria-label="จั่วการ์ด"><span class="deck-card-back back-two">✦</span><span class="deck-card-back">✦</span><b>กองจั่ว</b><small id="tableDeckCount">0 ใบ</small></button></div><div class="table-pile table-amulet"><span>🕯️</span><small>แท่นบูชา</small></div></div><div class="game-actions table-actions"><button class="primary" id="drawCard">🃏 จั่วการ์ด</button><button class="secondary" id="escapeBtn">🗝️ หนีออกจากบ้าน</button><button class="secondary" id="endTurn" aria-label="จบเทิร์นอัตโนมัติ">จบเทิร์น ↗</button></div></div><span id="deckCount" class="hidden">กองจั่ว</span><section class="hand-zone"><div class="hand-heading"><h3>🃏 การ์ดในมือ</h3><small id="handCount">0 ใบ</small></div><div class="hand-content-layout"><div id="hand" class="hand"></div></div></section></section><aside class="game-side-rail" aria-label="สถานะและประวัติเกม"><section class="hand-info-card side-status-card"><h4>📜 สถานะเกม</h4><div class="hand-stat-row"><span>ไพ่ในมือ</span><b id="sideHandCount">0 ใบ</b></div><div class="hand-stat-row"><span>ไพ่ในกองจั่ว</span><b id="sideDeckCount">— ใบ</b></div><div class="hand-stat-row"><span>ผู้เล่นที่ยังอยู่</span><b id="sidePlayersCount">—</b></div><div class="hand-stat-row"><span>รอบปัจจุบัน</span><b id="sideRoundCount">1</b></div><div class="hand-stat-row"><span>ถึงตา</span><b id="sideCurrentTurn">—</b></div><p class="hand-info-note">ใช้การ์ดแล้วจบรอบให้อัตโนมัติ • กุญแจครบ 3 ดอกชนะทันที</p></section><section class="hand-info-card hand-history-card"><h4>🕯️ ประวัติของผู้เล่นทุกคน</h4><p class="history-subtitle">การจั่ว การใช้การ์ด การป้องกัน และกุญแจ</p><div id="gameLog" class="game-log table-log"></div></section></aside></div>
  <div class="table-announcement hidden" id="tableAnnouncement" role="status" aria-live="polite"><span class="announcement-icon">🧿</span><b id="tableAnnouncementTitle">เหตุการณ์ในบ้านผีไทย</b><p id="tableAnnouncementText"></p></div>
  <div class="game-over hidden" id="gameOver"><div class="modal"><span class="eyebrow">การผจญภัยสิ้นสุดลง</span><h2 id="resultTitle">คุณหนีออกมาได้!</h2><p id="resultText"></p><button class="primary full" id="playAgain">เล่นอีกครั้ง</button></div></div>
+
+ <div class="reference-hotspot-layer" aria-label="ปุ่มควบคุมเกม">
+  <button type="button" class="reference-hotspot hotspot-menu" id="refHotspotMenu" aria-label="เปิดเมนู"></button>
+  <button type="button" class="reference-hotspot hotspot-sound" id="refHotspotSound" aria-label="เปิดหรือปิดเสียง"></button>
+  <button type="button" class="reference-hotspot hotspot-leave" id="refHotspotLeave" aria-label="ออกจากห้อง"></button>
+  <button type="button" class="reference-hotspot hotspot-draw" id="refHotspotDraw" aria-label="จั่วการ์ด"></button>
+  <button type="button" class="reference-hotspot hotspot-escape" id="refHotspotEscape" aria-label="หนีออกจากบ้าน"></button>
+  <button type="button" class="reference-hotspot hotspot-endturn" id="refHotspotEndTurn" aria-label="จบรอบ"></button>
+ </div>
 </div>
 <div class="draw-reveal hidden" id="drawReveal" role="dialog" aria-modal="true" aria-labelledby="revealTitle">
  <div class="reveal-backdrop"></div>
@@ -84,5 +93,5 @@
  </section>
 </div>
 <div class="toast" id="toast"></div>
-<script src="/socket.io/socket.io.js"></script><script src="/app.js?v=2.1.0"></script>
+<script src="/socket.io/socket.io.js"></script><script src="/app.js?v=2.1.2"></script>
 </body></html>

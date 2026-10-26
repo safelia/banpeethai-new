@@ -613,6 +613,31 @@ function init(){
  document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.scroll)?.scrollIntoView({behavior:'smooth'})));
  $('nameBtn')?.addEventListener('click',()=>{const n=prompt('ชื่อผู้เล่น',currentPlayerName);if(n?.trim()){currentPlayerName=n.trim().slice(0,18);$('profileName').textContent=currentPlayerName;if($('gamePlayerName'))$('gamePlayerName').textContent=currentPlayerName;}});
  $('gameMenuHotspot')?.addEventListener('click',()=>{openSetup();});
+
+ // v2.1.2: call game actions directly from independent hitboxes.
+ const hotspotActions = {
+   refHotspotMenu: () => openSetup(),
+   refHotspotSound: () => { if(musicEnabled) stopAmbient(); else startAmbient(); },
+   refHotspotLeave: () => leaveGame(),
+   refHotspotDraw: () => draw(),
+   refHotspotEscape: () => escape(),
+   refHotspotEndTurn: () => {
+     if(mode==='bot'&&localGame&&localGame.turn===0&&localGame.phase==='afterdraw'&&!localGame.pending){
+       if(localEndTimer)clearTimeout(localEndTimer);
+       localEndTimer=null;localEndTimerKey='';localNext();
+     } else if(mode==='online'&&onlineRoom&&onlineState?.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'){
+       socket.emit('end-turn',{room:onlineRoom});
+     } else toast('จบเทิร์นได้หลังจั่วการ์ดแล้ว');
+   }
+ };
+ Object.entries(hotspotActions).forEach(([id,action])=>{
+   const button=$(id);
+   if(button) button.addEventListener('click',event=>{
+     event.preventDefault();event.stopPropagation();
+     action();
+   });
+ });
+
  $('gameSettingsHotspot')?.addEventListener('click',()=>{const n=prompt('ชื่อผู้เล่น',currentPlayerName);if(n?.trim()){currentPlayerName=n.trim().slice(0,18);$('profileName').textContent=currentPlayerName;if($('gamePlayerName'))$('gamePlayerName').textContent=currentPlayerName;}});
  $('mode')?.addEventListener('change',setMode);
  $('startGame')?.addEventListener('click',()=>{if($('mode').value==='online'){toast('เลือกสร้างห้องหรือเข้าร่วมห้องด้านบนก่อน');return;}startBotGame();});
