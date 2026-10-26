@@ -1,0 +1,8 @@
+BanPeeThai v2.3.13 — Chair anchor calibration
+
+Fix:
+- Repositioned all five player markers to match the five visible chair centers in the provided screenshot.
+- Anchors remain percentages of the fixed game stage, so zooming and desktop viewport changes scale the markers with the table instead of shifting them independently.
+- Applied the same anchor coordinates in the mobile breakpoint.
+
+No game rules, deck data, or turn logic were changed in this patch.

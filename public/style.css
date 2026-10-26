@@ -1878,3 +1878,18 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
  #gameScreen:not(.hidden) .players-ring .seat-5{left:69.2%!important;top:58.5%!important}
  #gameScreen:not(.hidden) .hand-zone .hand-content-layout{padding-top:38px!important}
 }
+
+/* v2.3.13 — calibrate all five player badges to the actual chair centers in the house artwork.
+   Coordinates are percentages of the fixed 16:9 stage; each badge is centered on its anchor. */
+#gameScreen:not(.hidden) .players-ring .seat-1{left:13.5%!important;top:58%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-2{left:27%!important;top:50.5%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-3{left:50%!important;top:20%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-4{left:60%!important;top:50.5%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-5{left:72%!important;top:59%!important;right:auto!important;bottom:auto!important}
+@media(max-width:760px){
+  #gameScreen:not(.hidden) .players-ring .seat-1{left:13.5%!important;top:58%!important}
+  #gameScreen:not(.hidden) .players-ring .seat-2{left:27%!important;top:50.5%!important}
+  #gameScreen:not(.hidden) .players-ring .seat-3{left:50%!important;top:20%!important}
+  #gameScreen:not(.hidden) .players-ring .seat-4{left:60%!important;top:50.5%!important}
+  #gameScreen:not(.hidden) .players-ring .seat-5{left:72%!important;top:59%!important}
+}
