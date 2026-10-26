@@ -246,7 +246,7 @@ function currentState(){return mode==='online'?onlineState:localGame;}
 function logLocal(s){localGame.logs.unshift(s);localGame.logs=localGame.logs.slice(0,20);}
 function localAlive(){return localGame.players.filter(p=>p.alive);}
 function localFinish(p,msg){localGame.over=true;localGame.winner=p?.id||null;logLocal(msg);renderLocal();}
-function localHurt(p,reason){let i=p.hand.findIndex(c=>c.id==='heart');if(i>=0)p.hand.splice(i,1);p.hearts=Math.max(0,p.hearts-1);logLocal(`${p.name} ${reason||'ถูกผีหลอก'} เสียหัวใจ 1 ดวง (เหลือ ${p.hearts})`);if(!p.hearts){p.alive=false;logLocal(`${p.name} หัวใจหมดแล้ว แพ้ออกจากเกม`);if(localAlive().length<=1)localFinish(localAlive()[0],localAlive().length?`${localAlive()[0].name} เป็นผู้รอดชีวิตคนสุดท้าย!`:'ทุกคนแพ้แล้ว');}}
+function localHurt(p,reason){let i=p.hand.findIndex(c=>c.id==='heart');if(i>=0)p.hand.splice(i,1);p.hearts=Math.max(0,p.hearts-1);logLocal(`${p.name} ${reason||'ถูกผีหลอก'} เสียหัวใจ 1 ดวง (เหลือ ${p.hearts})`);if(!p.hearts){p.alive=false;logLocal(`${p.name} หัวใจหมดแล้ว แพ้ออกจากเกม`);if(localAlive().length<=1){localFinish(localAlive()[0],localAlive().length?`${localAlive()[0].name} เป็นผู้รอดชีวิตคนสุดท้าย!`:'ทุกคนแพ้แล้ว');}else if(localGame.players[localGame.turn]?.id===p.id){setTimeout(()=>{if(localGame&&!localGame.over&&localGame.players[localGame.turn]?.id===p.id&&!p.alive){localNext();renderLocal();}},0);}}}
 function localNext(){
  if(localGame.over)return;
  const n=localGame.players.length;let found=false;
@@ -412,34 +412,28 @@ function syncLocalDrawTimer(g,myTurn){
   }
  },Math.max(0,10000-(Date.now()-started)));
 }
-function syncLocalEndTimer(g,active){
- if(!active){if(localEndTimer){clearTimeout(localEndTimer);localEndTimer=null;}localEndTimerKey='';return;}
- const key=`end-${g.round}-${g.turn}-${g.turnStartedAt||0}`;if(localEndTimerKey===key)return;
- if(localEndTimer)clearTimeout(localEndTimer);localEndTimerKey=key;
- const started=g.afterDrawStartedAt||Date.now();
- localEndTimer=setTimeout(()=>{
-  localEndTimer=null;
-  if(localGame===g&&!g.over&&!g.pending&&g.phase==='afterdraw'&&g.turn===0){toast('หมดเวลา 10 วินาที ระบบจบเทิร์นให้อัตโนมัติ');localNext();}
- },Math.max(0,10000-(Date.now()-started)));
-}
+function syncLocalEndTimer(g,active){ if(localEndTimer){clearTimeout(localEndTimer);localEndTimer=null;} localEndTimerKey=''; }
+
 function updateDrawCountdown(){
  const banner=$('turnBanner');if(!banner)return;
  let started=0, active=false;
  let phase='draw';
- if(mode==='bot'&&localGame&&!localGame.over&&!localGame.pending&&localGame.turn===0&&['draw','afterdraw'].includes(localGame.phase)){
-  phase=localGame.phase;started=phase==='afterdraw'?(localGame.afterDrawStartedAt||Date.now()):(localGame.turnStartedAt||Date.now());active=true;
+ if(mode==='bot'&&localGame&&!localGame.over&&!localGame.pending&&localGame.turn===0&&localGame.phase==='draw'){
+  phase=localGame.phase;started=localGame.turnStartedAt||Date.now();active=true;
  }else if(mode==='online'&&onlineState&&!onlineState.over&&!onlineState.pending&&onlineState.players?.[onlineState.turn]){
-  phase=onlineState.phase||'draw';started=phase==='afterdraw'?(onlineState.afterDrawStartedAt||Date.now()):(onlineState.turnStartedAt||Date.now());active=true;
+  phase=onlineState.phase||'draw';if(phase==='draw'){started=onlineState.turnStartedAt||Date.now();active=true;}
  }
  if(active){
   const secs=Math.max(0,Math.ceil((10000-(Date.now()-started))/1000));
   const current=mode==='online'?onlineState.players[onlineState.turn]:localGame?.players?.[localGame.turn];
   const mine=mode==='bot'?current?.id==='human':current?.id===socket?.id;
-  const action=phase==='afterdraw'?'จบเทิร์น':'จั่วการ์ด';
+  const action='จั่วการ์ด';
   banner.textContent=mine?`ถึงตาคุณแล้ว — ${action}ใน ${secs} วินาที`:`ถึงตา ${current?.name||'ผู้เล่น'} — ${action}ใน ${secs} วินาที`;
   banner.classList.add('turn-countdown');
  }else{
   banner?.classList.remove('turn-countdown');
+  const g=currentState();
+  if(g&&!g.over&&!g.pending&&g.phase==='afterdraw'&&g.players?.[g.turn]){const mine=mode==='bot'?g.players[g.turn].id==='human':g.players[g.turn].id===socket?.id;banner.textContent=mine?'จั่วแล้ว — กด “จบรอบ” เมื่อพร้อม':`ถึงตา ${g.players[g.turn].name} — รอกดจบรอบ`;}
  }
 }
 if(!countdownInterval)countdownInterval=setInterval(updateDrawCountdown,1000);

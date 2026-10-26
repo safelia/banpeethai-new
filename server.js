@@ -57,19 +57,17 @@ function nextTurn(r){
 }
 function scheduleTurnAutoDraw(r){
  const g=r?.game;if(!g||g.over||g.pending)return;
- if(r.turnTimer)clearTimeout(r.turnTimer);
- const token=g.turnToken||0,phase=g.phase||'draw';
+ if(r.turnTimer){clearTimeout(r.turnTimer);r.turnTimer=null;}
+ // Only drawing has a timeout. After drawing, the active player must press End Round.
+ const phase=g.phase||'draw';
+ if(phase!=='draw')return;
+ const token=g.turnToken||0;
  r.turnTimer=setTimeout(()=>{
   const current=r.game;
-  if(!current||current.over||current.pending||(current.turnToken||0)!==token||current.phase!==phase)return;
-  const p=current.players[current.turn];if(!p||!p.alive)return;
-  if(phase==='draw'){
-   log(current,`${p.name} ไม่จั่วภายใน 10 วินาที ระบบจั่วให้อัตโนมัติ`);
-   drawCard(r,p);
-  }else if(phase==='afterdraw'){
-   log(current,`${p.name} ไม่จบเทิร์นภายใน 10 วินาที ระบบจบเทิร์นให้อัตโนมัติ`);
-   nextTurn(r);
-  }
+  if(!current||current.over||current.pending||(current.turnToken||0)!==token||current.phase!=='draw')return;
+  const p=current.players[current.turn];if(!p||!p.alive){nextTurn(r);return;}
+  log(current,`${p.name} ไม่จั่วภายใน 10 วินาที ระบบจั่วให้อัตโนมัติ`);
+  drawCard(r,p);
  },10000);
 }
 
@@ -80,7 +78,12 @@ function eliminate(r,p){
  const g=r.game;p.alive=false;p.hand=p.hand.filter(c=>c.id!=='heart');
  log(g,`${p.name} หัวใจหมดแล้ว แพ้ออกจากเกม`);
  const living=alive(g);
- if(living.length<=1)finish(r,living[0]?.id||null,living.length?`${living[0].name} เป็นผู้รอดชีวิตคนสุดท้าย!`:'ผู้เล่นทุกคนแพ้');
+ if(living.length<=1){finish(r,living[0]?.id||null,living.length?`${living[0].name} เป็นผู้รอดชีวิตคนสุดท้าย!`:'ผู้เล่นทุกคนแพ้');return;}
+ if(g.players[g.turn]?.id===p.id){
+  if(r.turnTimer){clearTimeout(r.turnTimer);r.turnTimer=null;}
+  // Defer until the current card-resolution handler finishes updating state.
+  setTimeout(()=>{if(r.game===g&&!g.over&&g.players[g.turn]?.id===p.id&&!p.alive)nextTurn(r);},0);
+ }
 }
 function hurt(r,p,reason){
  const i=p.hand.findIndex(c=>c.id==='heart');if(i>=0)p.hand.splice(i,1);
