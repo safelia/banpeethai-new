@@ -1676,3 +1676,103 @@ html,body{
   border:1px solid #d7a15c!important;
   border-radius:10px!important;
 }
+
+
+/* v2.3.0: lobby and full-face ghost reveal fixes */
+html, body {
+  height:auto!important;
+  min-height:100%!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior-y:auto!important;
+}
+body { display:block!important; }
+main { display:block!important; min-height:calc(100vh - 76px)!important; overflow:visible!important; }
+#setupModal.modal-backdrop {
+  align-items:flex-start!important;
+  justify-content:center!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  padding:clamp(18px,5vh,56px) 16px 28px!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+#setupModal .modal { margin:0 auto!important; flex:0 0 auto!important; }
+#drawReveal.finished-ghost-reveal:not(.hidden) {
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:auto!important;
+  padding:clamp(10px,2vh,22px)!important;
+}
+#drawReveal.finished-ghost-reveal:not(.hidden) > .reveal-card-shell {
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:10px!important;
+  width:auto!important;
+  max-width:min(94vw,560px)!important;
+  max-height:96dvh!important;
+  padding:0!important;
+  margin:auto!important;
+  overflow:visible!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#drawReveal.finished-ghost-reveal .reveal-kicker,
+#drawReveal.finished-ghost-reveal #revealTitle,
+#drawReveal.finished-ghost-reveal .reveal-paper { display:none!important; }
+#drawReveal.finished-ghost-reveal .reveal-card {
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:min(90vw,430px)!important;
+  max-height:calc(100dvh - 112px)!important;
+  aspect-ratio:2/3!important;
+  margin:0 auto!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border:1px solid #d7a15c!important;
+  border-radius:12px!important;
+  background:#090607!important;
+  box-shadow:0 16px 48px #000b,0 0 22px #d7a15c2b!important;
+}
+#drawReveal.finished-ghost-reveal #revealArt {
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:inherit!important;
+  background:none!important;
+  overflow:hidden!important;
+}
+#drawReveal.finished-ghost-reveal .reveal-full-card-art {
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:inherit!important;
+}
+#drawReveal.finished-ghost-reveal .reveal-actions {
+  width:min(94vw,430px)!important;
+  max-width:100%!important;
+  margin:0 auto!important;
+  padding:10px 12px!important;
+  border:1px solid #8c6345!important;
+  border-radius:12px!important;
+  background:#160d0df2!important;
+  box-sizing:border-box!important;
+}
+#drawReveal.finished-ghost-reveal .reveal-warning { margin:0 0 8px!important; }
+@media(max-width:600px) {
+  #drawReveal.finished-ghost-reveal .reveal-card { max-width:min(86vw,360px)!important; max-height:calc(100dvh - 150px)!important; }
+  #drawReveal.finished-ghost-reveal .reveal-actions { width:min(92vw,360px)!important; }
+}

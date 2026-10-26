@@ -479,7 +479,12 @@ function showReveal(draw,isGhost){
  const c=draw.card||byId('heart');clearTimeout(revealTimer);show('drawReveal');
  const ownDraw=mode==='bot'?draw.playerId==='human':draw.playerId===socket?.id;
  $('revealTitle').textContent=ownDraw?'คุณจั่วได้':`${draw.playerName||'ผู้เล่น'} จั่วได้`;
- $('revealArt').style.backgroundImage=`url('${imgUrl(c)}')`;$('revealType').textContent=c.type||'การ์ด';$('revealName').textContent=c.name||'การ์ดปริศนา';$('revealDesc').textContent=c.desc||'';$('revealEffect').textContent=c.effect||'';
+ const reveal=$('drawReveal');
+ reveal.classList.toggle('finished-ghost-reveal',!!c.fullArt);
+ const art=$('revealArt');
+ if(c.fullArt){art.innerHTML=`<img class="reveal-full-card-art" src="${esc(imgUrl(c))}" alt="${esc(c.name||'การ์ดผีไทย')}" draggable="false">`;art.style.backgroundImage='none';}
+ else{art.innerHTML='';art.style.backgroundImage=`url('${imgUrl(c)}')`;}
+ $('revealType').textContent=c.type||'การ์ด';$('revealName').textContent=c.name||'การ์ดปริศนา';$('revealDesc').textContent=c.desc||'';$('revealEffect').textContent=c.effect||'';
  const actions=$('revealActions');actions.innerHTML='';
  if(isGhost && ownDraw){
   if(mode==='bot'){
