@@ -1,8 +1,8 @@
 {
   "name": "banpee-thai-card-game",
-  "version": "1.4.48",
+  "version": "2.0.0",
   "private": true,
-  "description": "บ้านผีไทย — Thai Spirit Card Game",
+  "description": "บ้านผีไทย — Thai Spirit Card Game rebuilt UI",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
