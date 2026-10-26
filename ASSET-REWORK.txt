@@ -1,0 +1,1 @@
+Dark Horror asset rework: 27 unique card images, 2 environments, deck back and aged Thai ornament. Generated using built-in imagegen with photorealistic practical Thai horror film direction. Open public/asset-gallery.html to review images. Gameplay logic retained. Kra-sue uses non-graphic spectral roots.

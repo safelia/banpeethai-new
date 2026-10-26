@@ -871,3 +871,230 @@ html:has(#gameScreen:not(.hidden)),body:has(#gameScreen:not(.hidden)){width:100%
   margin-left:var(--hand-overlap-negative,0px)!important;overflow:hidden!important;box-sizing:border-box!important;
 }
 #gameScreen:not(.hidden) #hand.hand > .hand-card:first-child{margin-left:0!important}
+
+
+/* v2.1.9 recovery: result modal must stay clickable above invisible reference hitboxes. */
+#gameScreen:not(.hidden) .game-over{
+  position:fixed!important;inset:0!important;z-index:2147483647!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  pointer-events:auto!important;visibility:visible!important;
+  background:rgba(5,2,3,.82)!important;backdrop-filter:blur(10px)!important;
+}
+#gameScreen:not(.hidden) .game-over.hidden{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#gameScreen:not(.hidden) .game-over .modal{
+  position:relative!important;z-index:2147483647!important;pointer-events:auto!important;
+  width:min(92vw,520px)!important;max-height:88dvh!important;overflow:auto!important;
+  padding:28px!important;border:1px solid #d9a65c!important;border-radius:22px!important;
+  background:linear-gradient(145deg,#392333,#211319 82%)!important;
+  box-shadow:0 0 0 3px #d9a65c22,0 24px 80px #000d!important;
+}
+#gameScreen:not(.hidden) .game-over-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;margin-top:18px!important}
+#gameScreen:not(.hidden) #playAgain,
+#gameScreen:not(.hidden) #closeGameOver{
+  position:relative!important;z-index:2147483647!important;display:block!important;
+  min-height:48px!important;pointer-events:auto!important;touch-action:manipulation!important;
+  cursor:pointer!important;border-radius:12px!important;
+}
+#gameScreen:not(.hidden) #closeGameOver{
+  color:#fbe6c5!important;border:1px solid #a8794d!important;
+  background:linear-gradient(#4c3028,#251512)!important;
+}
+
+
+/* v2.1.9 player markers: preserve the Thai circular badge while showing name, hearts and keys. */
+#gameScreen:not(.hidden) .players-ring{
+  overflow:visible!important;pointer-events:none!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row{
+  position:absolute!important;display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;gap:1px!important;
+  width:clamp(84px,6.2vw,104px)!important;height:clamp(84px,6.2vw,104px)!important;
+  min-width:0!important;min-height:0!important;max-width:none!important;
+  padding:5px 4px!important;box-sizing:border-box!important;overflow:visible!important;
+  border-radius:50%!important;transform:translate(-50%,-50%)!important;
+  background:radial-gradient(circle,#59301d 0 49%,#32180f 53% 66%,#c28a38 69% 72%,#29120b 76%)!important;
+  border:2px solid #e6bd69!important;color:#ffedcf!important;
+  box-shadow:0 0 0 2px #f3cf7a44,inset 0 0 0 2px #70401d,0 4px 14px #000c!important;
+  pointer-events:auto!important;
+}
+#gameScreen:not(.hidden) .players-ring .seat-1{left:31.5%!important;top:46%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-2{left:50%!important;top:23%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-3{left:68.5%!important;top:46%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-4{left:29%!important;top:64%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-5{left:71.5%!important;top:64%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{
+  display:grid!important;place-items:center!important;flex:0 0 auto!important;
+  width:25px!important;height:25px!important;border-radius:50%!important;
+  font-size:16px!important;background:#26110c!important;border:1px solid #f0c970!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta{
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  justify-content:center!important;gap:1px!important;width:100%!important;min-width:0!important;
+  overflow:visible!important;text-align:center!important;line-height:1.1!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta b{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  white-space:nowrap!important;font-size:clamp(8px,.64vw,11px)!important;font-weight:800!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta small{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  white-space:nowrap!important;font-size:clamp(7px,.52vw,9px)!important;color:#ffd98c!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .hearts{
+  display:block!important;white-space:nowrap!important;font-size:clamp(8px,.65vw,11px)!important;
+  line-height:1!important;letter-spacing:-1px!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .seat-turn{
+  display:none!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player{
+  border-color:#fff0a3!important;box-shadow:0 0 0 3px #f5d87b88,0 0 18px #ffb642bb,inset 0 0 0 2px #f4ce79!important;
+}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .players-ring .player-row{width:72px!important;height:72px!important;padding:3px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-avatar{width:20px!important;height:20px!important;font-size:13px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-meta b{font-size:8px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-meta small{font-size:7px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .hearts{font-size:8px!important}
+ #gameScreen:not(.hidden) .game-over-actions{grid-template-columns:1fr!important}
+}
+
+
+/* v2.2.0 — locked stage coordinates; zoom/viewport changes scale the stage as one unit. */
+#gameScreen:not(.hidden) .game-layout.ritual-layout,
+#gameScreen:not(.hidden) .game-top{
+  position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+  width:var(--stage-w)!important;height:var(--stage-h)!important;
+  transform:translate(-50%,-50%)!important;transform-origin:center center!important;
+  margin:0!important;padding:0!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) .table-panel.ritual-panel,
+#gameScreen:not(.hidden) .ritual-scene{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;
+  margin:0!important;padding:0!important;transform:none!important;overflow:hidden!important;
+}
+#gameScreen:not(.hidden) .players-ring{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  overflow:visible!important;pointer-events:none!important;
+}
+/* Five exact chair anchors, expressed as percentages of the fixed 16:9 game stage. */
+#gameScreen:not(.hidden) .players-ring .player-row{
+  position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  width:clamp(76px,5.2vw,92px)!important;height:clamp(76px,5.2vw,92px)!important;
+  min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;
+  margin:0!important;padding:4px!important;gap:1px!important;box-sizing:border-box!important;
+  transform:translate(-50%,-50%)!important;border-radius:50%!important;overflow:hidden!important;
+  border:2px solid #e7bd65!important;
+  background:radial-gradient(circle,#59301d 0 49%,#32180f 54% 67%,#c28a38 69% 72%,#29120b 76%)!important;
+  box-shadow:0 0 0 2px #f3cf7a44,inset 0 0 0 2px #70401d,0 4px 14px #000c!important;
+  color:#ffedcf!important;pointer-events:auto!important;
+}
+#gameScreen:not(.hidden) .players-ring .seat-1{left:27%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring .seat-2{left:50%!important;top:22%!important}
+#gameScreen:not(.hidden) .players-ring .seat-3{left:73%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring .seat-4{left:27%!important;top:60%!important}
+#gameScreen:not(.hidden) .players-ring .seat-5{left:73%!important;top:60%!important}
+/* For 2–4 players, leave empty chairs empty; never shift a marker away from its chair. */
+#gameScreen:not(.hidden) .players-ring.count-1 .seat-1{left:50%!important;top:22%!important}
+#gameScreen:not(.hidden) .players-ring.count-2 .seat-1{left:27%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-2 .seat-2{left:73%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-3 .seat-1{left:27%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-3 .seat-2{left:50%!important;top:22%!important}
+#gameScreen:not(.hidden) .players-ring.count-3 .seat-3{left:73%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-4 .seat-1{left:27%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-4 .seat-2{left:50%!important;top:22%!important}
+#gameScreen:not(.hidden) .players-ring.count-4 .seat-3{left:73%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-4 .seat-4{left:27%!important;top:60%!important}
+#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{
+  display:grid!important;place-items:center!important;width:22px!important;height:22px!important;flex:0 0 22px!important;
+  margin:0!important;border-radius:50%!important;background:#26110c!important;border:1px solid #f0c970!important;
+  font-size:14px!important;line-height:1!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta{
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  gap:2px!important;width:100%!important;min-width:0!important;overflow:hidden!important;text-align:center!important;line-height:1.1!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta b{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  white-space:nowrap!important;font-size:clamp(8px,.62vw,10px)!important;font-weight:800!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta small{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  white-space:nowrap!important;font-size:clamp(7px,.5vw,9px)!important;color:#ffd98c!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .hearts{
+  display:block!important;visibility:visible!important;white-space:nowrap!important;
+  font-size:clamp(8px,.63vw,10px)!important;line-height:1!important;letter-spacing:-1px!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .seat-turn{display:none!important}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player{
+  border-color:#fff0a3!important;box-shadow:0 0 0 3px #f5d87b88,0 0 18px #ffb642bb,inset 0 0 0 2px #f4ce79!important;
+}
+/* Hand is a clipped, non-scrolling fan; overlap is computed in JS and recalculated on zoom. */
+#gameScreen:not(.hidden) .hand-zone{
+  overflow:hidden!important;clip-path:inset(0 round 10px)!important;contain:paint!important;isolation:isolate!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout{
+  position:relative!important;flex:1 1 auto!important;width:100%!important;max-width:100%!important;min-width:0!important;
+  min-height:0!important;overflow:hidden!important;clip-path:inset(0)!important;
+}
+#gameScreen:not(.hidden) #hand.hand{
+  display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;justify-content:flex-start!important;
+  gap:0!important;width:100%!important;max-width:100%!important;min-width:0!important;height:100%!important;
+  overflow:hidden!important;clip-path:inset(0)!important;padding:0!important;margin:0!important;
+  box-sizing:border-box!important;scrollbar-width:none!important;overscroll-behavior:none!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card{
+  display:flex!important;flex:0 0 var(--hand-card-width,80px)!important;
+  width:var(--hand-card-width,80px)!important;min-width:0!important;max-width:var(--hand-card-width,80px)!important;
+  margin-left:var(--hand-overlap-negative,0px)!important;overflow:hidden!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card:first-child{margin-left:0!important}
+#gameScreen:not(.hidden) .hand-card .hand-art{flex:0 0 38%!important;min-width:0!important;width:100%!important}
+#gameScreen:not(.hidden) .hand-card .hand-card-title,
+#gameScreen:not(.hidden) .hand-card .hand-card-type,
+#gameScreen:not(.hidden) .hand-card .hand-card-desc,
+#gameScreen:not(.hidden) .hand-card .hand-card-effect{min-width:0!important;max-width:100%!important;overflow:hidden!important;overflow-wrap:anywhere!important}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .players-ring .player-row{width:68px!important;height:68px!important;padding:3px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-avatar{width:18px!important;height:18px!important;flex-basis:18px!important;font-size:12px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-meta b{font-size:7px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-meta small{font-size:6px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .hearts{font-size:7px!important}
+}
+
+
+/* v2.2.1 — stage-relative layout survives browser zoom without fixed-viewport drift. */
+#gameScreen:not(.hidden) .game-layout.ritual-layout{container-type:inline-size!important;overflow:hidden!important}
+#gameScreen:not(.hidden) .hand-zone{
+ position:absolute!important;left:17.2%!important;right:auto!important;top:66.3%!important;bottom:auto!important;
+ width:65.6%!important;height:29.6%!important;max-height:29.6%!important;min-width:0!important;min-height:0!important;
+ margin:0!important;padding:0!important;overflow:hidden!important;contain:paint!important;isolation:isolate!important;
+ transform:none!important;box-sizing:border-box!important;z-index:1200!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}
+#gameScreen:not(.hidden) #hand.hand{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important;gap:0!important}
+#gameScreen:not(.hidden) .players-ring .player-row{
+ width:5.2%!important;height:auto!important;aspect-ratio:1!important;min-width:0!important;min-height:0!important;
+ max-width:92px!important;max-height:92px!important;padding:2px!important;gap:1px!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{
+ width:28cqw!important;height:28cqw!important;max-width:22px!important;max-height:22px!important;
+ flex:0 0 auto!important;font-size:clamp(8px,1.15cqw,14px)!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta b{font-size:clamp(6px,1.15cqw,10px)!important}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta small{font-size:clamp(5px,.92cqw,9px)!important}
+#gameScreen:not(.hidden) .players-ring .player-row .hearts{font-size:clamp(6px,1.1cqw,10px)!important}
+#gameScreen:not(.hidden) .players-ring .player-row.dead-player{
+ filter:grayscale(1)!important;opacity:.62!important;border-color:#aaa!important;
+ background:radial-gradient(circle,#494343 0 49%,#2c2929 54% 67%,#8c8585 69% 72%,#1c1919 76%)!important;
+ box-shadow:0 0 0 2px #aaa5,inset 0 0 0 2px #666,0 4px 14px #000c!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.dead-player .player-avatar{
+ filter:grayscale(1)!important;background:#444!important;border-color:#aaa!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.dead-player .player-meta b,
+#gameScreen:not(.hidden) .players-ring .player-row.dead-player .player-meta small{color:#bdb6b6!important}
+#gameScreen:not(.hidden) .players-ring .player-row.dead-player .hearts{filter:grayscale(1)!important}

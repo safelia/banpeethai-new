@@ -1,0 +1,17 @@
+:root{--cream:#ded8cb;--gold:#9c8964;--pink:#995647;--muted:#a09e94}
+body{background:#0d100f url('/assets/horror/house.jpg') center/cover fixed!important;color:#ded8cb}
+.hero-copy{background:linear-gradient(90deg,#0b100eee,#0b100e77),url('/assets/horror/house.jpg') center/cover!important}
+.quick-panel,.modal,.rules-section,.card,.hand-card,.card-parchment{background:#171c19f5!important;color:#ded8cb!important;border-color:#70634c!important}
+.quick-panel p,.quick-panel small,.card p{color:#b2b2a6!important}
+.primary{background:linear-gradient(#69362e,#38221d)!important;color:#eee4d6!important;border-color:#87634b!important;box-shadow:0 3px 10px #0008!important}
+.secondary,.topbar,.profile,.feature-strip>div{background:#111714ec!important;color:#d1c9b6!important;border-color:#645b49!important}
+.hero h1{color:#d4c7ad!important;text-shadow:0 3px 10px #000!important}
+.card-art,.hand-art,.card-preview-art,.reveal-art,.omen-choice-art{background-size:contain!important;background-repeat:no-repeat!important;background-position:center!important;background-color:#080b09!important}
+.card-art{height:auto!important;aspect-ratio:2/3!important}.card-art:before,.card-art:after,.hero-copy:after{content:none!important}
+#gameScreen:not(.hidden)::before{background-image:url('/assets/horror/table.jpg')!important}
+#gameScreen .thai-edge{background-image:url('/assets/horror/ornament.jpg')!important;mix-blend-mode:normal!important;opacity:.5!important}
+#gameScreen:not(.hidden) .deck-stack{opacity:1!important;background:url('/assets/horror/card-back.jpg') center/contain no-repeat!important;color:#e1d6bb!important;font-size:11px!important;border:1px solid #887250!important;border-radius:5px!important}
+#gameScreen .deck-card-back{opacity:0!important}
+#gameScreen:not(.hidden) #gameMenuHotspot,#gameScreen:not(.hidden) #leaveGame,#gameScreen:not(.hidden) #gameSoundToggle,#gameScreen:not(.hidden) #escapeBtn,#gameScreen:not(.hidden) #endTurn{opacity:1!important;color:#e2d9c6!important;font-size:clamp(9px,1vw,15px)!important;line-height:1.3!important;background:#101713ed!important;border:1px solid #847254!important;border-radius:5px!important}
+#gameScreen:not(.hidden) #hand .hand-card{background:#131a16fa!important;border-color:#897856!important}
+#gameScreen:not(.hidden) .players-ring .player-row{background:#171e19ed!important;border-color:#84765c!important}

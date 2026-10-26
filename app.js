@@ -170,7 +170,10 @@ function startOnline(){
 function startBotGame(){
  currentPlayerName=getName();$('profileName').textContent=currentPlayerName;if($('gamePlayerName'))$('gamePlayerName').textContent=currentPlayerName;
  const count=Number($('playerCount').value||3);
- const bots=Array.from({length:count-1},(_,i)=>({id:`bot-${i+1}`,name:['น้องบัว','คุณข้าวปั้น','แม่มะลิ','เจ้าตูบ'][i%4],hearts:3,keys:0,alive:true,hand:[],bot:true,skip:false}));
+ const usedNames=new Set([currentPlayerName.toLocaleLowerCase('th-TH')]);
+ const botBaseNames=['น้องบัว','คุณข้าวปั้น','แม่มะลิ','เจ้าตูบ'];
+ const uniqueBotName=(base,index)=>{let candidate=base,n=2;while(usedNames.has(candidate.toLocaleLowerCase('th-TH'))){candidate=`${base} ${n++}`;}usedNames.add(candidate.toLocaleLowerCase('th-TH'));return candidate;};
+ const bots=Array.from({length:count-1},(_,i)=>({id:`bot-${i+1}`,name:uniqueBotName(botBaseNames[i%botBaseNames.length],i),hearts:3,keys:0,alive:true,hand:[],bot:true,skip:false}));
  const heart=()=>({...byId('heart'),uid:`heart-${Math.random()}`});
  const deck=[];cards.forEach(c=>{for(let i=0;i<(Number(c.copies)||0);i++){if(c.id!=='heart')deck.push({...c,uid:`${c.id}-${Math.random().toString(36).slice(2,9)}`});}});
  for(let i=deck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}
@@ -264,6 +267,8 @@ function botTurn(){
 function renderPlayers(state, local=false){
  const list=$('playersList');if(!list)return;
  const players=state?.players||[];
+ list.classList.remove('count-1','count-2','count-3','count-4','count-5');
+ list.classList.add(`count-${Math.max(1,Math.min(5,players.length))}`);
  list.innerHTML=players.map((p,index)=>{
   const isTurn=players[state.turn]?.id===p.id;
   const hearts=Math.max(0,Number(p.hearts)||0);
@@ -278,8 +283,9 @@ function renderHand(hand,canPlay){
  const count=hand.length;
  $('handCount').textContent=`${count} ใบ`;
  const available=Math.max(1,el.clientWidth||el.parentElement?.clientWidth||960);
- const overlap=count>1?Math.min(38,Math.max(18,available*.045)):0;
- const cardWidth=count?Math.max(38,Math.min(140,Math.floor((available+overlap*Math.max(0,count-1))/count))):140;
+ const visibleSlot=count?available/count:available;
+ const cardWidth=count?Math.max(28,Math.min(140,Math.ceil(visibleSlot+Math.min(36,Math.max(6,visibleSlot*.38))))):140;
+ const overlap=count>1?Math.max(0,Math.min(cardWidth-1,cardWidth-visibleSlot)):0;
  const sideCount=$('sideHandCount');if(sideCount)sideCount.textContent=`${count} ใบ`;
  el.style.setProperty('--hand-count',String(count));
  el.style.setProperty('--hand-card-width',`${cardWidth}px`);
@@ -675,12 +681,24 @@ function init(){
  $('copyRoomCode')?.addEventListener('click',()=>{const code=$('createdRoomCode').textContent;navigator.clipboard?.writeText(code).then(()=>toast('คัดลอกรหัสห้องแล้ว')).catch(()=>toast(`รหัสห้อง: ${code}`));});
  $('drawCard')?.addEventListener('click',draw);$('tableDeck')?.addEventListener('click',draw);$('escapeBtn')?.addEventListener('click',escape);
  $('endTurn')?.addEventListener('click',()=>{if(mode==='bot'&&localGame&&localGame.turn===0&&localGame.phase==='afterdraw'&&!localGame.pending){if(localEndTimer)clearTimeout(localEndTimer);localEndTimer=null;localEndTimerKey='';localNext();}else if(mode==='online'&&onlineRoom&&onlineState?.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'){socket.emit('end-turn',{room:onlineRoom});}else toast('จบเทิร์นได้หลังจั่วการ์ดแล้ว');});
- $('leaveGame')?.addEventListener('click',leaveGame);$('playAgain')?.addEventListener('click',()=>{hide('gameOver');hide('gameScreen');openSetup();});
+ $('leaveGame')?.addEventListener('click',leaveGame);
+ const exitResultScreen=()=>{hide('gameOver');hide('gameScreen');hide('drawReveal');hide('gameOptionsPanel');localGame=null;onlineState=null;onlineRoom='';isHost=false;openSetup();};
+ $('closeGameOver')?.addEventListener('click',exitResultScreen);
+ $('playAgain')?.addEventListener('click',()=>{hide('gameOver');hide('drawReveal');hide('gameOptionsPanel');hide('gameScreen');localGame=null;onlineState=null;onlineRoom='';isHost=false;openSetup();});
+
  $('cardSearch')?.addEventListener('input',renderCatalog);$('cardFilter')?.addEventListener('change',renderCatalog);
  $('setupModal')?.addEventListener('click',e=>{if(e.target.id==='setupModal')closeSetup();});
  $('drawReveal')?.addEventListener('click',e=>{if(e.target.classList.contains('reveal-backdrop')){if(!localGame?.pending&&!onlineState?.pending)hide('drawReveal');}});
  if(window.io){socket=io({reconnection:true,reconnectionAttempts:8,reconnectionDelay:500,timeout:20000});bindSocket();}
  setMode();
 }
+let handResizeQueued=false;
+window.addEventListener('resize',()=>{
+ if(handResizeQueued)return;handResizeQueued=true;
+ requestAnimationFrame(()=>{handResizeQueued=false;
+  if(mode==='online'&&onlineState){const me=onlineState.players?.find(p=>p.id===socket?.id);renderHand(me?.hand||[],onlineState.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'&&!onlineState.over&&!onlineState.pending);}
+  else if(mode==='bot'&&localGame){const me=localGame.players?.find(p=>p.id==='human');renderHand(me?.hand||[],localGame.turn===0&&!localGame.over&&!localGame.pending&&localGame.phase==='afterdraw');}
+ });
+});
 document.addEventListener('DOMContentLoaded',init);
 })();
