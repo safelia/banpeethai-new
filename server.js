@@ -16,6 +16,14 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 function log(g,s){g.logs.unshift(s);g.logs=g.logs.slice(0,24)}
 function alive(g){return g.players.filter(p=>p.alive)}
 function keyCount(p){return (p.keys||0)+(p.hand||[]).filter(c=>c.id==='key').length}
+function uniquePlayerName(proposed,players,excludeId=null){
+ const base=String(proposed||'นักสำรวจ').trim().slice(0,18)||'นักสำรวจ';
+ const used=new Set((players||[]).filter(p=>p.id!==excludeId).map(p=>String(p.name||'').trim().toLocaleLowerCase('th-TH')));
+ if(!used.has(base.toLocaleLowerCase('th-TH')))return base;
+ for(let n=2;n<100;n++){const suffix=` ${n}`,candidate=base.slice(0,Math.max(1,18-suffix.length))+suffix;if(!used.has(candidate.toLocaleLowerCase('th-TH')))return candidate;}
+ return `ผู้เล่น-${Math.random().toString(36).slice(2,6)}`;
+}
+
 function publicRoom(r){return {room:r.code,host:r.host,started:r.started,players:r.players.map(p=>({id:p.id,name:p.name,hearts:p.hearts||3,keys:keyCount(p),alive:p.alive!==false,connected:true}))}}
 function emitRoom(r){io.to(r.code).emit('room-update',publicRoom(r))}
 function requestPlayerState(r,socket){
@@ -122,7 +130,7 @@ function drawCard(r,p){
 }
 io.on('connection',socket=>{
  socket.on('create-room',({name}={},cb=()=>{})=>{
-  const code=roomCode(),player={id:socket.id,name:String(name||'นักสำรวจ').trim().slice(0,18)||'นักสำรวจ',hearts:3,keys:0,alive:true};
+  const code=roomCode(),player={id:socket.id,name:uniquePlayerName(name,[]),hearts:3,keys:0,alive:true};
   const r={code,host:socket.id,players:[player],started:false,game:null,turnTimer:null};rooms.set(code,r);socket.join(code);cb({ok:true,room:code,players:publicRoom(r).players});emitRoom(r);
  });
  socket.on('join-room',({room,name}={},cb=()=>{})=>{
@@ -131,7 +139,7 @@ io.on('connection',socket=>{
   if(r.started)return cb({ok:false,error:'เกมเริ่มแล้ว ไม่สามารถเข้าร่วมกลางเกมได้'});
   if(r.players.length>=5)return cb({ok:false,error:'ห้องเต็มแล้ว (สูงสุด 5 คน)'});
   if(r.players.some(p=>p.id===socket.id))return cb({ok:true,room:code});
-  r.players.push({id:socket.id,name:String(name||'ผู้มาเยือน').trim().slice(0,18)||'ผู้มาเยือน',hearts:3,keys:0,alive:true});socket.join(code);cb({ok:true,room:code});emitRoom(r);
+  r.players.push({id:socket.id,name:uniquePlayerName(name,r.players),hearts:3,keys:0,alive:true});socket.join(code);cb({ok:true,room:code});emitRoom(r);
  });
  socket.on('request-online-state',({room}={},cb=()=>{})=>{
   const r=rooms.get(String(room||'').toUpperCase());
