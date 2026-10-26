@@ -59,3 +59,15 @@ Deploy commands: Build `npm install`; Start `npm start`; Health check `/health`.
 - Positions the hand panel directly in viewport coordinates using the centered 16:9 stage math, avoiding conflicting nested parent positioning.
 - Forces cards to render visibly within the bottom hand frame and preserves readable card text.
 - Bumps CSS/JS cache versions to v2.1.4.
+
+
+## v2.1.5 Thai circular player markers
+- Replaces square player avatars with circular Thai-inspired gold ornamental markers, including a lotus-like flower accent and a highlighted active-turn ring.
+- Bumps CSS/JS cache versions to v2.1.5.
+
+
+## v2.1.6 end-turn, Thai player tokens, stacked hand
+- Enlarges and repositions the invisible end-turn hotspot over the visible button and keeps the game phase validation.
+- Replaces rectangular player plates with round Thai-inspired gold tokens around the seats.
+- Overlaps hand cards, removes horizontal scrolling, and clips the cards to the hand frame.
+- Bumps CSS/JS cache versions to v2.1.6.

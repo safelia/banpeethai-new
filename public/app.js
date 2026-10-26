@@ -626,12 +626,14 @@ function init(){
    refHotspotDraw: () => draw(),
    refHotspotEscape: () => escape(),
    refHotspotEndTurn: () => {
-     if(mode==='bot'&&localGame&&localGame.turn===0&&localGame.phase==='afterdraw'&&!localGame.pending){
+     if(mode==='bot'&&localGame&&localGame.turn===0&&localGame.phase==='afterdraw'&&!localGame.pending&&!localGame.over){
        if(localEndTimer)clearTimeout(localEndTimer);
        localEndTimer=null;localEndTimerKey='';localNext();
-     } else if(mode==='online'&&onlineRoom&&onlineState?.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'){
+     } else if(mode==='online'&&onlineRoom&&onlineState?.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'&&!onlineState.pending&&!onlineState.over){
        socket.emit('end-turn',{room:onlineRoom});
-     } else toast('จบเทิร์นได้หลังจั่วการ์ดแล้ว');
+     } else {
+       toast('ต้องจั่วไพ่ก่อน แล้วกดจบรอบ');
+     }
    }
  };
  Object.entries(hotspotActions).forEach(([id,action])=>{
