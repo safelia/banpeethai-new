@@ -53,3 +53,9 @@ Deploy commands: Build `npm install`; Start `npm start`; Health check `/health`.
 - Forces hand cards to render visibly inside the lower panel and allows horizontal scrolling without clipping card content.
 - Makes the discard/last-drawn card preview visible in the dashed left-side table slot.
 - Centers the reveal card dialog in the viewport and cache-busts CSS/JS to v2.1.3.
+
+
+## v2.1.4 hand panel viewport-position fix
+- Positions the hand panel directly in viewport coordinates using the centered 16:9 stage math, avoiding conflicting nested parent positioning.
+- Forces cards to render visibly within the bottom hand frame and preserves readable card text.
+- Bumps CSS/JS cache versions to v2.1.4.
