@@ -1098,3 +1098,42 @@ html:has(#gameScreen:not(.hidden)),body:has(#gameScreen:not(.hidden)){width:100%
 #gameScreen:not(.hidden) .players-ring .player-row.dead-player .player-meta b,
 #gameScreen:not(.hidden) .players-ring .player-row.dead-player .player-meta small{color:#bdb6b6!important}
 #gameScreen:not(.hidden) .players-ring .player-row.dead-player .hearts{filter:grayscale(1)!important}
+
+/* v2.2.2 — turn clarity, safer card timing, and refined Thai-inspired side trim. */
+@keyframes banpee-turn-glow {
+  0%,100% { box-shadow: 0 0 0 2px #ffe8a866, 0 0 12px #ffc45b99, inset 0 0 0 2px #ffe4a7; filter:brightness(1.02); }
+  50% { box-shadow: 0 0 0 5px #fff0a6aa, 0 0 30px #ffbd45ee, 0 0 46px #ff7e28a8, inset 0 0 0 3px #fff2c8; filter:brightness(1.22); }
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player {
+  border:2px solid #fff0ad!important;
+  background:radial-gradient(circle at 50% 30%,#79502c 0%,#3b2118 58%,#1b100f 100%)!important;
+  animation:banpee-turn-glow 1.45s ease-in-out infinite!important;
+  z-index:30!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player:after {
+  content:'✦ ถึงตาเล่น ✦'; position:absolute;left:50%;bottom:-17px;transform:translateX(-50%);
+  white-space:nowrap;padding:2px 8px;border:1px solid #ffe3a0;border-radius:99px;
+  background:linear-gradient(180deg,#8d4b18,#49210e);color:#fff2c5;
+  font-size:clamp(7px,.62vw,10px);font-weight:800;letter-spacing:.03em;
+  box-shadow:0 0 12px #ffb84499;pointer-events:none;
+}
+#gameScreen:not(.hidden) .turn-banner:not(:empty) {
+  color:#fff2c5!important;text-shadow:0 0 8px #ffb83e,0 2px 4px #000!important;
+}
+/* Narrow decorative rails sit at the screen edges, never over the game controls. */
+#gameScreen:not(.hidden) .game-layout.ritual-layout::before,
+#gameScreen:not(.hidden) .game-layout.ritual-layout::after {
+  content:'✦\A❧\A✧\A❧\A✦'; position:fixed;top:7%;bottom:7%;width:clamp(16px,2.1vw,34px);
+  z-index:1500;pointer-events:none;display:flex;align-items:center;justify-content:space-around;
+  flex-direction:column;overflow:hidden;white-space:pre;text-align:center;
+  color:#f4ce86;font-family:Pridi,serif;font-size:clamp(11px,1.2vw,18px);line-height:1;
+  opacity:.72;text-shadow:0 0 7px #c78032,0 0 16px #8c411f;
+  background:linear-gradient(90deg,#1b0c0d99,#8d5a2b22 45%,#1b0c0d77);
+  border-top:1px solid #d7a85a88;border-bottom:1px solid #d7a85a88;
+  box-shadow:inset 0 0 8px #e8b65b22;
+}
+#gameScreen:not(.hidden) .game-layout.ritual-layout::before {left:0;border-right:1px solid #d7a85a77;}
+#gameScreen:not(.hidden) .game-layout.ritual-layout::after {right:0;border-left:1px solid #d7a85a77;transform:scaleX(-1);}
+@media (prefers-reduced-motion:reduce) {
+  #gameScreen:not(.hidden) .players-ring .player-row.active-player {animation:none!important;}
+}
