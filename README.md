@@ -91,3 +91,10 @@ Deploy commands: Build `npm install`; Start `npm start`; Health check `/health`.
 - Added subtle Thai-inspired gold edge ornaments.
 
 Syntax checked with Node.js; full live multiplayer gameplay still requires deployment testing.
+
+
+## v2.2.3 — Card readability and haunted side background
+- Increased in-hand card typography and improved card preview modal readability.
+- Styled omen-choice card buttons so the revealed card art and descriptions are visible.
+- Replaced gold side glyph rails with a faded haunted Thai house background.
+- Kept player seat anchors and hand panel tied to the game stage across zoom breakpoints.

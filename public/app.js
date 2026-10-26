@@ -72,6 +72,57 @@ function playDrawSound(){
  const tap=ctx.createOscillator(),tg=ctx.createGain();tap.type='sine';tap.frequency.setValueAtTime(190,now+.13);tap.frequency.exponentialRampToValueAtTime(90,now+.21);tg.gain.setValueAtTime(.0001,now+.13);tg.gain.exponentialRampToValueAtTime(.055,now+.145);tg.gain.exponentialRampToValueAtTime(.0001,now+.24);tap.connect(tg);tg.connect(ctx.destination);tap.start(now+.13);tap.stop(now+.25);
 }
 
+
+function playCardEventSound(card){
+ if(!musicEnabled||!card)return;
+ const ctx=ensureAudio();if(!ctx)return;if(ctx.state==='suspended')ctx.resume();
+ const now=ctx.currentTime;
+ const id=card.id||'';
+ const isGhost=card.kind==='ghost'||card.type==='ผีอันตราย';
+ // Ghost: short eerie rising/falling scream made from filtered noise and wavering tones.
+ if(isGhost){
+  const duration=.95;
+  const buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*duration),ctx.sampleRate);
+  const data=buffer.getChannelData(0);
+  for(let i=0;i<data.length;i++){
+   const t=i/data.length;
+   const envelope=Math.pow(Math.sin(Math.PI*t),1.3)*(1-t*.28);
+   data[i]=(Math.random()*2-1)*envelope;
+  }
+  const noise=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+  noise.buffer=buffer;filter.type='bandpass';filter.Q.value=2.4;
+  filter.frequency.setValueAtTime(520,now);filter.frequency.exponentialRampToValueAtTime(1450,now+.22);filter.frequency.exponentialRampToValueAtTime(620,now+.72);
+  gain.gain.setValueAtTime(.0001,now);gain.gain.linearRampToValueAtTime(.20,now+.12);gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
+  noise.connect(filter);filter.connect(gain);gain.connect(ctx.destination);noise.start(now);noise.stop(now+duration);
+  const scream=ctx.createOscillator(),sg=ctx.createGain();scream.type='sawtooth';
+  scream.frequency.setValueAtTime(470,now);scream.frequency.exponentialRampToValueAtTime(1080,now+.18);scream.frequency.exponentialRampToValueAtTime(390,now+.62);
+  sg.gain.setValueAtTime(.0001,now);sg.gain.linearRampToValueAtTime(.055,now+.1);sg.gain.exponentialRampToValueAtTime(.0001,now+.68);
+  scream.connect(sg);sg.connect(ctx.destination);scream.start(now);scream.stop(now+.7);
+  return;
+ }
+ // Siamese cat: a short two-part meow synthesized from a voiced, bending tone.
+ if(id==='cat'||/แมว/.test(card.name||'')){
+  [0,.24].forEach((offset,i)=>{
+   const osc=ctx.createOscillator(),gain=ctx.createGain(),filter=ctx.createBiquadFilter();
+   osc.type='triangle';filter.type='lowpass';filter.frequency.value=1900;
+   osc.frequency.setValueAtTime(i?690:840,now+offset);
+   osc.frequency.exponentialRampToValueAtTime(i?410:520,now+offset+.19);
+   gain.gain.setValueAtTime(.0001,now+offset);gain.gain.linearRampToValueAtTime(.11,now+offset+.035);gain.gain.exponentialRampToValueAtTime(.0001,now+offset+.22);
+   osc.connect(filter);filter.connect(gain);gain.connect(ctx.destination);osc.start(now+offset);osc.stop(now+offset+.23);
+  });
+  return;
+ }
+ // Helper cards: a gentle magical sparkle.
+ if(card.type==='ตัวช่วย'||['key','lantern','lucky-flower','ghost-puppy'].includes(id)){
+  [0,.09,.19].forEach((offset,i)=>{
+   const osc=ctx.createOscillator(),gain=ctx.createGain();
+   osc.type='sine';osc.frequency.setValueAtTime([1046.5,1318.5,1568][i],now+offset);
+   gain.gain.setValueAtTime(.0001,now+offset);gain.gain.linearRampToValueAtTime(.065,now+offset+.018);gain.gain.exponentialRampToValueAtTime(.0001,now+offset+.32);
+   osc.connect(gain);gain.connect(ctx.destination);osc.start(now+offset);osc.stop(now+offset+.33);
+  });
+ }
+}
+
 function updateSoundForScreen(){
  // Keep the same gentle background music running in both lobby and gameplay.
  if(musicEnabled && audioCtx?.state==='suspended')audioCtx.resume();
@@ -213,11 +264,30 @@ function localAutoEndAfterUse(g,p){
   logLocal(`${p.name} ใช้การ์ดแล้ว จบเทิร์นอัตโนมัติ`);localNext();
  },650);
 }
+
+function drawCardRespectingCatLimit(deck,hand){
+ if(!Array.isArray(deck)||!deck.length)return null;
+ if((hand||[]).some(c=>c?.id==='cat')){
+  // Keep duplicate cats in the draw pile; recycle eligible discards if needed.
+  for(let i=deck.length-1;i>=0;i--){
+   if(deck[i]?.id!=='cat')return deck.splice(i,1)[0];
+  }
+  if(localGame?.discard?.some(c=>c?.id!=='cat')){
+   const eligible=localGame.discard.filter(c=>c?.id!=='cat');
+   localGame.discard=localGame.discard.filter(c=>c?.id==='cat');
+   deck.push(...eligible.sort(()=>Math.random()-.5));
+   for(let i=deck.length-1;i>=0;i--)if(deck[i]?.id!=='cat')return deck.splice(i,1)[0];
+  }
+  return null;
+ }
+ return deck.pop();
+}
+
 function localDraw(p){
  if(localGame.over||localGame.pending||localGame.phase!=='draw'||localGame.players[localGame.turn].id!==p.id||!p.alive)return;
  if(localDrawTimer){clearTimeout(localDrawTimer);localDrawTimer=null;} localDrawTimerKey='';
  if(!localGame.deck.length){toast('กองจั่วหมดแล้ว');localNext();return;}
- const c=localGame.deck.pop();localGame.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
+ const c=drawCardRespectingCatLimit(localGame.deck,p.hand);if(!c){toast('มีแต่การ์ดแมวในกองจั่ว รอใช้การ์ดแมวในมือก่อน');localGame.turnStartedAt=Date.now();syncLocalDrawTimer(localGame,true);return;}playDrawSound();playCardEventSound(c);localGame.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
  logLocal(`${p.name} จั่วได้ “${c.name}”`);
  if(c.id==='holy-water' && c.kind!=='ghost' && c.type!=='ผีอันตราย' && (p.hearts||0)<3){
   p.hearts=Math.min(3,(p.hearts||0)+1);p.hand.push({...byId('heart'),uid:`heart-${p.id}-water-${Date.now()}`});localGame.discard.push(c);
@@ -239,7 +309,11 @@ function resolveLocalGhost(useProtection){
  const c=g.pending.card;g.discard.push(c);
  if(useProtection){if((p.shields||0)>0){p.shields--;logLocal(`${p.name} ใช้เครื่องรางที่เตรียมไว้ป้องกันผี`);announceTable(`${p.name} ใช้เครื่องรางป้องกัน ${c.name} ได้สำเร็จ`,'ป้องกันผีสำเร็จ');}else{const i=p.hand.findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','ban','lucky-flower','holy-water'].includes(x.id));if(i>=0){const prot=p.hand.splice(i,1)[0];g.discard.push(prot);logLocal(`${p.name} ใช้ ${prot.name} ป้องกันผี`);announceTable(`${p.name} ใช้การ์ด “${prot.name}” ป้องกัน ${c.name} ได้สำเร็จ`,'ใช้การ์ดป้องกัน');}else localHurt(p,`ถูก ${c.name} หลอก`);}}
  else localHurt(p,`ถูก ${c.name} หลอก`);
- g.pending=null;hide('drawReveal');if(!g.over)localNext();else renderLocal();
+ g.pending=null;hide('drawReveal');
+ if(!g.over){
+  g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnStartedAt=g.turnStartedAt||Date.now();
+  localEndTimerKey='';renderLocal();
+ }else renderLocal();
 }
 function botTurn(){
  const g=localGame;if(!g||g.over||g.pending)return;const p=g.players[g.turn];if(!p?.bot||!p.alive)return;
@@ -247,7 +321,7 @@ function botTurn(){
  if(playerKeyCount(p)>=3){localFinish(p,`${p.name} มีกุญแจครบ 3 ดอกแล้ว หนีออกจากบ้านผีไทยได้สำเร็จ!`);return;}
  if(p.skip){p.skip=false;logLocal(`${p.name} ถูกข้ามเทิร์น`);localNext();return;}
  if(!g.deck.length){localNext();return;}
- const c=g.deck.pop();g.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
+ const c=drawCardRespectingCatLimit(g.deck,p.hand);if(!c){logLocal(`${p.name} ยังจั่วการ์ดแมวเพิ่มไม่ได้ เพราะมีแมวอยู่ในมือแล้ว`);localNext();return;}playDrawSound();playCardEventSound(c);g.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
  logLocal(`${p.name} จั่วได้ “${c.name}”`);
  if(g.lastDraw.ghost){
   const i=p.hand.findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','lucky-flower','holy-water'].includes(x.id));
@@ -393,7 +467,7 @@ function renderOnline(){
  if($('sidePlayersCount'))$('sidePlayersCount').textContent=`${(s.players||[]).filter(x=>x.alive!==false).length}/${(s.players||[]).length}`;if($('sideRoundCount'))$('sideRoundCount').textContent=String(s.round||1);if($('sideCurrentTurn'))$('sideCurrentTurn').textContent=s.over?'เกมจบ':(s.players[s.turn]?.name||'—');
  const canDraw=myTurn&&s.phase!=='afterdraw'&&!s.pending&&!s.over;
  $('drawCard').disabled=!canDraw;$('tableDeck').disabled=!canDraw;$('endTurn').disabled=!(myTurn&&s.phase==='afterdraw'&&!s.pending&&!s.over);$('escapeBtn').disabled=!(myTurn&&!s.pending&&!s.over);
- if(s.lastDraw&&s.lastDraw.token!==lastRevealToken){lastRevealToken=s.lastDraw.token;showReveal(s.lastDraw,!!s.lastDraw.ghost);}
+ if(s.lastDraw&&s.lastDraw.token!==lastRevealToken){lastRevealToken=s.lastDraw.token;playCardEventSound({...s.lastDraw.card,kind:s.lastDraw.ghost?'ghost':s.lastDraw.card?.kind});showReveal(s.lastDraw,!!s.lastDraw.ghost);}
  if(s.pending&&s.pending.playerId===socket?.id){showGhostChoicesOnline(s.pending.card);}
  if(s.over){show('gameOver');$('resultTitle').textContent=s.winner===socket?.id?'คุณหนีออกมาได้!':s.winner?`${s.players.find(p=>p.id===s.winner)?.name||'ผู้เล่น'} ชนะ!`:'เกมจบแล้ว';$('resultText').textContent=s.logs?.[0]||'การผจญภัยสิ้นสุดลง';}
  else hide('gameOver');

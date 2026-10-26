@@ -99,12 +99,30 @@ function startGame(r){
 }
 function findPlayer(r,id){return r?.game?.players.find(p=>p.id===id)}
 function isTurn(r,p){return r?.game&&!r.game.over&&!r.game.pending&&r.game.players[r.game.turn]?.id===p?.id&&p?.alive}
+
+function drawRespectingCatLimit(g,p){
+ if(!g?.deck?.length)return null;
+ if((p.hand||[]).some(c=>c?.id==='cat')){
+  for(let i=g.deck.length-1;i>=0;i--){
+   if(g.deck[i]?.id!=='cat')return g.deck.splice(i,1)[0];
+  }
+  if(g.discard?.some(c=>c?.id!=='cat')){
+   const eligible=g.discard.filter(c=>c?.id!=='cat');
+   g.discard=g.discard.filter(c=>c?.id==='cat');
+   g.deck.push(...shuffle(eligible));
+   for(let i=g.deck.length-1;i>=0;i--)if(g.deck[i]?.id!=='cat')return g.deck.splice(i,1)[0];
+  }
+  return null;
+ }
+ return g.deck.pop();
+}
+
 function drawCard(r,p){
  const g=r.game;if(!isTurn(r,p)||(g.phase||'draw')!=='draw')return;
  if(r.turnTimer)clearTimeout(r.turnTimer);
  if(!g.deck.length&&g.discard.length){g.deck=shuffle(g.discard.splice(0));log(g,'สับกองทิ้งกลับมาเป็นกองจั่วใหม่')}
  if(!g.deck.length){log(g,'กองการ์ดหมดแล้ว');nextTurn(r);return}
- const c=g.deck.pop(),ghost=c.kind==='ghost'||c.type==='ผีอันตราย';
+ const c=drawRespectingCatLimit(g,p);if(!c){log(g,`${p.name} มีการ์ดแมวอยู่แล้ว จึงยังจั่วแมวเพิ่มไม่ได้`);emitStates(r);scheduleTurnAutoDraw(r);return;}const ghost=c.kind==='ghost'||c.type==='ผีอันตราย';
  g.lastDraw={token:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,playerId:p.id,playerName:p.name,card:{id:c.id,name:c.name,type:c.type,desc:c.desc,effect:c.effect,image:c.image},ghost};
  log(g,`${p.name} จั่วได้ “${c.name}”`);
  // น้ำมนต์ทำงานทันทีเมื่อจั่วได้และหัวใจยังไม่เต็ม: ใช้การ์ด ฟื้น 1 หัวใจ และเพิ่มการ์ดหัวใจเข้ามือ
@@ -169,7 +187,11 @@ io.on('connection',socket=>{
    if((p.shields||0)>0){p.shields--;const msg=`${p.name} ใช้เครื่องรางที่เตรียมไว้ ป้องกัน ${c.name} ได้สำเร็จ`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ใช้การ์ดป้องกัน',message:msg,kind:'ward'});}
    else {const i=p.hand.findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','ban','lucky-flower','holy-water'].includes(x.id));if(i>=0){const ward=p.hand.splice(i,1)[0];g.discard.push(ward);const msg=`${p.name} ใช้การ์ด “${ward.name}” ป้องกัน ${c.name} ได้สำเร็จ`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ใช้การ์ดป้องกัน',message:msg,kind:'ward'});}else{hurt(r,p,`ถูก ${c.name} หลอก`);const msg=`${p.name} ไม่มีการ์ดป้องกัน เสียหัวใจ 1 ดวง`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ผีหลอกสำเร็จ',message:msg,kind:'danger'});}}
   } else {hurt(r,p,`ถูก ${c.name} หลอก`);const msg=`${p.name} ยอมรับผีหลอก เสียหัวใจ 1 ดวง`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ผีหลอกสำเร็จ',message:msg,kind:'danger'});}
-  g.pending=null;if(!g.over)nextTurn(r);else emitStates(r);
+  g.pending=null;
+  if(!g.over){
+   g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;
+   emitStates(r);scheduleTurnAutoDraw(r);
+  }else emitStates(r);
  });
  socket.on('skip-draw',({room}={})=>{
   const r=rooms.get(String(room||'').toUpperCase()),p=findPlayer(r,socket.id);if(!r||!p||!isTurn(r,p)||(r.game.phase||'draw')!=='draw')return;
