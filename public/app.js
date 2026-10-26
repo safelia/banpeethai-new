@@ -39,12 +39,28 @@ function startAmbient(){
   step++;
  };
  playBar();musicTimer=setInterval(playBar,720);
- const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: เปิด';btn.setAttribute('aria-pressed','true');}const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: เปิด';gameBtn.setAttribute('aria-pressed','true');}
+ const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: เปิด';btn.setAttribute('aria-pressed','true');}const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: เปิด';gameBtn.setAttribute('aria-pressed','true');}if(typeof syncGameMusicControls==='function')syncGameMusicControls();syncGameMusicControls();
 }
 function stopAmbient(){
  if(musicTimer){clearInterval(musicTimer);musicTimer=null;}
  ambientNodes.forEach(n=>{try{if(n.disconnect)n.disconnect();}catch(_){}});ambientNodes=[];musicEnabled=false;
- const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: ปิด';btn.setAttribute('aria-pressed','false');}const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: ปิด';gameBtn.setAttribute('aria-pressed','false');}
+ const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: ปิด';btn.setAttribute('aria-pressed','false');}const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: ปิด';gameBtn.setAttribute('aria-pressed','false');}if(typeof syncGameMusicControls==='function')syncGameMusicControls();syncGameMusicControls();
+}
+function syncGameMusicControls(){
+ const toggle=$('settingsMusicToggle'), status=$('gameMusicStatus');
+ if(toggle){
+  toggle.setAttribute('aria-pressed',musicEnabled?'true':'false');
+  toggle.classList.toggle('is-on',musicEnabled);
+  const label=toggle.querySelector('b');if(label)label.textContent=musicEnabled?'เปิด':'ปิด';
+ }
+ if(status)status.textContent=musicEnabled?'กำลังเล่นเพลงบรรเลง':'ปิดอยู่';
+}
+function openGameOptions(){
+ const panel=$('gameOptionsPanel');if(!panel)return;
+ syncGameMusicControls();panel.classList.remove('hidden');
+}
+function closeGameOptions(){
+ $('gameOptionsPanel')?.classList.add('hidden');
 }
 function playDrawSound(){
  const ctx=ensureAudio();if(!ctx)return;if(ctx.state==='suspended')ctx.resume();
@@ -248,6 +264,8 @@ function botTurn(){
 function renderPlayers(state, local=false){
  const list=$('playersList');if(!list)return;
  const players=state?.players||[];
+ list.classList.remove('count-1','count-2','count-3','count-4','count-5');
+ list.classList.add(`count-${Math.max(1,Math.min(5,players.length))}`);
  list.innerHTML=players.map((p,index)=>{
   const isTurn=players[state.turn]?.id===p.id;
   const hearts=Math.max(0,Number(p.hearts)||0);
@@ -262,12 +280,15 @@ function renderHand(hand,canPlay){
  const count=hand.length;
  $('handCount').textContent=`${count} ใบ`;
  const available=Math.max(1,el.clientWidth||el.parentElement?.clientWidth||960);
- const gap=count>1?Math.max(3,Math.min(7,available*.004)):0;
- const cardWidth=count?Math.max(42,Math.min(170,Math.floor((available-gap*Math.max(0,count-1))/count))):170;
+ const visibleSlot=count?available/count:available;
+ const cardWidth=count?Math.max(38,Math.min(140,Math.floor(visibleSlot+Math.min(42,Math.max(10,visibleSlot*.42))))):140;
+ const overlap=count>1?Math.max(0,Math.min(cardWidth-1,cardWidth-visibleSlot)):0;
  const sideCount=$('sideHandCount');if(sideCount)sideCount.textContent=`${count} ใบ`;
  el.style.setProperty('--hand-count',String(count));
  el.style.setProperty('--hand-card-width',`${cardWidth}px`);
- el.style.setProperty('--hand-gap',`${gap}px`);
+ el.style.setProperty('--hand-overlap',`${overlap}px`);
+ el.style.setProperty('--hand-overlap-negative',`${-overlap}px`);
+ el.style.setProperty('--hand-gap','0px');
  el.innerHTML=hand.map((c,i)=>`<button class="hand-card ${c.id==='heart'?'heart-card':''}" data-hand-index="${i}" style="--hand-index:${i};flex:0 1 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px" ${!canPlayCard(c)?'disabled':''} title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
    <span class="hand-art" style="background-image:url('${esc(imgUrl(c))}')"></span>
    <span class="hand-card-title">${esc(c.name||'การ์ด')}</span>
@@ -616,11 +637,17 @@ function init(){
  document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>hide(b.dataset.close)));
  document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.scroll)?.scrollIntoView({behavior:'smooth'})));
  $('nameBtn')?.addEventListener('click',()=>{const n=prompt('ชื่อผู้เล่น',currentPlayerName);if(n?.trim()){currentPlayerName=n.trim().slice(0,18);$('profileName').textContent=currentPlayerName;if($('gamePlayerName'))$('gamePlayerName').textContent=currentPlayerName;}});
- $('gameMenuHotspot')?.addEventListener('click',()=>{openSetup();});
+ $('gameMenuHotspot')?.addEventListener('click',()=>{openGameOptions();});
+  $('settingsMusicToggle')?.addEventListener('click',()=>{if(musicEnabled)stopAmbient();else startAmbient();syncGameMusicControls();});
+  $('closeGameOptions')?.addEventListener('click',closeGameOptions);
+  $('doneGameOptions')?.addEventListener('click',closeGameOptions);
+  $('gameOptionsPanel')?.addEventListener('click',e=>{if(e.target===$('gameOptionsPanel'))closeGameOptions();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeGameOptions();});
+
 
  // v2.1.2: call game actions directly from independent hitboxes.
  const hotspotActions = {
-   refHotspotMenu: () => openSetup(),
+   refHotspotMenu: () => openGameOptions(),
    refHotspotSound: () => { if(musicEnabled) stopAmbient(); else startAmbient(); },
    refHotspotLeave: () => leaveGame(),
    refHotspotDraw: () => draw(),
@@ -651,12 +678,24 @@ function init(){
  $('copyRoomCode')?.addEventListener('click',()=>{const code=$('createdRoomCode').textContent;navigator.clipboard?.writeText(code).then(()=>toast('คัดลอกรหัสห้องแล้ว')).catch(()=>toast(`รหัสห้อง: ${code}`));});
  $('drawCard')?.addEventListener('click',draw);$('tableDeck')?.addEventListener('click',draw);$('escapeBtn')?.addEventListener('click',escape);
  $('endTurn')?.addEventListener('click',()=>{if(mode==='bot'&&localGame&&localGame.turn===0&&localGame.phase==='afterdraw'&&!localGame.pending){if(localEndTimer)clearTimeout(localEndTimer);localEndTimer=null;localEndTimerKey='';localNext();}else if(mode==='online'&&onlineRoom&&onlineState?.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'){socket.emit('end-turn',{room:onlineRoom});}else toast('จบเทิร์นได้หลังจั่วการ์ดแล้ว');});
- $('leaveGame')?.addEventListener('click',leaveGame);$('playAgain')?.addEventListener('click',()=>{hide('gameOver');hide('gameScreen');openSetup();});
+ $('leaveGame')?.addEventListener('click',leaveGame);
+ const exitResultScreen=()=>{hide('gameOver');hide('gameScreen');hide('drawReveal');hide('gameOptionsPanel');localGame=null;onlineState=null;onlineRoom='';isHost=false;openSetup();};
+ $('closeGameOver')?.addEventListener('click',exitResultScreen);
+ $('playAgain')?.addEventListener('click',()=>{hide('gameOver');hide('drawReveal');hide('gameOptionsPanel');hide('gameScreen');localGame=null;onlineState=null;onlineRoom='';isHost=false;openSetup();});
+
  $('cardSearch')?.addEventListener('input',renderCatalog);$('cardFilter')?.addEventListener('change',renderCatalog);
  $('setupModal')?.addEventListener('click',e=>{if(e.target.id==='setupModal')closeSetup();});
  $('drawReveal')?.addEventListener('click',e=>{if(e.target.classList.contains('reveal-backdrop')){if(!localGame?.pending&&!onlineState?.pending)hide('drawReveal');}});
  if(window.io){socket=io({reconnection:true,reconnectionAttempts:8,reconnectionDelay:500,timeout:20000});bindSocket();}
  setMode();
 }
+let handResizeQueued=false;
+window.addEventListener('resize',()=>{
+ if(handResizeQueued)return;handResizeQueued=true;
+ requestAnimationFrame(()=>{handResizeQueued=false;
+  if(mode==='online'&&onlineState){const me=onlineState.players?.find(p=>p.id===socket?.id);renderHand(me?.hand||[],onlineState.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'&&!onlineState.over&&!onlineState.pending);}
+  else if(mode==='bot'&&localGame){const me=localGame.players?.find(p=>p.id==='human');renderHand(me?.hand||[],localGame.turn===0&&!localGame.over&&!localGame.pending&&localGame.phase==='afterdraw');}
+ });
+});
 document.addEventListener('DOMContentLoaded',init);
 })();
