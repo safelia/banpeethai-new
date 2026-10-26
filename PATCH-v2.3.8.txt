@@ -1,0 +1,12 @@
+BanPeeThai v2.3.8 UI and deck patch
+
+Changes:
+- Player hand cards keep a readable fixed card width and overlap within the hand frame instead of shrinking or escaping the frame.
+- Full-art card faces use contain sizing to keep the complete card visible.
+- Latest card shown on the table uses contain sizing and a taller display area so the whole card face is visible.
+- Removed "เจ้าที่ให้กำลังใจ" and "ผีน้อยเพื่อนรัก" from the draw deck by setting copies to 0.
+
+Run:
+  npm install
+  npm start
+Then open http://localhost:3000

@@ -17,7 +17,7 @@
     "type": "ผู้ช่วย",
     "icon": "👼",
     "color": "gold",
-    "copies": 4,
+    "copies": 0,
     "desc": "เจ้าที่ใจดีช่วยคุ้มครองคุณจากอันตราย",
     "effect": "ยกเลิกการเสียหัวใจ 1 ครั้ง",
     "image": "/assets/cards/card-18.jpg"
@@ -280,7 +280,7 @@
     "type": "ตัวช่วย",
     "icon": "🫧",
     "color": "mint",
-    "copies": 5,
+    "copies": 0,
     "desc": "ผีน้อยตัวจิ๋วอยากช่วยคุณหาทางออก",
     "effect": "ป้องกันผลร้ายครั้งถัดไป",
     "image": "/assets/cards/card-18.jpg"

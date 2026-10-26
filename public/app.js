@@ -374,16 +374,19 @@ function renderHand(hand,canPlay){
  const count=hand.length;
  $('handCount').textContent=`${count} ใบ`;
  const available=Math.max(1,el.clientWidth||el.parentElement?.clientWidth||960);
- const visibleSlot=count?available/count:available;
- const cardWidth=count?Math.max(28,Math.min(140,Math.ceil(visibleSlot+Math.min(36,Math.max(6,visibleSlot*.38))))):140;
- const overlap=count>1?Math.max(0,Math.min(cardWidth-1,cardWidth-visibleSlot)):0;
+ // Keep card artwork at a readable, stable size. Cards overlap horizontally when
+ // the hand grows instead of being squeezed or pushed outside the frame.
+ const handHeight=Math.max(120,el.clientHeight||el.parentElement?.clientHeight||220);
+ const cardWidth=count?Math.max(92,Math.min(142,Math.round((handHeight-8)*2/3))):142;
+ const stride=count>1?Math.min(cardWidth,Math.max(28,(available-cardWidth)/(count-1))):cardWidth;
+ const overlap=count>1?Math.max(0,Math.round(cardWidth-stride)):0;
  const sideCount=$('sideHandCount');if(sideCount)sideCount.textContent=`${count} ใบ`;
  el.style.setProperty('--hand-count',String(count));
  el.style.setProperty('--hand-card-width',`${cardWidth}px`);
  el.style.setProperty('--hand-overlap',`${overlap}px`);
  el.style.setProperty('--hand-overlap-negative',`${-overlap}px`);
  el.style.setProperty('--hand-gap','0px');
- el.innerHTML=hand.map((c,i)=>`<button class="hand-card ${c.id==='heart'?'heart-card':''} ${c.fullArt?'hand-full-art-card':''}" data-hand-index="${i}" style="--hand-index:${i};flex:0 1 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px" ${!canPlayCard(c)?'disabled':''} title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
+ el.innerHTML=hand.map((c,i)=>`<button class="hand-card ${c.id==='heart'?'heart-card':''} ${c.fullArt?'hand-full-art-card':''}" data-hand-index="${i}" style="--hand-index:${i};--hand-card-width:${cardWidth}px;--card-overlap:${overlap}px;flex:0 0 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px;margin-left:${i===0?0:-overlap}px;z-index:${i+1}" ${!canPlayCard(c)?'disabled':''} title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
    ${c.fullArt?`<img class="hand-full-art" src="${esc(imgUrl(c))}" alt="${esc(c.name)}">`:`<span class="hand-art" style="background-image:url('${esc(imgUrl(c))}')"></span>
    <span class="hand-card-title">${esc(c.name||'การ์ด')}</span>
    <span class="hand-card-type">${esc(c.type||'การ์ด')}</span>
