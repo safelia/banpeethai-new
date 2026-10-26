@@ -1,2 +1,2 @@
-BanPeeThai Rebuilt v2.0.0
-Clean UI stylesheet, original gameplay logic and assets preserved.
+BanPeeThai Rebuilt v2.2.2
+Turn spotlight, automatic holy-water healing, card-action consistency fixes, and refined Thai-inspired side ornaments.
