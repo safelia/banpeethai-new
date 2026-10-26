@@ -123,8 +123,12 @@ function drawCard(r,p){
  if(!g.deck.length&&g.discard.length){g.deck=shuffle(g.discard.splice(0));log(g,'สับกองทิ้งกลับมาเป็นกองจั่วใหม่')}
  if(!g.deck.length){log(g,'กองการ์ดหมดแล้ว');nextTurn(r);return}
  const c=drawRespectingCatLimit(g,p);if(!c){log(g,`${p.name} มีการ์ดแมวอยู่แล้ว จึงยังจั่วแมวเพิ่มไม่ได้`);emitStates(r);scheduleTurnAutoDraw(r);return;}const ghost=c.kind==='ghost'||c.type==='ผีอันตราย';
- g.lastDraw={token:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,playerId:p.id,playerName:p.name,card:{id:c.id,name:c.name,type:c.type,desc:c.desc,effect:c.effect,image:c.image},ghost};
+ g.lastDraw={token:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,playerId:p.id,playerName:p.name,card:{id:c.id,name:c.name,type:c.type,desc:c.desc,effect:c.effect,image:c.image,fullArt:!!c.fullArt,instantDanger:!!c.instantDanger},ghost};
  log(g,`${p.name} จั่วได้ “${c.name}”`);
+ if(c.instantDanger){
+  g.discard.push(c);hurt(r,p,`จั่วได้ ${c.name} ซึ่งเป็นผีอันตราย ป้องกันไม่ได้`);
+  if(!g.over){g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);}else emitStates(r);return;
+ }
  // น้ำมนต์ทำงานทันทีเมื่อจั่วได้และหัวใจยังไม่เต็ม: ใช้การ์ด ฟื้น 1 หัวใจ และเพิ่มการ์ดหัวใจเข้ามือ
  if(c.id==='holy-water' && !ghost && (p.hearts||0)<3){
   p.hearts=Math.min(3,(p.hearts||0)+1);
@@ -258,7 +262,7 @@ io.on('connection',socket=>{
   }else if(c.id==='eye'){
    const t=target();const hidden=t?.hand?.length?t.hand[Math.floor(Math.random()*t.hand.length)]:null;if(hidden){log(g,`${p.name} ใช้ ${c.name} ส่องดูไพ่ในมือ ${t.name}`);effect(`ตาวาวกระจก: ไพ่ที่สุ่มเห็นจากมือ ${t.name}`,hidden)}else{log(g,`${t?.name||'ผู้เล่น'} ไม่มีไพ่ในมือให้ส่อง`);effect(`${t?.name||'ผู้เล่น'} ไม่มีไพ่ในมือให้ส่อง`)}
   }else if(c.id==='lantern'){
-   if(!g.deck.length&&g.discard.length)g.deck=shuffle(g.discard.splice(0));const extra=g.deck.pop();if(extra){const ghost=extra.kind==='ghost'||extra.type==='ผีอันตราย';g.lastDraw={token:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,playerId:p.id,playerName:p.name,card:extra,ghost};log(g,`${p.name} ใช้ ${c.name} จั่วเพิ่มได้ “${extra.name}”`);if(ghost){g.pending={playerId:p.id,card:extra};g.phase='resolve';g.turnToken=(g.turnToken||0)+1;emitStates(r);socket.emit('card-effect',{kind:'reveal',message:'โคมลอยนำทางทำให้จั่วเพิ่ม แต่พบผี!',card:extra,token:g.lastDraw.token});return;}if(extra.id==='holy-water'&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-lantern-water-${Date.now()}`});g.discard.push(extra);log(g,`${p.name} ใช้โคมลอยจั่วได้น้ำมนต์ ใช้อัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`);effect(`น้ำมนต์ทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,cardById('heart'));}else if(extra.id==='lucky-flower'&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-lantern-flower-${Date.now()}`});g.discard.push(extra);log(g,`${p.name} ใช้โคมลอยจั่วได้ดอกบัว ฟื้นหัวใจเป็น ${p.hearts}/3`);effect(`ดอกบัวทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,cardById('heart'));}else{p.hand.push(extra);effect(`โคมลอยนำทาง: จั่วเพิ่มและเก็บ “${extra.name}” เข้ามือ`,extra)}}else{log(g,`${p.name} ใช้ ${c.name} แต่กองจั่วว่าง`)}
+   if(!g.deck.length&&g.discard.length)g.deck=shuffle(g.discard.splice(0));const extra=g.deck.pop();if(extra){const ghost=extra.kind==='ghost'||extra.type==='ผีอันตราย';g.lastDraw={token:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,playerId:p.id,playerName:p.name,card:extra,ghost};log(g,`${p.name} ใช้ ${c.name} จั่วเพิ่มได้ “${extra.name}”`);if(extra.instantDanger){g.discard.push(extra);hurt(r,p,`จั่วเพิ่มได้ ${extra.name} ซึ่งเป็นผีอันตราย ป้องกันไม่ได้`);if(!g.over){g.phase='afterdraw';g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);}else emitStates(r);socket.emit('card-effect',{kind:'reveal',message:'โคมลอยนำทางเปิดเจอผีอันตราย!',card:extra,token:g.lastDraw.token});return;}if(ghost){g.pending={playerId:p.id,card:extra};g.phase='resolve';g.turnToken=(g.turnToken||0)+1;emitStates(r);socket.emit('card-effect',{kind:'reveal',message:'โคมลอยนำทางทำให้จั่วเพิ่ม แต่พบผี!',card:extra,token:g.lastDraw.token});return;}if(extra.id==='holy-water'&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-lantern-water-${Date.now()}`});g.discard.push(extra);log(g,`${p.name} ใช้โคมลอยจั่วได้น้ำมนต์ ใช้อัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`);effect(`น้ำมนต์ทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,cardById('heart'));}else if(extra.id==='lucky-flower'&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-lantern-flower-${Date.now()}`});g.discard.push(extra);log(g,`${p.name} ใช้โคมลอยจั่วได้ดอกบัว ฟื้นหัวใจเป็น ${p.hearts}/3`);effect(`ดอกบัวทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,cardById('heart'));}else{p.hand.push(extra);effect(`โคมลอยนำทาง: จั่วเพิ่มและเก็บ “${extra.name}” เข้ามือ`,extra)}}else{log(g,`${p.name} ใช้ ${c.name} แต่กองจั่วว่าง`)}
   }else{
    log(g,`${p.name} ใช้ ${c.name}`);effect(`ใช้ ${c.name} แล้ว`)
   }
@@ -275,7 +279,10 @@ io.on('connection',socket=>{
    const chosen=choice.cards[Number(index)],other=choice.cards.filter((_,i)=>i!==Number(index));
    if(other.length)g.deck.push(...other);
    if(!chosen){log(g,`${p.name} ยกเลิกการเลือกไพ่จิ้งจกทัก`);}
-   else if(chosen.kind==='ghost'||chosen.type==='ผีอันตราย'){
+   else if(chosen.instantDanger){
+    g.discard.push(chosen);hurt(r,p,`จิ้งจกทักเปิดเจอ ${chosen.name} ซึ่งป้องกันไม่ได้`);log(g,`${p.name} เปิดเจอผีอันตราย ${chosen.name} จากจิ้งจกทัก`);
+    socket.emit('card-effect',{kind:'reveal',message:'จิ้งจกทักเปิดเจอผีอันตราย!',card:chosen,token:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`});
+   }else if(chosen.kind==='ghost'||chosen.type==='ผีอันตราย'){
     g.pending={playerId:p.id,card:chosen};g.phase='resolve';g.turnToken=(g.turnToken||0)+1;
     log(g,`${p.name} เลือก “${chosen.name}” จากจิ้งจกทัก แต่พบผี!`);
     emitStates(r);socket.emit('card-effect',{kind:'reveal',message:'จิ้งจกทักเลือกได้ไพ่ผี!',card:chosen,token:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`});return;

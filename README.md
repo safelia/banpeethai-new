@@ -98,3 +98,9 @@ Syntax checked with Node.js; full live multiplayer gameplay still requires deplo
 - Styled omen-choice card buttons so the revealed card art and descriptions are visible.
 - Replaced gold side glyph rails with a faded haunted Thai house background.
 - Kept player seat anchors and hand panel tied to the game stage across zoom breakpoints.
+
+
+## v2.3.1 — Finished dangerous ghost cards
+- Replaced the legacy generic `tani` ghost entry with three integrated full-art cards: ผีนางรำ, ผีเจ้ากรรมนายเวร, and ผีเปรต.
+- Each dangerous ghost immediately removes one heart on draw; protection cards cannot prevent it.
+- Draw reveal displays only the finished card image, with no duplicate title/description/action UI.

@@ -1776,3 +1776,18 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
   #drawReveal.finished-ghost-reveal .reveal-card { max-width:min(86vw,360px)!important; max-height:calc(100dvh - 150px)!important; }
   #drawReveal.finished-ghost-reveal .reveal-actions { width:min(92vw,360px)!important; }
 }
+
+
+/* Finished dangerous ghost cards already contain their full title, lore and rules. */
+#drawReveal.instant-danger-reveal:not(.hidden) .reveal-kicker,
+#drawReveal.instant-danger-reveal:not(.hidden) #revealTitle,
+#drawReveal.instant-danger-reveal:not(.hidden) .reveal-paper,
+#drawReveal.instant-danger-reveal:not(.hidden) .reveal-actions { display:none!important; }
+#drawReveal.instant-danger-reveal:not(.hidden) > .reveal-card-shell { gap:0!important; }
+#drawReveal.instant-danger-reveal:not(.hidden) .reveal-card {
+  width:auto!important;height:auto!important;aspect-ratio:2/3!important;
+  max-width:min(90vw,430px)!important;max-height:calc(100dvh - 32px)!important;
+  padding:0!important;overflow:hidden!important;background:#090607!important;
+}
+#drawReveal.instant-danger-reveal:not(.hidden) #revealArt { width:100%!important;height:100%!important;min-height:0!important;margin:0!important;padding:0!important; }
+#drawReveal.instant-danger-reveal:not(.hidden) .reveal-full-card-art { display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important; }
