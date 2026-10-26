@@ -1653,7 +1653,7 @@ html,body{
   height:100%!important;
   min-width:0!important;
   min-height:0!important;
-  object-fit:fill!important;
+  object-fit:contain!important;
   object-position:center!important;
   border-radius:inherit!important;
   pointer-events:none!important;
