@@ -130,14 +130,15 @@
   },
   {
     "id": "protection",
-    "name": "เครื่องรางป้องกัน",
+    "name": "สร้อยคอห้อยพระ",
     "type": "ป้องกัน",
     "icon": "🧿",
     "color": "blue",
     "copies": 8,
-    "desc": "เครื่องรางทองคำสลักยันต์ ช่วยปกป้องผู้ถือจากวิญญาณร้าย",
-    "effect": "เมื่อจั่วเจอผี เลือกทิ้งใบนี้แทนการเสียหัวใจ 1 ดวง",
-    "image": "/assets/cards/card-09.jpg"
+    "desc": "นะโม นะโม นะโม หลวงพ่อช่วยลูกด้วย!!!!!",
+    "effect": "เมื่อเจอผี ใช้การ์ดป้องกันการลดหัวใจ 1 ดวง",
+    "image": "/assets/cards/finished-protection/ward-amulet-necklace.webp",
+    "fullArt": true
   },
   {
     "id": "holy-water",
@@ -146,9 +147,10 @@
     "icon": "🏺",
     "color": "cyan",
     "copies": 5,
-    "desc": "น้ำมนต์ช่วยให้ใจสงบและไล่เงามืด",
-    "effect": "ลบผลผีที่กำลังโจมตี หรือฟื้นหัวใจ 1 ดวง (สูงสุด 3)",
-    "image": "/assets/cards/card-11.jpg"
+    "desc": "โดนน้ำนี้เข้าไปต้องปวดร้าวแน่ๆ!!!",
+    "effect": "เมื่อเจอผี ใช้การ์ดป้องกันการลดหัวใจ 1 ดวง หรือฟื้นหัวใจอัตโนมัติเมื่อหัวใจไม่เต็ม",
+    "image": "/assets/cards/finished-protection/ward-holy-water.webp",
+    "fullArt": true
   },
   {
     "id": "friend-holy-water",
@@ -168,9 +170,10 @@
     "icon": "🍚",
     "color": "yellow",
     "copies": 5,
-    "desc": "โปรยข้าวสารเสกเพื่อเปิดทางหนี",
-    "effect": "ยกเลิกผลผีที่เพิ่งจั่วเจอ",
-    "image": "/assets/cards/card-24.jpg"
+    "desc": "กำเม็ดข้าวสารขว้างใส่ผี",
+    "effect": "เมื่อเจอผี ใช้การ์ดป้องกันการลดหัวใจ 1 ดวง",
+    "image": "/assets/cards/finished-protection/ward-blessed-rice.webp",
+    "fullArt": true
   },
   {
     "id": "skip",
