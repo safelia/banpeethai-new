@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#211523">
+<title>บ้านผีไทย — Thai Spirit Card Game v2.1.0</title>
+<link rel="stylesheet" href="/style.css?v=2.1.1">
+</head>
+<body>
+<div class="ambient"></div>
+<header class="topbar">
+  <a class="brand" href="#"><span class="brand-mark">⌂</span><span><b>บ้านผีไทย</b><small>THAI SPIRIT CARD GAME</small></span></a>
+  <nav><button data-scroll="story">เรื่องราว</button><button data-scroll="cards">การ์ดทั้งหมด</button><button data-scroll="rules">คู่มือการเล่น</button></nav>
+  <button class="secondary sound-toggle" id="soundToggle" type="button" aria-pressed="false">♫ เสียง: ปิด</button><div class="profile"><span>🐈</span><div><b id="profileName">ผู้เล่น</b><small>นักสำรวจมือใหม่</small></div><button id="nameBtn" title="เปลี่ยนชื่อ">⚙</button></div>
+</header>
+<main>
+<section class="hero" id="story">
+  <div class="hero-copy">
+    <div class="eyebrow">✦ คืนนี้... บ้านหลังนี้มีความลับ ✦</div>
+    <div class="logo-drawing">⌂</div>
+    <h1>บ้านผีไทย</h1><p class="english">THAI SPIRIT CARD GAME</p>
+    <p class="lead">เกมการ์ดผีไทยสุดน่ารัก<br>รวมทีมเพื่อน จั่วการ์ด เอาตัวรอด แล้วหนีออกจากบ้านให้ได้!</p>
+    <div class="chips"><span>❤️ หัวใจ 3 ดวง</span><span>♟ 2–5 ผู้เล่น</span><span>🌙 เล่นกับบอท 2–5 คน</span></div>
+    <div class="hero-actions"><button class="primary big" id="openSetup">✦ เริ่มเล่นเกม</button><button class="secondary" data-scroll="cards">เปิดดูการ์ดทั้งหมด ↗</button></div>
+  </div>
+  <aside class="quick-panel">
+    <div class="panel-label">📜 บันทึกจากผู้เฒ่า</div><h2>ยินดีต้อนรับสู่บ้านผีไทย</h2>
+    <p>บ้านไม้เก่าหลังนี้เต็มไปด้วยวิญญาณจากตำนานพื้นบ้าน บางตนขี้เล่น บางตนชอบแกล้ง และบางตนซ่อนกุญแจทางออกไว้...</p>
+    <div class="objective"><span>🗝️</span><div><b>ภารกิจของคุณ</b><small>เอาตัวรอดและสะสมกุญแจ 3 ดอกเพื่อหนีออกจากบ้าน</small></div></div>
+    <button class="secondary full" data-scroll="rules">อ่านวิธีเล่นก่อนเริ่ม →</button>
+  </aside>
+</section>
+<section class="feature-strip">
+ <div><span>🃏</span><b>การ์ดหลากหลาย</b><small>ผีไทย แอ็กชัน และตัวช่วย</small></div><div><span>🫶</span><b>เล่นกับเพื่อนได้</b><small>2–5 คนต่อห้อง</small></div><div><span>🧿</span><b>วางแผนเอาตัวรอด</b><small>ป้องกันผี รักษาหัวใจ</small></div><div><span>🗝️</span><b>หาทางออก</b><small>สะสมกุญแจให้ครบ 3 ดอก</small></div>
+</section>
+<section class="section" id="cards">
+ <div class="section-heading"><div><span class="eyebrow">สะสม • สำรวจ • เอาตัวรอด</span><h2>คลังการ์ดผีไทย <span>🪷</span></h2><p>การ์ดทุกใบออกแบบใหม่ พร้อมคำอธิบายและความสามารถ</p></div><div class="card-tools"><input id="cardSearch" placeholder="⌕ ค้นหาการ์ด..."><select id="cardFilter"><option value="all">ทุกประเภท</option><option>ผีไทย</option><option>ผีอันตราย</option><option>ป้องกัน</option><option>แอ็กชัน</option><option>ตัวช่วย</option><option>กุญแจ</option><option>ลางบอกเหตุ</option></select></div></div>
+ <div class="card-grid" id="cardGrid"></div>
+</section>
+<section class="section rules-section" id="rules">
+ <div class="section-heading"><div><span class="eyebrow">คู่มือจากผู้ดูแลบ้าน</span><h2>วิธีเล่นฉบับเข้าใจง่าย</h2><p>เอาตัวรอดให้ได้ก่อนที่หัวใจจะหมดลง</p></div></div>
+ <div class="rules-grid">
+  <article><span>01</span><h3>เริ่มต้นการเดินทาง</h3><p>ผู้เล่น 2–5 คน เริ่มด้วยหัวใจคนละ 3 ดวงเท่านั้น ไม่มีการ์ดในมือ</p></article>
+  <article><span>02</span><h3>เล่นในเทิร์นของคุณ</h3><p>ทุกเทิร์นต้องจั่วการ์ด 1 ใบหลังเล่นการ์ดที่ต้องการ ยกเว้นใช้การ์ด “ข้ามการจั่ว”</p></article>
+  <article><span>03</span><h3>ระวังวิญญาณ</h3><p>เมื่อจั่วเจอผี คุณเสียหัวใจ 1 ดวง หรือเลือกทิ้งการ์ดป้องกัน 1 ใบแทนได้</p></article>
+  <article><span>04</span><h3>หนีออกจากบ้าน</h3><p>สะสมกุญแจเรือนไทยให้ครบ 3 ดอกแล้วกด “หนีออกจากบ้าน” เพื่อชนะ</p></article>
+ </div>
+ <div class="note"><b>💡 เคล็ดลับ:</b> ใช้เครื่องรางและน้ำมนต์ให้ถูกจังหวะ คอยสังเกตหัวใจของตัวเอง และอย่าลืมว่าคู่แข่งก็แย่งกุญแจได้เช่นกัน</div>
+</section>
+<footer><span>⌂ บ้านผีไทย</span><small>สร้างด้วยความรักในตำนานพื้นบ้านไทย • เกมต้นฉบับแฟนตาซี</small></footer>
+</main>
+<div class="modal-backdrop hidden" id="setupModal"><div class="modal"><button class="close" data-close="setupModal">×</button><span class="eyebrow">เตรียมตัวก่อนเข้าบ้าน</span><h2>เริ่มการผจญภัย</h2><label>ชื่อผู้เล่น<input id="playerName" maxlength="18" value="นักสำรวจ"></label><label>รูปแบบการเล่น<select id="mode"><option value="bot">เล่นกับบอท</option><option value="online">เล่นออนไลน์กับเพื่อน</option></select></label><div id="botOptions"><label>จำนวนผู้เล่นรวม<select id="playerCount"><option value="2">2 คน</option><option value="3" selected>3 คน</option><option value="4">4 คน</option><option value="5">5 คน</option></select></label></div><div id="onlineOptions" class="hidden"><div class="online-choice"><button type="button" class="secondary full" id="createRoomBtn">🏮 สร้างห้องใหม่</button><p class="muted">หรือเข้าห้องที่เพื่อนสร้างไว้</p><label>รหัสห้อง<input id="joinRoomCode" maxlength="5" placeholder="เช่น A7K2Q" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" inputmode="text" enterkeyhint="go"></label><button type="button" class="secondary full" id="joinRoomBtn">เข้าร่วมห้อง</button></div><div id="roomLobby" class="hidden"><h3>รหัสห้องของคุณ: <strong id="createdRoomCode"></strong></h3><button type="button" class="secondary" id="copyRoomCode">คัดลอกรหัสห้อง</button><p id="lobbyPlayers">รอผู้เล่น...</p><button type="button" class="primary full" id="startOnlineGame">เริ่มเกม (เจ้าของห้อง)</button></div></div><button class="primary full" id="startGame">เข้าบ้านผีไทย →</button></div></div>
+<div class="game-overlay hidden" id="gameScreen">
+ <div class="game-top"><button class="secondary game-menu-hotspot" id="gameMenuHotspot" type="button" aria-label="เมนู">เมนู</button><button class="secondary game-settings-hotspot" id="gameSettingsHotspot" type="button" aria-label="ตั้งค่า">ตั้งค่า</button><button class="secondary surrender-button" id="leaveGame" title="ยอมแพ้และออกจากเกม">🏳️ ออกเกม</button><div class="game-brand-title"><span class="game-brand-mark">⌂</span><div><h2 id="gameTitle">บ้านผีไทย</h2><small>THAI SPIRIT CARD GAME</small></div></div><div class="game-hud-right"><span class="game-player-chip">🐈 <b id="gamePlayerName">ผู้เล่น</b></span><button class="secondary game-sound-toggle" id="gameSoundToggle" type="button" aria-pressed="false">♫ เสียง: ปิด</button><div class="room-tag" id="roomTag">โหมดบอท</div></div></div>
+ <div class="game-layout ritual-layout"><section class="table-panel ritual-panel"><div class="turn-banner" id="turnBanner">ถึงตาคุณแล้ว</div><div class="night-omen" id="nightOmen">คำทำนายประจำคืน • 🌫️ หมอกหนาทึบปกคลุมเรือนไทย…</div><div class="table-art ritual-scene"><div class="table-scene-heading"><span>🏮 บ้านผีไทย • วงพิธีสำรวจเรือน</span><span>รอบที่ <b id="roundCount">1</b></span></div><div id="playersList" class="players-ring" aria-label="ผู้เล่นรอบโต๊ะ"></div><div class="table-play-area ritual-table"><div class="table-pile discard-pile" id="discardTop"><span class="discard-empty">—</span><small>กองทิ้ง</small></div><div class="table-center"><p id="tableMessage">ถึงตาคุณแล้ว จั่วการ์ด 1 ใบ</p><button class="deck-stack" id="tableDeck" type="button" aria-label="จั่วการ์ด"><span class="deck-card-back back-two">✦</span><span class="deck-card-back">✦</span><b>กองจั่ว</b><small id="tableDeckCount">0 ใบ</small></button></div><div class="table-pile table-amulet"><span>🕯️</span><small>แท่นบูชา</small></div></div><div class="game-actions table-actions"><button class="primary" id="drawCard">🃏 จั่วการ์ด</button><button class="secondary" id="escapeBtn">🗝️ หนีออกจากบ้าน</button><button class="secondary" id="endTurn" aria-label="จบเทิร์นอัตโนมัติ">จบเทิร์น ↗</button></div></div><span id="deckCount" class="hidden">กองจั่ว</span><section class="hand-zone"><div class="hand-heading"><h3>🃏 การ์ดในมือ</h3><small id="handCount">0 ใบ</small></div><div class="hand-content-layout"><div id="hand" class="hand"></div></div></section></section><aside class="game-side-rail" aria-label="สถานะและประวัติเกม"><section class="hand-info-card side-status-card"><h4>📜 สถานะเกม</h4><div class="hand-stat-row"><span>ไพ่ในมือ</span><b id="sideHandCount">0 ใบ</b></div><div class="hand-stat-row"><span>ไพ่ในกองจั่ว</span><b id="sideDeckCount">— ใบ</b></div><div class="hand-stat-row"><span>ผู้เล่นที่ยังอยู่</span><b id="sidePlayersCount">—</b></div><div class="hand-stat-row"><span>รอบปัจจุบัน</span><b id="sideRoundCount">1</b></div><div class="hand-stat-row"><span>ถึงตา</span><b id="sideCurrentTurn">—</b></div><p class="hand-info-note">ใช้การ์ดแล้วจบรอบให้อัตโนมัติ • กุญแจครบ 3 ดอกชนะทันที</p></section><section class="hand-info-card hand-history-card"><h4>🕯️ ประวัติของผู้เล่นทุกคน</h4><p class="history-subtitle">การจั่ว การใช้การ์ด การป้องกัน และกุญแจ</p><div id="gameLog" class="game-log table-log"></div></section></aside></div>
+ <div class="table-announcement hidden" id="tableAnnouncement" role="status" aria-live="polite"><span class="announcement-icon">🧿</span><b id="tableAnnouncementTitle">เหตุการณ์ในบ้านผีไทย</b><p id="tableAnnouncementText"></p></div>
+ <div class="game-over hidden" id="gameOver"><div class="modal"><span class="eyebrow">การผจญภัยสิ้นสุดลง</span><h2 id="resultTitle">คุณหนีออกมาได้!</h2><p id="resultText"></p><button class="primary full" id="playAgain">เล่นอีกครั้ง</button></div></div>
+
+ <div class="reference-hotspot-layer" aria-label="ปุ่มควบคุมเกม">
+  <button type="button" class="reference-hotspot hotspot-menu" id="refHotspotMenu" aria-label="เปิดเมนู"></button>
+  <button type="button" class="reference-hotspot hotspot-sound" id="refHotspotSound" aria-label="เปิดหรือปิดเสียง"></button>
+  <button type="button" class="reference-hotspot hotspot-leave" id="refHotspotLeave" aria-label="ออกจากห้อง"></button>
+  <button type="button" class="reference-hotspot hotspot-draw" id="refHotspotDraw" aria-label="จั่วการ์ด"></button>
+  <button type="button" class="reference-hotspot hotspot-escape" id="refHotspotEscape" aria-label="หนีออกจากบ้าน"></button>
+  <button type="button" class="reference-hotspot hotspot-endturn" id="refHotspotEndTurn" aria-label="จบรอบ"></button>
+ </div>
+</div>
+<div class="draw-reveal hidden" id="drawReveal" role="dialog" aria-modal="true" aria-labelledby="revealTitle">
+ <div class="reveal-backdrop"></div>
+ <div class="reveal-card-shell">
+  <div class="reveal-kicker">🏮 บ้านผีไทย • การ์ดที่พบ</div>
+  <h2 id="revealTitle">คุณจั่วได้การ์ดใบนี้</h2>
+  <article class="reveal-card">
+   <div class="reveal-art" id="revealArt"></div>
+   <div class="reveal-paper">
+    <span class="reveal-type" id="revealType">ประเภทการ์ด</span>
+    <h3 id="revealName">ชื่อการ์ด</h3>
+    <p id="revealDesc">คำบรรยายการ์ด</p>
+    <div class="reveal-effect"><b>ความสามารถ</b><span id="revealEffect">ผลของการ์ด</span></div>
+   </div>
+  </article>
+  <div class="reveal-actions" id="revealActions"></div>
+ </div>
+</div>
+<div class="target-modal-backdrop hidden" id="targetModal" role="dialog" aria-modal="true" aria-labelledby="targetTitle" aria-hidden="true">
+ <section class="target-modal-card">
+  <div class="target-modal-ornament">✦ 🏮 ✦</div>
+  <span class="eyebrow">บ้านผีไทย • เลือกเป้าหมาย</span>
+  <h2 id="targetTitle">เลือกผู้เล่น</h2>
+  <p id="targetSubtitle">เลือกคนที่ต้องการให้การ์ดส่งผลด้วย</p>
+  <div class="target-options" id="targetOptions"></div>
+  <button type="button" class="secondary target-cancel" id="targetCancel">ยกเลิก</button>
+ </section>
+</div>
+<div class="toast" id="toast"></div>
+<script src="/socket.io/socket.io.js"></script><script src="/app.js?v=2.1.1"></script>
+</body></html>

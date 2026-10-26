@@ -1,0 +1,276 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Pridi:wght@400;500;600;700&display=swap');
+:root{--bg:#17121b;--panel:#261a28;--panel2:#332130;--gold:#efc28a;--pink:#f18caa;--cream:#ffebd0;--muted:#c6b0bd;--line:#7d4e5b;--shadow:0 18px 55px #09060ab0}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#17121b;color:var(--cream);font-family:Kanit,system-ui,sans-serif;background-image:linear-gradient(180deg,#17121b66,#17121be8 70%),url('/assets/haunted-thai-house.png'),radial-gradient(ellipse at 50% 0,#54314b,#17121b 70%);background-size:cover;background-position:center top;background-attachment:fixed;min-height:100vh}body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 8% 10%,#f18caa17,transparent 30%),radial-gradient(circle at 90% 25%,#f4c77c13,transparent 30%);z-index:-1}
+button,input,select{font:inherit}button{cursor:pointer;transition:transform .18s,filter .18s}button:hover{filter:brightness(1.12);transform:translateY(-1px)}.topbar{max-width:1320px;margin:auto;height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid #e7b7a52a;background:#17121b88;backdrop-filter:blur(12px);position:sticky;top:0;z-index:10}.brand{display:flex;gap:12px;align-items:center;color:var(--cream);text-decoration:none}.brand-mark{display:grid;place-items:center;width:48px;height:48px;border:1px solid var(--gold);border-radius:14px;background:#5b3449;font-size:28px;color:var(--gold)}.brand b{font-family:Pridi,serif;font-size:24px;display:block;line-height:1.1}.brand small,.profile small{display:block;color:var(--muted);font-size:10px;letter-spacing:1.5px}.topbar nav{display:flex;gap:8px}.topbar nav button,.profile button{background:transparent;color:var(--cream);border:1px solid transparent;padding:10px 14px;border-radius:12px}.topbar nav button:hover{border-color:var(--line);background:#ffffff0b}.profile{display:flex;gap:10px;align-items:center;background:#ffffff0a;border:1px solid #f0c9ad35;border-radius:18px;padding:8px 12px}.profile>span{font-size:24px}.profile b{font-size:13px}.profile small{letter-spacing:0}.profile button{padding:5px}.hero{max-width:1320px;margin:30px auto 24px;padding:0 24px;display:grid;grid-template-columns:1.45fr .8fr;gap:22px;min-height:470px}.hero-copy,.quick-panel{border:1px solid #e7b7a533;border-radius:26px;box-shadow:var(--shadow);overflow:hidden;position:relative}.hero-copy{padding:42px 46px;background:linear-gradient(90deg,#211523f5 0%,#211523d9 58%,#2115236b 100%),url('/assets/haunted-thai-house.png') center/cover}.hero-copy:after{content:"✦ 𓆩♡𓆪 ✦";position:absolute;right:34px;bottom:24px;color:#f2c48b9c;font-size:25px;letter-spacing:14px}.eyebrow{color:var(--gold);font-size:12px;letter-spacing:1.2px}.logo-drawing{font-family:Pridi,serif;font-size:52px;color:var(--gold);margin-top:12px;line-height:1}.hero h1{font:700 clamp(44px,5vw,70px)/1.1 Pridi,serif;margin:0;color:#ffdfb9;text-shadow:0 4px 0 #7a3b4b,0 10px 32px #ffb47c45}.english{letter-spacing:3px;color:#d8b8b6;font-size:11px;margin:5px 0 20px}.lead{font-size:19px;line-height:1.8;margin:0 0 18px}.chips{display:flex;flex-wrap:wrap;gap:8px}.chips span{font-size:12px;border:1px solid #f4c9a63c;background:#ffffff0b;border-radius:100px;padding:7px 12px;color:#f8d8c7}.hero-actions{display:flex;gap:12px;align-items:center;margin-top:25px;flex-wrap:wrap}.primary,.secondary{border-radius:13px;padding:12px 18px;border:1px solid #f4b1ad66;font-weight:600}.primary{background:linear-gradient(135deg,#f28da7,#bb4d70);color:white;box-shadow:0 5px 0 #7c344f,0 12px 24px #e75c8b25}.primary.big{font-size:19px;padding:16px 30px}.secondary{background:#281b2b;color:var(--cream);border-color:#b98a954f}.quick-panel{padding:30px;background:linear-gradient(145deg,#fff0d8,#f5d9b7);color:#5a3045;align-self:stretch}.quick-panel h2{font:600 28px Pridi,serif;margin:10px 0}.quick-panel p{font-size:14px;line-height:1.9;color:#785568}.panel-label{color:#a85c70;font-size:12px}.objective{display:flex;align-items:center;gap:12px;background:#ffffff8c;border:1px solid #b87a7b3b;padding:13px;border-radius:14px;margin:20px 0}.objective>span{font-size:28px}.objective b,.objective small{display:block}.objective small{font-size:12px;color:#80576a;margin-top:3px}.full{width:100%}.quick-panel .secondary{background:#e5a0b2;color:#592c45;border:0}.feature-strip{max-width:1272px;margin:0 auto 65px;padding:0 24px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.feature-strip>div{background:#2a1d2dbb;border:1px solid #f4c9a624;border-radius:18px;padding:15px;display:grid;grid-template-columns:42px 1fr;align-items:center;column-gap:10px}.feature-strip span{grid-row:span 2;display:grid;place-items:center;width:42px;height:42px;background:#f0b5bb19;border-radius:12px;font-size:23px}.feature-strip b{font-size:14px}.feature-strip small{font-size:11px;color:var(--muted)}.section{max-width:1272px;margin:0 auto 76px;padding:0 24px}.section-heading{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:22px}.section h2{font:600 34px Pridi,serif;margin:5px 0;color:var(--cream)}.section h2 span{color:var(--pink)}.section-heading p{color:var(--muted);margin:0;font-size:13px}.card-tools{display:flex;gap:8px;flex-wrap:wrap}.card-tools input,.card-tools select,.modal input,.modal select{background:#1b1420;color:var(--cream);border:1px solid #a56d7c6b;border-radius:10px;padding:11px 13px;outline:none}.card-tools input:focus,.modal input:focus{border-color:var(--pink)}.card-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:15px}.card{border:1px solid #d4a16d8a;border-radius:16px;padding:8px;background:linear-gradient(145deg,#402b31,#19151c);box-shadow:0 9px 22px #05030770;position:relative;min-width:0;transition:transform .2s}.card:hover{transform:translateY(-5px) rotate(-.5deg)}.card-art{height:148px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;overflow:hidden;border:1px solid #ffffff24;background:radial-gradient(circle at 50% 35%,var(--glow),transparent 58%),linear-gradient(160deg,#43313e,#18131d 78%)}.card-art:before,.card-art:after{content:"✦";position:absolute;color:#f7d7a6aa;font-size:16px}.card-art:before{top:9px;left:11px}.card-art:after{right:11px;bottom:9px}.card-art .emoji{font-size:58px;filter:drop-shadow(0 7px 10px #0009)}.card-art .seal{font-size:9px;letter-spacing:2px;color:#f3d2a1;margin-top:7px}.card-type{display:inline-block;font-size:9px;padding:3px 7px;border-radius:99px;background:var(--glow);color:#25151e;margin:9px 0 4px;font-weight:700}.card h3{font:500 16px Pridi,serif;margin:0 0 5px;line-height:1.35}.card p{font-size:11px;color:#d3bdc8;line-height:1.55;margin:0 0 8px;min-height:48px}.card .effect{border-top:1px solid #ffffff18;padding-top:7px;font-size:10px;color:#f3cda2;line-height:1.5}.card-count{position:absolute;top:15px;right:15px;background:#17121bd9;border:1px solid #f0c68b55;border-radius:8px;font-size:10px;padding:3px 6px}.rules-section{background:#241a29d9;border:1px solid #e7b7a52b;border-radius:25px;padding:30px}.rules-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.rules-grid article{border-radius:17px;background:#ffffff06;border:1px solid #e7b7a51e;padding:22px}.rules-grid article>span{font:600 25px Pridi,serif;color:var(--pink)}.rules-grid h3{font:500 18px Pridi,serif;margin:10px 0}.rules-grid p{font-size:13px;line-height:1.8;color:var(--muted);margin:0}.note{margin-top:18px;padding:14px 17px;border-radius:13px;background:#f0c48a14;border:1px solid #f0c48a29;font-size:13px;color:#efd2b6}footer{border-top:1px solid #e7b7a52b;padding:24px max(24px,calc((100% - 1224px)/2));display:flex;justify-content:space-between;gap:15px;color:var(--gold)}footer small{color:var(--muted)}.modal-backdrop,.game-overlay{position:fixed;inset:0;background:#0c0810e8;backdrop-filter:blur(9px);z-index:30;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto}.hidden{display:none!important}.modal{width:min(100%,480px);background:linear-gradient(145deg,#352336,#1d1621);border:1px solid #e5b18d75;border-radius:24px;padding:30px;box-shadow:var(--shadow);position:relative}.modal h2{font:600 30px Pridi,serif;margin:6px 0 20px}.close{position:absolute;right:16px;top:12px;border:0;background:transparent;color:var(--cream);font-size:30px}.modal label{display:block;font-size:13px;color:#e7cbd4;margin:14px 0}.modal input,.modal select{display:block;width:100%;margin-top:7px}.muted{font-size:12px;color:var(--muted)}.game-overlay{display:block;padding:20px;overflow:auto;background:linear-gradient(#17111ceF,#17111cf5),url('/assets/haunted-thai-house.png') center/cover fixed}.game-top{max-width:1350px;margin:0 auto 18px;display:flex;align-items:center;justify-content:space-between;gap:15px}.game-top h2{font:600 27px Pridi,serif;margin:0}.room-tag{border:1px solid #d8b07b5c;border-radius:99px;padding:8px 13px;color:var(--gold);font-size:12px}.game-layout{max-width:1350px;margin:auto;display:grid;grid-template-columns:260px 1fr;gap:18px}.panel,.table-panel{background:#241a29ed;border:1px solid #e7b7a545;border-radius:22px;padding:20px;box-shadow:var(--shadow)}.panel h3,.hand-heading h3{font:500 18px Pridi,serif;margin:0 0 15px}.player-row{display:flex;gap:10px;align-items:center;padding:10px;border-radius:12px;background:#ffffff08;margin-bottom:8px}.player-avatar{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:#f4c38a24;font-size:22px}.player-meta{flex:1}.player-meta b,.player-meta small{display:block}.player-meta b{font-size:12px}.player-meta small{font-size:10px;color:var(--muted)}.hearts{color:#ff819c;letter-spacing:1px;font-size:12px}.deck-box{display:flex;flex-direction:column;align-items:center;margin:20px 0;padding:17px;background:#ffffff06;border-radius:16px}.deck-back{height:94px;width:68px;border:2px solid #e3bd7c;border-radius:9px;background:repeating-linear-gradient(45deg,#3a2737,#3a2737 5px,#281b2c 5px,#281b2c 10px);display:grid;place-items:center;color:var(--gold);font-size:30px;box-shadow:0 6px 12px #0008}.deck-back small{font-size:8px}.deck-box b{margin-top:9px;font-size:12px}.deck-box>small{font-size:10px;color:var(--muted)}.game-log{max-height:170px;overflow:auto;font-size:11px;color:#cfb6c2;line-height:1.6;border-top:1px solid #ffffff17;padding-top:12px}.game-log div{margin-bottom:5px}.turn-banner{background:#e8a3b321;border:1px solid #e8a3b34a;border-radius:12px;padding:11px 15px;color:#ffd5df;font-size:13px;margin-bottom:16px}.table-art{min-height:240px;border-radius:20px;border:1px solid #a77c5b70;background:linear-gradient(#2115239e,#211523e8),url('/assets/haunted-thai-house.png') center/cover;display:grid;place-items:center;position:relative;overflow:hidden}.table-center{text-align:center;padding:25px}.sigil{font:60px Pridi,serif;color:#eac38c;text-shadow:0 0 30px #f2b77c66}.table-center h3{font:500 24px Pridi,serif;margin:0}.table-center p{font-size:12px;color:#d8bdc7}.hand-heading{display:flex;justify-content:space-between;align-items:center;margin-top:20px}.hand-heading small{color:var(--muted)}.hand{display:flex;gap:10px;overflow-x:auto;padding:5px 3px 16px;min-height:165px}.hand-card{flex:0 0 112px;border-radius:12px;padding:7px;background:linear-gradient(145deg,#4a3039,#201722);border:1px solid #d6a978a8;color:var(--cream);text-align:left;box-shadow:0 5px 12px #0007}.hand-card .emoji{display:grid;place-items:center;height:76px;background:radial-gradient(circle,#ffffff17,transparent 65%);font-size:39px}.hand-card b{font:500 13px Pridi,serif;display:block}.hand-card small{color:#d9b9c6;font-size:9px}.hand-card:disabled{opacity:.45;cursor:not-allowed}.game-actions{display:flex;gap:10px;flex-wrap:wrap}.game-actions button{flex:1;min-width:140px}.game-over{position:fixed;inset:0;background:#0b070de8;z-index:50;display:grid;place-items:center;padding:20px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#f6d9b8;color:#4b2638;border-radius:12px;padding:12px 18px;box-shadow:var(--shadow);z-index:80;opacity:0;pointer-events:none;transition:opacity .2s}.toast.show{opacity:1}
+@media(max-width:1000px){.hero{grid-template-columns:1fr}.quick-panel{max-width:none}.card-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.rules-grid{grid-template-columns:repeat(2,1fr)}.game-layout{grid-template-columns:1fr}.players-panel{display:grid;grid-template-columns:1fr 1fr;gap:10px}.players-panel h3{grid-column:1/-1}.game-log{max-height:120px}.topbar nav{display:none}}
+@media(max-width:650px){.topbar{height:66px;padding:0 13px}.brand b{font-size:20px}.brand-mark{width:40px;height:40px}.profile{padding:6px}.profile small{display:none}.hero{padding:0 13px;margin-top:14px}.hero-copy{padding:26px 22px;min-height:440px}.hero h1{font-size:48px}.lead{font-size:16px}.quick-panel{padding:22px}.feature-strip{grid-template-columns:repeat(2,1fr);padding:0 13px;margin-bottom:45px}.section{padding:0 13px;margin-bottom:50px}.section-heading{align-items:start;flex-direction:column}.section h2{font-size:28px}.card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card-art{height:130px}.card-art .emoji{font-size:48px}.card p{min-height:0}.rules-grid{grid-template-columns:1fr}.rules-section{padding:20px 14px}.game-overlay{padding:10px}.game-top{align-items:flex-start;flex-wrap:wrap}.game-top h2{font-size:22px}.panel,.table-panel{padding:13px}.players-panel{display:block}.game-actions button{min-width:100px;padding:11px 8px}.table-art{min-height:190px}footer{flex-direction:column}}
+
+/* BanPeeThai Rebuilt v2 — clean layout system; no historical override layers */
+:root{--stage-w:min(100vw,177.78dvh);--stage-h:min(100dvh,56.25vw);--gold:#f5bd62;--ink:#10090a}
+html,body{min-height:100%;}
+body{overflow-x:hidden}
+button{touch-action:manipulation}
+.primary,.secondary{border-radius:12px;padding:11px 16px;font-weight:600;border:1px solid #e8bd75;color:#fff3d9;background:linear-gradient(180deg,#8a4a21,#4b2519);box-shadow:0 4px 0 #1d100c,0 8px 20px #0005}
+.secondary{background:linear-gradient(180deg,#30212a,#17121a);border-color:#a17b65;color:#f3d9b0}
+.primary:disabled,.secondary:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.full{width:100%}
+.hidden{display:none!important}
+
+/* Home page */
+.ambient{position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse at 50% 0,#58304440,transparent 58%)}
+.hero{align-items:stretch}
+.hero-copy{background:linear-gradient(115deg,#1b1117e8,#24141cdb),url('/assets/haunted-thai-house-backdrop.jpg') center/cover}
+.quick-panel{background:linear-gradient(155deg,#2a1a21f2,#171016f5)}
+.eyebrow{color:#f4c98d;letter-spacing:.06em;font-size:12px}
+.hero h1{font-family:Pridi,serif;text-shadow:0 5px 28px #e8a65c35}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:25px}
+.feature-strip{max-width:1272px;margin:0 auto 64px;padding:0 24px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.card-tools input,.card-tools select{min-width:170px}
+.card .effect span{display:block;color:#e9d2b5}
+.card-art{background-size:cover;background-position:center}
+.card-art .card-type{position:absolute;bottom:4px;left:8px;margin:0;background:#21120ee8;color:#ffe2ad;border:1px solid #d4a15b}
+
+/* Setup and modal layers */
+.modal-backdrop,.target-modal-backdrop,.draw-reveal,.game-over{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px;background:#070507d9;backdrop-filter:blur(12px);overflow:auto}
+.modal{max-height:min(92dvh,900px);overflow:auto}
+.modal label{display:block}
+.modal input,.modal select{width:100%;min-height:42px}
+.game-over{z-index:150}
+.toast{z-index:300;max-width:min(92vw,520px);text-align:center}
+
+/* Gameplay root: one fixed stage, always centered, no nested width constraints */
+#gameScreen.game-overlay{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;overflow:hidden!important;display:block!important;z-index:50!important;background:#080506!important;background-image:radial-gradient(ellipse at center,#351a1a 0%,#0b0708 70%)!important;backdrop-filter:none!important;isolation:isolate;}
+#gameScreen.game-overlay.hidden{display:none!important}
+#gameScreen .game-top{position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;width:var(--stage-w)!important;height:var(--stage-h)!important;max-width:none!important;margin:0!important;padding:0!important;z-index:30!important;display:block!important;pointer-events:none!important}
+#gameScreen .game-top>*{pointer-events:auto}
+#gameScreen .game-brand-title{position:absolute;left:6%;top:1.8%;display:flex;align-items:center;gap:8px;opacity:0;pointer-events:none}
+#gameScreen .game-hud-right{display:contents}
+#gameScreen .game-player-chip,#gameScreen .room-tag{display:none!important}
+#gameScreen .game-menu-hotspot,#gameScreen .game-settings-hotspot,#gameScreen .game-sound-toggle,#gameScreen .surrender-button{position:absolute!important;display:block!important;margin:0!important;padding:0!important;min-width:0!important;width:4.2%!important;height:6.5%!important;border:0!important;border-radius:18px!important;background:transparent!important;box-shadow:none!important;color:transparent!important;font-size:0!important;opacity:.02!important;transform:none!important;z-index:40!important}
+#gameScreen .game-menu-hotspot{left:1.1%!important;top:1.5%!important;width:4.2%!important}
+#gameScreen .game-settings-hotspot{left:72.0%!important;top:1.4%!important;width:7.1%!important}
+#gameScreen .game-sound-toggle{left:79.5%!important;top:1.4%!important;width:8.7%!important}
+#gameScreen .surrender-button{left:88.3%!important;top:1.4%!important;width:10.2%!important}
+#gameScreen .game-layout.ritual-layout{position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;width:var(--stage-w)!important;height:var(--stage-h)!important;max-width:none!important;min-width:0!important;min-height:0!important;max-height:none!important;margin:0!important;padding:0!important;display:block!important;overflow:hidden!important;gap:0!important;background:transparent!important;}
+#gameScreen .table-panel.ritual-panel{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;max-height:none!important;margin:0!important;padding:0!important;display:block!important;overflow:hidden!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;}
+#gameScreen .turn-banner{position:absolute!important;left:38%!important;top:9%!important;width:24%!important;max-width:360px!important;margin:0!important;padding:7px 12px!important;text-align:center!important;z-index:20!important;background:#160c0bdd!important;border:1px solid #d79b4c!important;border-radius:10px!important;color:#ffe3a9!important;font-size:clamp(10px,.85vw,15px)!important;box-shadow:0 3px 12px #0009!important}
+#gameScreen .night-omen{position:absolute!important;left:30%!important;top:16%!important;width:40%!important;text-align:center!important;color:#f7d7a4!important;font-size:clamp(9px,.75vw,13px)!important;text-shadow:0 2px 5px #000!important;z-index:15!important;pointer-events:none!important}
+#gameScreen .ritual-scene{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;margin:0!important;padding:0!important;overflow:hidden!important;border:0!important;border-radius:0!important;outline:0!important;background:#130b0a url('/assets/banpee-ui-layout.png?v=2.0.0') center/100% 100% no-repeat!important;box-shadow:none!important}
+#gameScreen .ritual-scene:before,#gameScreen .ritual-scene:after{display:none!important;content:none!important}
+#gameScreen .table-scene-heading{position:absolute!important;left:6%!important;top:59.5%!important;right:6%!important;display:flex!important;justify-content:space-between!important;color:#ffe3ad!important;font-size:clamp(9px,.72vw,12px)!important;text-shadow:0 2px 5px #000!important;z-index:5!important;pointer-events:none!important}
+#gameScreen .players-ring{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:12!important;pointer-events:none!important}
+#gameScreen .players-ring .player-row{position:absolute!important;display:grid!important;grid-template-columns:28px minmax(0,1fr)!important;gap:4px!important;align-items:center!important;width:clamp(95px,12%,170px)!important;min-height:44px!important;margin:0!important;padding:5px 7px!important;border:1px solid #d9a65c!important;border-radius:10px!important;background:#180d0eea!important;box-shadow:0 4px 14px #000a!important;pointer-events:auto!important;}
+#gameScreen .players-ring .player-row.seat-1{left:24%!important;top:27%!important}
+#gameScreen .players-ring .player-row.seat-2{left:44%!important;top:21%!important}
+#gameScreen .players-ring .player-row.seat-3{right:23%!important;top:27%!important}
+#gameScreen .players-ring .player-row.seat-4{left:8%!important;top:43%!important}
+#gameScreen .players-ring .player-row.seat-5{right:8%!important;top:43%!important}
+#gameScreen .players-ring .player-avatar{width:26px!important;height:26px!important;font-size:17px!important;border-radius:8px!important}
+#gameScreen .players-ring .player-meta{min-width:0!important}
+#gameScreen .players-ring .player-meta b{display:block!important;font-size:clamp(9px,.7vw,12px)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;color:#ffedcf!important}
+#gameScreen .players-ring .player-meta small{font-size:clamp(8px,.55vw,10px)!important;color:#e3c8a5!important}
+#gameScreen .players-ring .hearts{grid-column:1/-1!important;font-size:clamp(9px,.7vw,12px)!important;letter-spacing:0!important}
+#gameScreen .players-ring .seat-turn{grid-column:1/-1!important;font-size:9px!important;color:#ffe4a7!important}
+#gameScreen .ritual-table{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;padding:0!important;display:block!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;z-index:10!important}
+#gameScreen .table-center{position:absolute!important;left:42%!important;top:35%!important;width:16%!important;height:22%!important;padding:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;background:transparent!important;text-align:center!important;z-index:11!important}
+#gameScreen #tableMessage{position:absolute!important;left:50%!important;top:-26%!important;transform:translateX(-50%)!important;width:190%!important;margin:0!important;color:#ffdfa1!important;font-size:clamp(9px,.8vw,14px)!important;text-shadow:0 2px 5px #000!important}
+#gameScreen .deck-stack{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;border:0!important;border-radius:10%!important;background:transparent!important;box-shadow:none!important;color:transparent!important;font-size:0!important;opacity:.02!important;z-index:20!important}
+#gameScreen .deck-stack .deck-card-back,#gameScreen .deck-stack b,#gameScreen .deck-stack small{opacity:0!important;display:none!important}
+#gameScreen .ritual-table .discard-pile{position:absolute!important;left:28.5%!important;top:43%!important;width:11%!important;height:13%!important;display:flex!important;align-items:center!important;justify-content:center!important;margin:0!important;padding:2px!important;overflow:hidden!important;border:1px solid #e7b36c!important;border-radius:5px!important;background:#180d0cbb!important;box-shadow:0 3px 10px #0009!important;z-index:18!important}
+#gameScreen .discard-preview{width:100%!important;height:100%!important;object-fit:cover!important;border-radius:3px!important}
+#gameScreen .discard-pile small{display:none!important}
+#gameScreen .table-amulet{display:none!important}
+#gameScreen .table-actions{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;padding:0!important;display:block!important;border:0!important;background:transparent!important;z-index:25!important;pointer-events:none!important}
+#gameScreen .table-actions button{position:absolute!important;display:block!important;min-width:0!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:14px!important;background:transparent!important;box-shadow:none!important;color:transparent!important;font-size:0!important;opacity:.02!important;pointer-events:auto!important;transform:none!important}
+#gameScreen #drawCard{left:44.7%!important;top:39.5%!important;width:11%!important;height:17%!important}
+#gameScreen #escapeBtn{left:64%!important;top:45%!important;width:12%!important;height:14%!important}
+#gameScreen #endTurn{left:43%!important;top:55%!important;width:14%!important;height:7%!important}
+#gameScreen .hand-zone{position:absolute!important;left:4%!important;right:4%!important;bottom:5%!important;width:92%!important;height:29%!important;max-height:29%!important;min-height:0!important;margin:0!important;padding:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;background:transparent!important;border:0!important;border-radius:0!important;z-index:22!important}
+#gameScreen .hand-heading{flex:0 0 22px!important;min-height:22px!important;height:22px!important;margin:0!important;padding:0 2%!important;display:flex!important;align-items:center!important;justify-content:space-between!important;background:transparent!important;color:#fff0d4!important;border:0!important}
+#gameScreen .hand-heading h3{font-size:clamp(10px,.85vw,15px)!important;margin:0!important;font-family:Kanit, sans-serif!important;color:#fff0d4!important}
+#gameScreen .hand-heading small{font-size:clamp(9px,.65vw,12px)!important;color:#e9c99c!important}
+#gameScreen .hand-content-layout{flex:1 1 auto!important;min-height:0!important;display:block!important;overflow:hidden!important;padding:2px 2% 4px!important}
+#gameScreen #hand.hand{display:flex!important;align-items:stretch!important;gap:7px!important;width:100%!important;height:100%!important;min-height:0!important;overflow-x:auto!important;overflow-y:hidden!important;padding:0 0 4px!important;scrollbar-width:thin!important;scrollbar-color:#b67a43 #1a0e0c!important}
+#gameScreen #hand .hand-card{position:relative!important;flex:0 0 clamp(100px,9.2%,145px)!important;width:clamp(100px,9.2%,145px)!important;min-width:0!important;height:100%!important;min-height:0!important;max-height:100%!important;margin:0!important;padding:4px!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;border:1px solid #d7a15c!important;border-radius:8px!important;background:linear-gradient(160deg,#493027,#160e0d)!important;color:#ffedcf!important;text-align:left!important;box-shadow:0 3px 9px #0009!important;opacity:1!important;}
+#gameScreen #hand .hand-art{display:block!important;flex:0 0 38%!important;width:100%!important;height:38%!important;min-height:0!important;max-height:38%!important;margin:0 0 3px!important;border-radius:4px!important;background-size:cover!important;background-position:center!important;border:1px solid #d4a15b!important}
+#gameScreen #hand .hand-card-title{display:block!important;flex:0 0 auto!important;font-family:Pridi,serif!important;font-size:clamp(10px,.78vw,13px)!important;line-height:1.15!important;padding:2px!important;color:#ffedcf!important}
+#gameScreen #hand .hand-card-type{display:block!important;flex:0 0 auto!important;font-size:clamp(8px,.62vw,10px)!important;line-height:1.15!important;padding:2px!important;color:#f5c77c!important}
+#gameScreen #hand .hand-card-desc{display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:3!important;flex:1 1 auto!important;min-height:0!important;overflow:hidden!important;font-size:clamp(8px,.58vw,10px)!important;line-height:1.25!important;padding:2px!important;color:#e8d3b9!important;overflow-wrap:anywhere!important}
+#gameScreen #hand .hand-card-effect{display:flex!important;flex:0 0 auto!important;flex-direction:column!important;max-height:26%!important;min-height:22px!important;padding:3px!important;overflow:hidden!important;border-top:1px solid #c28a45!important;background:#160d0dbd!important;font-size:9px!important}
+#gameScreen #hand .hand-card-effect b{font-size:clamp(8px,.55vw,10px)!important;line-height:1.1!important;color:#ffd18a!important}
+#gameScreen #hand .hand-card-effect span{font-size:clamp(7px,.5vw,9px)!important;line-height:1.15!important;color:#f1dfc5!important;overflow:hidden!important}
+#gameScreen .game-side-rail{position:absolute!important;left:-10000px!important;top:auto!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+#gameScreen #gameLog,.table-log{display:none!important}
+#gameScreen .table-announcement{position:absolute!important;left:50%!important;top:40%!important;transform:translate(-50%,-50%)!important;z-index:80!important;width:min(80%,500px)!important;padding:16px!important;border:1px solid #e6b66b!important;border-radius:16px!important;background:#190e0ef2!important;color:#ffedcf!important;text-align:center!important;box-shadow:0 12px 40px #000c!important}
+
+/* Card reveal, card preview, target and omen dialogs */
+.draw-reveal{z-index:180!important}
+.reveal-card-shell,.target-modal-card,.card-preview-dialog,.omen-choice-dialog{width:min(94vw,520px);max-height:92dvh;overflow:auto;padding:22px;border:1px solid #d7a15c;border-radius:20px;background:linear-gradient(155deg,#38241f,#130d0d);box-shadow:0 20px 70px #000c;color:#ffedcf}
+.reveal-kicker,.card-preview-kicker{font-size:12px;color:#efc28a}
+.reveal-card{display:grid;grid-template-columns:minmax(100px,.8fr) minmax(0,1.2fr);gap:14px;margin:16px 0}
+.reveal-art,.card-preview-art,.omen-choice-art{min-height:180px;border:1px solid #d7a15c;border-radius:12px;background-position:center;background-size:cover;background-color:#211513}
+.reveal-paper{padding:12px;border-radius:12px;background:#f2d9ac;color:#35201b}
+.reveal-type,.card-preview-type{font-size:11px;color:#8b4c26}
+.reveal-paper h3{font-family:Pridi,serif;margin:6px 0}
+.reveal-paper p,.reveal-effect{font-size:12px;line-height:1.5}
+.reveal-actions,.card-preview-actions,.omen-choice-buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.reveal-actions>*{flex:1 1 auto}
+.reveal-warning{color:#ffb3a3;font-size:13px}
+.reveal-countdown{color:#f3d4a2;font-size:12px}
+.target-modal-backdrop{z-index:190}
+.target-modal-card{text-align:center}
+.target-options{display:grid;gap:8px;margin:16px 0}
+.target-option{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border:1px solid #8d6343;border-radius:12px;background:#241613;color:#ffe8c2;text-align:left}
+.target-avatar{font-size:24px}
+.target-info{flex:1}
+.target-info b,.target-info small{display:block}
+.target-arrow{color:#e9b76d}
+.target-cancel{width:100%}
+.card-preview-backdrop,.omen-choice-backdrop{position:fixed;inset:0;z-index:190;display:grid;place-items:center;padding:16px;background:#050304e8;backdrop-filter:blur(10px)}
+.card-preview-dialog{position:relative}
+.card-preview-close,.omen-close{float:right;border:0;background:transparent;color:#ffedcf;font-size:28px}
+.card-preview-card{display:grid;grid-template-columns:120px 1fr;gap:12px;margin:14px 0}
+.card-preview-note{font-size:12px;color:#d9c0a1}
+.omen-choice-dialog h2{font-family:Pridi,serif}
+.omen-choice-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.omen-choice-cards .card{min-width:0}
+
+/* Responsive behavior: keep the same 16:9 stage, scale down proportionally */
+@media(max-width:900px){
+ .topbar{padding:0 14px}.topbar nav{display:none}.hero{padding:0 14px}.feature-strip{grid-template-columns:repeat(2,minmax(0,1fr));padding:0 14px}.section{padding:0 14px}.card-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #gameScreen .game-top,#gameScreen .game-layout.ritual-layout{width:var(--stage-w)!important;height:var(--stage-h)!important}
+ #gameScreen .players-ring .player-row{width:clamp(78px,15%,132px)!important;grid-template-columns:22px minmax(0,1fr)!important;padding:3px!important}
+ #gameScreen .players-ring .player-avatar{width:21px!important;height:21px!important;font-size:14px!important}
+ #gameScreen .hand-zone{bottom:5%!important;height:29%!important}
+ #gameScreen #hand .hand-card{flex-basis:clamp(82px,12%,120px)!important;width:clamp(82px,12%,120px)!important}
+}
+@media(max-width:600px){
+ .hero{margin-top:14px}.hero-copy{min-height:0}.hero h1{font-size:42px}.feature-strip{gap:8px}.card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.section-heading{align-items:flex-start}.card-tools{width:100%}.card-tools input,.card-tools select{flex:1;min-width:0;width:100%}.rules-grid{grid-template-columns:1fr}.modal{padding:22px}
+ #gameScreen .game-top,#gameScreen .game-layout.ritual-layout{width:var(--stage-w)!important;height:var(--stage-h)!important}
+ #gameScreen .turn-banner{top:8%!important;left:32%!important;width:36%!important;padding:4px!important;font-size:9px!important}
+ #gameScreen .night-omen{top:14%!important;font-size:7px!important}
+ #gameScreen .players-ring .player-row{width:clamp(58px,16%,88px)!important;min-height:32px!important;grid-template-columns:16px minmax(0,1fr)!important;gap:2px!important;padding:2px!important;border-radius:6px!important}
+ #gameScreen .players-ring .player-avatar{width:15px!important;height:15px!important;font-size:10px!important;border-radius:4px!important}
+ #gameScreen .players-ring .player-meta b{font-size:7px!important}.players-ring .player-meta small{font-size:6px!important}
+ #gameScreen .players-ring .hearts{font-size:7px!important}
+ #gameScreen .hand-zone{left:4%!important;right:4%!important;bottom:5%!important;width:92%!important;height:29%!important}
+ #gameScreen .hand-heading{height:16px!important;min-height:16px!important;flex-basis:16px!important}
+ #gameScreen .hand-heading h3{font-size:8px!important}
+ #gameScreen #hand .hand-card{flex-basis:clamp(62px,16%,88px)!important;width:clamp(62px,16%,88px)!important;padding:2px!important}
+ #gameScreen #hand .hand-art{flex-basis:34%!important;height:34%!important;max-height:34%!important}
+ #gameScreen #hand .hand-card-title{font-size:7px!important}.hand-card-type{font-size:6px!important}
+ #gameScreen #hand .hand-card-desc{font-size:6px!important;-webkit-line-clamp:2!important}
+ #gameScreen #hand .hand-card-effect{min-height:14px!important;padding:1px!important}
+ #gameScreen #hand .hand-card-effect b{font-size:6px!important}#gameScreen #hand .hand-card-effect span{font-size:5px!important}
+ .reveal-card,.card-preview-card{grid-template-columns:1fr}.reveal-art,.card-preview-art{min-height:130px}
+}
+@media(max-height:520px){
+ #gameScreen .turn-banner{top:7%!important;padding:3px!important}
+ #gameScreen .night-omen{display:none!important}
+ #gameScreen .hand-zone{height:28%!important;bottom:4%!important}
+ #gameScreen .hand-heading{height:18px!important;min-height:18px!important;flex-basis:18px!important}
+}
+
+
+/* v2.1.0 — Exact user reference scene; fixed viewport, no page scroll. */
+:root{--stage-w:min(100vw,177.6833dvh);--stage-h:min(100dvh,56.280vw)}
+html:has(#gameScreen:not(.hidden)),body:has(#gameScreen:not(.hidden)){width:100%!important;height:100%!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;overscroll-behavior:none!important}
+#gameScreen:not(.hidden){display:block!important;position:fixed!important;inset:0!important;left:0!important;top:0!important;right:0!important;bottom:0!important;width:100vw!important;height:100dvh!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;overflow:hidden!important;box-sizing:border-box!important;transform:none!important;translate:none!important;scale:none!important;zoom:1!important;background:#050304!important;backdrop-filter:none!important;isolation:isolate!important;z-index:1000!important}
+#gameScreen:not(.hidden)::before{content:"";position:absolute!important;left:50%!important;top:50%!important;width:var(--stage-w)!important;height:var(--stage-h)!important;transform:translate(-50%,-50%)!important;background-image:url('/assets/game-layout-reference.png?v=2.1.0')!important;background-position:center!important;background-repeat:no-repeat!important;background-size:100% 100%!important;pointer-events:none!important;z-index:0!important}
+#gameScreen:not(.hidden)>.game-top,#gameScreen:not(.hidden)>.game-layout.ritual-layout{position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;inset:auto!important;width:var(--stage-w)!important;height:var(--stage-h)!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;transform:translate(-50%,-50%)!important;translate:none!important;scale:none!important;zoom:1!important;box-sizing:border-box!important}
+#gameScreen:not(.hidden)>.game-top{display:block!important;z-index:20!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;pointer-events:none!important}
+#gameScreen:not(.hidden) .game-brand-title,#gameScreen:not(.hidden) .room-tag,#gameScreen:not(.hidden) .game-player-chip,#gameScreen:not(.hidden) #gameSettingsHotspot{display:none!important}
+#gameScreen:not(.hidden) .game-hud-right{display:contents!important}
+#gameScreen:not(.hidden) #gameMenuHotspot,#gameScreen:not(.hidden) #leaveGame,#gameScreen:not(.hidden) #gameSoundToggle{position:absolute!important;display:block!important;min-width:0!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;color:transparent!important;font-size:0!important;line-height:0!important;background:transparent!important;box-shadow:none!important;opacity:0!important;pointer-events:auto!important;z-index:40!important;cursor:pointer!important}
+#gameScreen:not(.hidden) #gameMenuHotspot{left:1.2%!important;top:1.1%!important;width:4.3%!important;height:7.8%!important}
+#gameScreen:not(.hidden) #leaveGame{right:1.8%!important;top:1.2%!important;width:10.2%!important;height:7.6%!important}
+#gameScreen:not(.hidden) #gameSoundToggle{left:15.5%!important;top:1%!important;width:5%!important;height:7%!important}
+#gameScreen:not(.hidden)>.game-layout.ritual-layout{display:block!important;z-index:2!important;background:transparent!important;overflow:hidden!important}
+#gameScreen:not(.hidden) .table-panel.ritual-panel,#gameScreen:not(.hidden) .ritual-scene{position:absolute!important;inset:0!important;left:0!important;top:0!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:hidden!important;background:transparent!important;transform:none!important;translate:none!important;scale:none!important;zoom:1!important}
+#gameScreen:not(.hidden) .table-scene-heading,#gameScreen:not(.hidden) .night-omen,#gameScreen:not(.hidden) .table-amulet,#gameScreen:not(.hidden) .discard-pile,#gameScreen:not(.hidden) #tableMessage,#gameScreen:not(.hidden) .game-side-rail,#gameScreen:not(.hidden) #deckCount,#gameScreen:not(.hidden) .turn-banner{display:none!important}
+#gameScreen:not(.hidden) .players-ring{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;padding:0!important;display:block!important;overflow:hidden!important;background:transparent!important;pointer-events:none!important}
+#gameScreen:not(.hidden) .players-ring .player-row{position:absolute!important;display:grid!important;grid-template-columns:clamp(17px,2.2vw,32px) minmax(0,1fr)!important;gap:clamp(2px,.35vw,6px)!important;align-items:center!important;width:clamp(76px,13.5%,176px)!important;min-width:0!important;max-width:18%!important;min-height:0!important;margin:0!important;padding:clamp(3px,.5vw,8px)!important;border:1px solid #d7a15c88!important;border-radius:9px!important;background:#170d0bc9!important;box-shadow:0 3px 10px #0008!important;color:#ffedcf!important;overflow:hidden!important;pointer-events:none!important}
+#gameScreen:not(.hidden) .players-ring .seat-1{left:17%!important;top:39%!important}
+#gameScreen:not(.hidden) .players-ring .seat-2{left:29%!important;top:34%!important}
+#gameScreen:not(.hidden) .players-ring .seat-3{left:43%!important;top:17%!important}
+#gameScreen:not(.hidden) .players-ring .seat-4{left:59%!important;top:34%!important}
+#gameScreen:not(.hidden) .players-ring .seat-5{left:70%!important;top:39%!important}
+#gameScreen:not(.hidden) .players-ring .player-avatar{width:100%!important;height:auto!important;aspect-ratio:1!important;min-width:0!important;display:grid!important;place-items:center!important;font-size:clamp(10px,1.2vw,20px)!important;border-radius:5px!important;background:#6a3c2588!important}
+#gameScreen:not(.hidden) .players-ring .player-meta{min-width:0!important;overflow:hidden!important}
+#gameScreen:not(.hidden) .players-ring .player-meta b{display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:clamp(8px,.78vw,12px)!important;line-height:1.2!important;color:#fff0d4!important}
+#gameScreen:not(.hidden) .players-ring .player-meta small,#gameScreen:not(.hidden) .players-ring .hearts{display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:clamp(7px,.62vw,10px)!important;line-height:1.2!important;color:#f4c77e!important}
+#gameScreen:not(.hidden) .players-ring .seat-turn{display:none!important}
+#gameScreen:not(.hidden) .table-play-area,#gameScreen:not(.hidden) .ritual-table,#gameScreen:not(.hidden) .table-center,#gameScreen:not(.hidden) .table-actions{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;margin:0!important;padding:0!important;display:block!important;border:0!important;background:transparent!important;pointer-events:none!important;overflow:hidden!important}
+#gameScreen:not(.hidden) .deck-stack,#gameScreen:not(.hidden) #drawCard,#gameScreen:not(.hidden) #escapeBtn,#gameScreen:not(.hidden) #endTurn{position:absolute!important;display:block!important;min-width:0!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:transparent!important;font-size:0!important;line-height:0!important;opacity:0!important;pointer-events:auto!important;cursor:pointer!important;z-index:50!important}
+#gameScreen:not(.hidden) .deck-stack{left:45.1%!important;top:35.1%!important;width:9%!important;height:18%!important}
+#gameScreen:not(.hidden) #drawCard{left:45.1%!important;top:35.1%!important;width:9%!important;height:18%!important;pointer-events:none!important}
+#gameScreen:not(.hidden) #escapeBtn{left:57.4%!important;top:42.1%!important;width:10.8%!important;height:13.5%!important}
+#gameScreen:not(.hidden) #endTurn{left:43.1%!important;top:55.1%!important;width:13.5%!important;height:6.3%!important}
+#gameScreen:not(.hidden) .hand-zone{position:absolute!important;left:16.8%!important;top:65.4%!important;right:auto!important;bottom:auto!important;width:64.6%!important;height:29.6%!important;max-width:none!important;max-height:29.6%!important;min-height:0!important;margin:0!important;padding:0!important;display:flex!important;flex-direction:column!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;overflow:hidden!important;z-index:15!important}
+#gameScreen:not(.hidden) .hand-heading{flex:0 0 10%!important;height:10%!important;min-height:0!important;margin:0!important;padding:0 2.2%!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;background:transparent!important;border:0!important;pointer-events:none!important}
+#gameScreen:not(.hidden) .hand-heading h3{display:none!important}
+#gameScreen:not(.hidden) .hand-heading small{font-size:clamp(8px,.7vw,12px)!important;color:#e9c99c!important;text-shadow:0 1px 3px #000!important}
+#gameScreen:not(.hidden) .hand-content-layout{flex:1 1 auto!important;min-width:0!important;min-height:0!important;display:block!important;overflow:hidden!important;padding:0 2.1% 1.5%!important;box-sizing:border-box!important}
+#gameScreen:not(.hidden) #hand.hand{display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;justify-content:flex-start!important;gap:var(--hand-gap,5px)!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;padding:0!important;margin:0!important;overflow:hidden!important;overscroll-behavior:none!important;scrollbar-width:none!important;box-sizing:border-box!important}
+#gameScreen:not(.hidden) #hand .hand-card{position:relative!important;flex:0 1 var(--hand-card-width,150px)!important;width:var(--hand-card-width,150px)!important;min-width:0!important;max-width:var(--hand-card-width,150px)!important;height:100%!important;min-height:0!important;max-height:100%!important;margin:0!important;padding:clamp(2px,.3vw,5px)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;border:1px solid #d7a15c!important;border-radius:6px!important;background:linear-gradient(160deg,#493027f5,#160e0df7)!important;color:#ffedcf!important;text-align:left!important;box-shadow:0 3px 9px #0009!important;opacity:1!important}
+#gameScreen:not(.hidden) #hand .hand-art{display:block!important;flex:0 0 36%!important;width:100%!important;height:36%!important;min-height:0!important;max-height:36%!important;margin:0 0 2px!important;border-radius:3px!important;background-size:cover!important;background-position:center!important;border:1px solid #d4a15b!important}
+#gameScreen:not(.hidden) #hand .hand-card-title{display:block!important;flex:0 0 auto!important;min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-family:Pridi,serif!important;font-size:clamp(7px,.7vw,12px)!important;line-height:1.15!important;padding:1px!important;color:#ffedcf!important}
+#gameScreen:not(.hidden) #hand .hand-card-type{display:block!important;flex:0 0 auto!important;min-width:0!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;font-size:clamp(6px,.56vw,9px)!important;line-height:1.15!important;padding:1px!important;color:#f5c77c!important}
+#gameScreen:not(.hidden) #hand .hand-card-desc{display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;flex:1 1 auto!important;min-height:0!important;overflow:hidden!important;overflow-wrap:anywhere!important;font-size:clamp(6px,.5vw,9px)!important;line-height:1.2!important;padding:1px!important;color:#e8d3b9!important}
+#gameScreen:not(.hidden) #hand .hand-card-effect{display:flex!important;flex:0 0 auto!important;flex-direction:column!important;max-height:23%!important;min-height:0!important;padding:2px!important;overflow:hidden!important;border-top:1px solid #c28a45!important;background:#160d0dbd!important;font-size:clamp(6px,.48vw,8px)!important}
+#gameScreen:not(.hidden) #hand .hand-card-effect b{font-size:clamp(6px,.48vw,8px)!important;line-height:1.05!important;color:#ffd18a!important}
+#gameScreen:not(.hidden) #hand .hand-card-effect span{font-size:clamp(5px,.43vw,7px)!important;line-height:1.1!important;color:#f1dfc5!important;overflow:hidden!important}
+#gameScreen:not(.hidden) .table-announcement{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;width:min(70%,520px)!important;max-height:70%!important;overflow:auto!important;z-index:180!important}
+#gameScreen:not(.hidden) .game-over{position:fixed!important;inset:0!important;z-index:200!important}
+#gameScreen:not(.hidden) .game-over .modal{pointer-events:auto!important}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .players-ring .player-row{width:clamp(55px,15%,110px)!important;padding:2px!important}
+ #gameScreen:not(.hidden) .players-ring .seat-1{left:10%!important;top:41%!important}
+ #gameScreen:not(.hidden) .players-ring .seat-2{left:26%!important;top:35%!important}
+ #gameScreen:not(.hidden) .players-ring .seat-3{left:41%!important;top:18%!important}
+ #gameScreen:not(.hidden) .players-ring .seat-4{left:58%!important;top:35%!important}
+ #gameScreen:not(.hidden) .players-ring .seat-5{left:74%!important;top:41%!important}
+ #gameScreen:not(.hidden) .hand-zone{left:16.8%!important;width:64.6%!important;top:65.4%!important;height:29.6%!important}
+}
+
+
+/* Keep interactive dialogs and feedback above the fixed gameplay stage. */
+#setupModal{z-index:1300!important}
+#drawReveal,.target-modal-backdrop,.card-preview-backdrop,.omen-choice-backdrop{z-index:1400!important}
+#toast.toast{z-index:1500!important}
+
+
+
+/* v2.1.1 — Independent transparent hitboxes aligned to the reference artwork.
+   This layer is a direct child of #gameScreen so legacy pointer-events rules
+   on nested table containers cannot disable the invisible controls. */
+#gameScreen:not(.hidden) > .reference-hotspot-layer{
+  position:absolute!important;
+  left:50%!important;top:50%!important;
+  width:var(--stage-w)!important;height:var(--stage-h)!important;
+  transform:translate(-50%,-50%)!important;
+  margin:0!important;padding:0!important;border:0!important;
+  z-index:500!important;pointer-events:none!important;
+  overflow:hidden!important;background:transparent!important;
+}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .reference-hotspot{
+  position:absolute!important;display:block!important;
+  min-width:0!important;min-height:0!important;
+  margin:0!important;padding:0!important;border:0!important;
+  border-radius:0!important;outline:0!important;
+  background:transparent!important;box-shadow:none!important;
+  color:transparent!important;font-size:0!important;line-height:0!important;
+  opacity:0!important;appearance:none!important;-webkit-appearance:none!important;
+  pointer-events:auto!important;cursor:pointer!important;
+  transform:none!important;filter:none!important;
+  touch-action:manipulation!important;
+}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .reference-hotspot:focus-visible{
+  opacity:.18!important;outline:2px solid #ffcf73!important;background:#ffcf7330!important;
+}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-menu{left:.5%!important;top:.5%!important;width:5.2%!important;height:7.4%!important}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-sound{left:17.3%!important;top:.5%!important;width:4.2%!important;height:7.4%!important}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-leave{left:87.2%!important;top:.5%!important;width:12.3%!important;height:7.4%!important}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-draw{left:44.4%!important;top:33.4%!important;width:11.8%!important;height:21.3%!important}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-escape{left:56.2%!important;top:39.4%!important;width:13.8%!important;height:16.8%!important}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-endturn{left:41.3%!important;top:51.3%!important;width:17.2%!important;height:9.2%!important}
