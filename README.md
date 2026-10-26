@@ -22,3 +22,14 @@ npm start
 สร้าง Web Service ใหม่ เชื่อม repository นี้ โดยให้ Root Directory ว่าง (ไฟล์ `package.json` อยู่ที่ราก), Build Command `npm install`, Start Command `npm start`, Health Check Path `/health`.
 
 **คำแนะนำ:** ทดสอบ Web Service ใหม่ให้ครบก่อนลบ Service เดิม เพราะการลบ Service เดิมทำให้ URL เดิมหยุดทำงาน และการลบ repository อาจทำให้โค้ดกู้คืนยากขึ้น
+
+
+## v2.1.0 — Reference-scene interface
+
+- Uses `public/assets/game-layout-reference.png`, the supplied 1672×941 reference scene.
+- Fixed 16:9 gameplay stage, no page scrolling while the game is open.
+- Transparent hit areas for menu, draw, end turn, escape, exit room and sound toggle.
+- Hand cards are dynamically sized to fit the hand panel without negative margins or horizontal overflow.
+- Online players can always leave the room; surrender is requested only when allowed by the game rules.
+
+Deploy commands: Build `npm install`; Start `npm start`; Health check `/health`.

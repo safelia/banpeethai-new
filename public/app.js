@@ -259,15 +259,16 @@ function renderHand(hand,canPlay){
  const el=$('hand');if(!el)return;
  const phase=mode==='online'?(onlineState?.phase||'draw'):(localGame?.phase||'draw');
  const canPlayCard=c=>(canPlay&&c.id!=='skip-next') || (phase==='draw'&&['skip-next','gecko','owl'].includes(c.id));
- $('handCount').textContent=`${hand.length} ใบ`;
- const available=Math.max(240,el.clientWidth||el.parentElement?.clientWidth||960);
- const cardWidth=Math.round(Math.max(148,Math.min(220,(available-24)/Math.min(Math.max(hand.length,1),5))));
- const overlap=hand.length>5?Math.min(cardWidth-108,Math.max(0,(cardWidth*hand.length-available)/(hand.length-1))):0;
- const sideCount=$('sideHandCount');if(sideCount)sideCount.textContent=`${hand.length} ใบ`;
- el.style.setProperty('--hand-count',String(hand.length));
+ const count=hand.length;
+ $('handCount').textContent=`${count} ใบ`;
+ const available=Math.max(1,el.clientWidth||el.parentElement?.clientWidth||960);
+ const gap=count>1?Math.max(3,Math.min(7,available*.004)):0;
+ const cardWidth=count?Math.max(42,Math.min(170,Math.floor((available-gap*Math.max(0,count-1))/count))):170;
+ const sideCount=$('sideHandCount');if(sideCount)sideCount.textContent=`${count} ใบ`;
+ el.style.setProperty('--hand-count',String(count));
  el.style.setProperty('--hand-card-width',`${cardWidth}px`);
- el.style.setProperty('--hand-overlap',`${overlap}px`);
- el.innerHTML=hand.map((c,i)=>`<button class="hand-card ${c.id==='heart'?'heart-card':''}" data-hand-index="${i}" style="--hand-index:${i};flex:0 0 ${cardWidth}px;width:${cardWidth}px;margin-right:${i<hand.length-1?-overlap:0}px;z-index:${i+1}" ${!canPlayCard(c)?'disabled':''} title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
+ el.style.setProperty('--hand-gap',`${gap}px`);
+ el.innerHTML=hand.map((c,i)=>`<button class="hand-card ${c.id==='heart'?'heart-card':''}" data-hand-index="${i}" style="--hand-index:${i};flex:0 1 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px" ${!canPlayCard(c)?'disabled':''} title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
    <span class="hand-art" style="background-image:url('${esc(imgUrl(c))}')"></span>
    <span class="hand-card-title">${esc(c.name||'การ์ด')}</span>
    <span class="hand-card-type">${esc(c.type||'การ์ด')}</span>
@@ -275,7 +276,6 @@ function renderHand(hand,canPlay){
    <span class="hand-card-effect"><b>ความสามารถ</b><span>${esc(c.effect||'ไม่มีความสามารถพิเศษ')}</span></span>
   </button>`).join('')||'<p class="muted">ยังไม่มีการ์ดในมือ</p>';
  el.querySelectorAll('[data-hand-index]').forEach(btn=>btn.addEventListener('click',()=>previewHandCard(Number(btn.dataset.handIndex))));
-
 }
 function renderLogs(logs){$('gameLog').innerHTML=(logs||[]).slice(0,24).map(s=>`<p>✦ ${esc(s)}</p>`).join('');}
 function syncLocalDrawTimer(g,myTurn){
@@ -542,17 +542,17 @@ function leaveGame(){
  if(!confirm('ยืนยันยอมแพ้และออกจากเกมหรือไม่?'))return;
  if(mode==='online'&&onlineRoom){
   const aliveCount=(onlineState?.players||[]).filter(p=>p.alive!==false).length;
-  if(aliveCount<=2){toast('โหมดออนไลน์ต้องมีผู้เล่นที่ยังอยู่มากกว่า 2 คน จึงจะยอมแพ้ได้');return;}
   const leavingRoom=onlineRoom;
-  socket?.emit('surrender-game',{room:leavingRoom});
+  // Leaving the room must always be possible. Only emit surrender when the game rules allow it.
+  if(aliveCount>2) socket?.emit('surrender-game',{room:leavingRoom});
   hide('drawReveal');
-  toast('ยอมแพ้แล้ว กำลังออกจากห้อง');
+  toast('กำลังออกจากห้อง…');
   setTimeout(()=>{
    socket?.emit('leave-room',{room:leavingRoom});
    hide('gameScreen');hide('gameOver');show('setupModal');
    localGame=null;onlineState=null;onlineRoom='';isHost=false;
    startAmbient();
-  },450);
+  },250);
   return;
  }
  if(localGame&&!localGame.over){
