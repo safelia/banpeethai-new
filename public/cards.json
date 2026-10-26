@@ -177,25 +177,15 @@
   },
   {
     "id": "skip",
-    "name": "ข้ามเทิร์น",
+    "name": "ข้ามผู้เล่น",
     "type": "แอ็กชัน",
-    "icon": "🥤",
-    "color": "sky",
+    "icon": "⏭️",
+    "color": "red",
     "copies": 5,
-    "desc": "เลือกผู้เล่นคนถัดไปให้เสียเทิร์น",
-    "effect": "ข้ามเทิร์นผู้เล่นคนถัดไป",
-    "image": "/assets/cards/card-21.jpg"
-  },
-  {
-    "id": "reverse",
-    "name": "ย้อนกลับ",
-    "type": "แอ็กชัน",
-    "icon": "↩️",
-    "color": "lavender",
-    "copies": 4,
-    "desc": "ยันต์กลับทิศทำให้ลำดับการเล่นเปลี่ยน",
-    "effect": "กลับทิศทางการเล่น",
-    "image": "/assets/cards/card-23.jpg"
+    "desc": "เลือกผู้เล่นที่จะอดเล่นในรอบถัดไป",
+    "effect": "เลือกผู้เล่น 1 คนให้ข้ามเทิร์นถัดไป",
+    "image": "/assets/cards/finished-actions/skip.webp",
+    "fullArt": true
   },
   {
     "id": "spider",
@@ -215,22 +205,24 @@
     "name": "ห้ามเล่น",
     "type": "แอ็กชัน",
     "icon": "🚫",
-    "color": "red",
+    "color": "gold",
     "copies": 4,
-    "desc": "เตรียมยันต์ห้ามเล่นไว้คุ้มครองตัวเองจากวิญญาณ",
-    "effect": "เก็บเป็นเครื่องรางป้องกันผี 1 ครั้ง",
-    "image": "/assets/cards/card-10.jpg"
+    "desc": "เลือกผู้เล่นที่จะไม่ได้เล่นในรอบถัดไป",
+    "effect": "เลือกผู้เล่น 1 คนให้ข้ามเทิร์นถัดไป",
+    "image": "/assets/cards/finished-actions/ban.webp",
+    "fullArt": true
   },
   {
     "id": "skip-next",
     "name": "ข้ามการจั่ว",
     "type": "แอ็กชัน",
     "icon": "⏭️",
-    "color": "blue",
+    "color": "red",
     "copies": 8,
-    "desc": "ใช้แทนการจั่วการ์ดในเทิร์นของคุณ",
-    "effect": "ทิ้งการ์ดใบนี้ แล้วจบเทิร์นโดยไม่ต้องจั่ว",
-    "image": "/assets/cards/card-17.jpg"
+    "desc": "ขอไม่หยิบไพ่ใบนี้",
+    "effect": "ใช้แทนการจั่วในเทิร์นนี้ แล้วจบเทิร์นทันที",
+    "image": "/assets/cards/finished-actions/skip-next.webp",
+    "fullArt": true
   },
   {
     "id": "gecko",
@@ -269,12 +261,13 @@
     "id": "vase",
     "name": "ข้ามผู้เล่นคนถัดไป",
     "type": "แอ็กชัน",
-    "icon": "🏺",
-    "color": "brown",
-    "copies": 3,
-    "desc": "แจกันโบราณส่งเสียงก้อง ทำให้ผู้เล่นถัดไปเสียจังหวะและพลาดเทิร์น",
-    "effect": "ข้ามเทิร์นผู้เล่นคนถัดไป",
-    "image": "/assets/cards/card-25.jpg"
+    "icon": "⏭️",
+    "color": "red",
+    "copies": 4,
+    "desc": "เสียงแก้วแตกดังมาก เพื่อนตกใจสุดๆ",
+    "effect": "ผู้เล่นคนถัดไปอดเล่นเทิร์นถัดไป",
+    "image": "/assets/cards/finished-actions/vase.webp",
+    "fullArt": true
   },
   {
     "id": "key",
@@ -333,13 +326,38 @@
   },
   {
     "id": "ghost-visit",
-    "name": "พาผีไปเยี่ยมเพื่อน",
+    "name": "ลากเพื่อนไปหาผี",
     "type": "แอ็กชัน",
     "icon": "👻",
-    "color": "purple",
+    "color": "red",
     "copies": 5,
-    "desc": "ชวนวิญญาณขี้เล่นไปเคาะประตูเพื่อนหนึ่งคน",
-    "effect": "เลือกผู้เล่น 1 คน หากไม่มีการ์ดป้องกัน จะเสียหัวใจ 1 ดวง",
-    "image": "/assets/cards/card-06.jpg"
+    "desc": "มึงมาดูนี่ดิ",
+    "effect": "เลือกผู้เล่น 1 คนให้เสียหัวใจ 1 ดวง เว้นแต่มีการ์ดป้องกัน",
+    "image": "/assets/cards/finished-actions/ghost-visit.webp",
+    "fullArt": true
+  },
+  {
+    "id": "ghost-disguise",
+    "name": "ปลอมเป็นผี",
+    "type": "แอ็กชัน",
+    "icon": "👻",
+    "color": "red",
+    "copies": 4,
+    "desc": "แฮร่!! ตกใจละสิ",
+    "effect": "เลือกผู้เล่น 1 คนให้เสียหัวใจ 1 ดวงทันที ป้องกันไม่ได้",
+    "image": "/assets/cards/finished-actions/ghost-disguise.webp",
+    "fullArt": true
+  },
+  {
+    "id": "kumarn",
+    "name": "กุมารชวนไปเล่น",
+    "type": "แอ็กชัน",
+    "icon": "👻",
+    "color": "red",
+    "copies": 4,
+    "desc": "หนูเหงาไปเล่นด้วยกันสิ",
+    "effect": "เมื่อจั่วได้ ผู้จั่วจะอดเล่นรอบถัดไปทันที",
+    "image": "/assets/cards/finished-actions/kumarn.webp",
+    "fullArt": true
   }
 ]

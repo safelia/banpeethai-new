@@ -1791,3 +1791,11 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
 }
 #drawReveal.instant-danger-reveal:not(.hidden) #revealArt { width:100%!important;height:100%!important;min-height:0!important;margin:0!important;padding:0!important; }
 #drawReveal.instant-danger-reveal:not(.hidden) .reveal-full-card-art { display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important; }
+
+
+/* v2.3.3: reveal finished action/protection artwork as a single complete card, with no duplicate text panel. */
+#drawReveal.single-full-card-reveal:not(.hidden) .reveal-actions { display:none!important; }
+#drawReveal.single-full-card-reveal:not(.hidden) > .reveal-card-shell { gap:0!important; }
+#drawReveal.single-full-card-reveal:not(.hidden) .reveal-card { max-height:calc(100dvh - 28px)!important; max-width:min(92vw,470px)!important; }
+#gameScreen:not(.hidden) #hand .hand-full-art-card { aspect-ratio:2/3!important; }
+#gameScreen:not(.hidden) #hand .hand-full-art { object-fit:contain!important; }

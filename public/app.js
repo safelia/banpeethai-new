@@ -305,6 +305,7 @@ function localDraw(p){
   else{p.hand.push(c);logLocal(`${p.name} หัวใจเต็ม จึงเก็บดอกบัวนำโชคไว้ป้องกันผี`);}
   showReveal(localGame.lastDraw,false);localGame.phase='afterdraw';localGame.afterDrawStartedAt=Date.now();localDrawTimerKey='';renderLocal();return;
  }
+ if(c.id==='kumarn'){p.skip=true;localGame.discard.push(c);logLocal(`${p.name} จั่วได้กุมารชวนไปเล่น จึงต้องอดเล่นรอบถัดไปทันที`);showReveal(localGame.lastDraw,false);localGame.phase='afterdraw';localGame.afterDrawStartedAt=Date.now();localDrawTimerKey='';renderLocal();return;}
  if(c.kind==='ghost'||c.type==='ผีอันตราย'){localGame.pending={playerId:p.id,card:c};localGame.phase='resolve';renderLocal();showReveal(localGame.lastDraw,true);return;}
  p.hand.push(c);localGame.discard.push(c);
  if(playerKeyCount(p)>=3){showReveal(localGame.lastDraw,false);localFinish(p,`${p.name} มีกุญแจครบ 3 ดอกแล้ว หนีออกจากบ้านผีไทยได้สำเร็จ!`);return;}
@@ -313,7 +314,7 @@ function localDraw(p){
 function resolveLocalGhost(useProtection){
  const g=localGame,p=g?.players.find(p=>p.id===g.pending?.playerId);if(!g||!p)return;
  const c=g.pending.card;g.discard.push(c);
- if(useProtection){if((p.shields||0)>0){p.shields--;logLocal(`${p.name} ใช้เครื่องรางที่เตรียมไว้ป้องกันผี`);announceTable(`${p.name} ใช้เครื่องรางป้องกัน ${c.name} ได้สำเร็จ`,'ป้องกันผีสำเร็จ');}else{const i=p.hand.findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','ban','lucky-flower','holy-water'].includes(x.id));if(i>=0){const prot=p.hand.splice(i,1)[0];g.discard.push(prot);logLocal(`${p.name} ใช้ ${prot.name} ป้องกันผี`);announceTable(`${p.name} ใช้การ์ด “${prot.name}” ป้องกัน ${c.name} ได้สำเร็จ`,'ใช้การ์ดป้องกัน');}else localHurt(p,`ถูก ${c.name} หลอก`);}}
+ if(useProtection){if((p.shields||0)>0){p.shields--;logLocal(`${p.name} ใช้เครื่องรางที่เตรียมไว้ป้องกันผี`);announceTable(`${p.name} ใช้เครื่องรางป้องกัน ${c.name} ได้สำเร็จ`,'ป้องกันผีสำเร็จ');}else{const i=p.hand.findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','lucky-flower','holy-water'].includes(x.id));if(i>=0){const prot=p.hand.splice(i,1)[0];g.discard.push(prot);logLocal(`${p.name} ใช้ ${prot.name} ป้องกันผี`);announceTable(`${p.name} ใช้การ์ด “${prot.name}” ป้องกัน ${c.name} ได้สำเร็จ`,'ใช้การ์ดป้องกัน');}else localHurt(p,`ถูก ${c.name} หลอก`);}}
  else localHurt(p,`ถูก ${c.name} หลอก`);
  g.pending=null;hide('drawReveal');
  if(!g.over){
@@ -333,6 +334,7 @@ function botTurn(){
   g.discard.push(c);localHurt(p,`จั่วได้ ${c.name} ซึ่งเป็นผีอันตราย ป้องกันไม่ได้`);renderLocal();showReveal(g.lastDraw,true);
   const token=g.lastDraw.token;setTimeout(()=>{if(localGame===g&&g.lastDraw?.token===token){hide('drawReveal');if(!g.over&&!g.pending)localNext();}},4500);return;
  }
+ if(c.id==='kumarn'){p.skip=true;g.discard.push(c);logLocal(`${p.name} จั่วได้กุมารชวนไปเล่น จึงอดเล่นรอบถัดไปทันที`);showReveal(g.lastDraw,false);renderLocal();const token=g.lastDraw.token;setTimeout(()=>{if(localGame===g&&g.lastDraw?.token===token){hide('drawReveal');if(!g.over&&!g.pending)localNext();}},4000);return;}
  if(g.lastDraw.ghost){
   const i=p.hand.findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','lucky-flower','holy-water'].includes(x.id));
   if(i>=0){g.discard.push(p.hand.splice(i,1)[0]);g.discard.push(c);logLocal(`${p.name} ใช้เครื่องรางป้องกันตัวเอง`);}
@@ -490,6 +492,7 @@ function showReveal(draw,isGhost){
  $('revealTitle').textContent=ownDraw?'คุณจั่วได้':`${draw.playerName||'ผู้เล่น'} จั่วได้`;
  const reveal=$('drawReveal');
  reveal.classList.toggle('finished-ghost-reveal',!!c.fullArt);
+ reveal.classList.toggle('single-full-card-reveal',!!c.fullArt&&!isGhost);
  reveal.classList.toggle('instant-danger-reveal',!!c.instantDanger);
  const art=$('revealArt');
  if(c.fullArt){art.innerHTML=`<img class="reveal-full-card-art" src="${esc(imgUrl(c))}" alt="${esc(c.name||'การ์ดผีไทย')}" draggable="false">`;art.style.backgroundImage='none';}
@@ -499,6 +502,10 @@ function showReveal(draw,isGhost){
  if(c.instantDanger){
   // Finished dangerous-ghost artwork already contains its title and rules: show only that single card.
   clearTimeout(revealTimer);revealTimer=setTimeout(()=>hide('drawReveal'),4500);return;
+ }
+ if(c.fullArt && !isGhost){
+  $('revealType').textContent='';$('revealName').textContent='';$('revealDesc').textContent='';$('revealEffect').textContent='';
+  clearTimeout(revealTimer);revealTimer=setTimeout(()=>hide('drawReveal'),4000);return;
  }
  if(isGhost && ownDraw){
   if(mode==='bot'){
@@ -596,7 +603,7 @@ async function playHandCard(index){
   if(['heart','protection','lucky-flower','key'].includes(c.id))return toast(c.id==='heart'?'หัวใจคือพลังชีวิต':c.id==='lucky-flower'?'ดอกบัวนำโชคทำงานอัตโนมัติเมื่อจั่ว หรือเก็บไว้ป้องกันผีเมื่อหัวใจเต็ม':c.id==='key'?'กุญแจนับจากการ์ดในมืออัตโนมัติ ไม่ต้องกดใช้ — เมื่อครบ 3 ดอกให้กดหนีออกจากบ้าน':'เก็บเครื่องรางไว้ใช้ตอนเจอผี');
   const others=(onlineState?.players||[]).filter(p=>p.id!==socket.id&&p.alive);
   let targetId;
-  if(['skip','vase','ghost-visit'].includes(c.id)){const t=await chooseTarget(others);if(!t)return toast('ยกเลิกการใช้การ์ด');targetId=t.id;}
+  if(['skip','ban','ghost-visit','ghost-disguise'].includes(c.id)){const t=await chooseTarget(others);if(!t)return toast('ยกเลิกการใช้การ์ด');targetId=t.id;}
   if(c.id==='friend-holy-water'){const t=await chooseTarget(others,p=>(Number(p.hearts)||0)<3);if(!t)return toast('ไม่มีเพื่อนที่หัวใจยังไม่เต็มให้ฟื้นฟู');targetId=t.id;}
   if(c.id==='cat'){const t=await chooseTarget(others,p=>playerKeyCount(p)>0);if(!t)return toast('ไม่มีผู้เล่นอื่นที่มีกุญแจให้ขโมย');targetId=t.id;}
   if(c.id==='eye'){const t=await chooseTarget(others,p=>(p.handCount||0)>0);if(!t)return toast('ไม่มีผู้เล่นอื่นที่มีไพ่ในมือ');targetId=t.id;}
@@ -609,18 +616,20 @@ async function playHandCard(index){
  if(g.phase!=='afterdraw'&&g.phase!=='draw')return toast('ยังใช้การ์ดไม่ได้ในจังหวะนี้');
  if(['heart','protection','lucky-flower','key'].includes(c.id))return toast(c.id==='heart'?'หัวใจคือพลังชีวิต':c.id==='lucky-flower'?'ดอกบัวนำโชคทำงานอัตโนมัติเมื่อจั่ว หรือเก็บไว้ป้องกันผีเมื่อหัวใจเต็ม':c.id==='key'?'กุญแจนับจากการ์ดในมืออัตโนมัติ ไม่ต้องกดใช้ — เมื่อครบ 3 ดอกให้กดหนีออกจากบ้าน':'เก็บเครื่องรางไว้ใช้เมื่อเจอผี');
  const others=g.players.filter(x=>x.alive&&x.id!==p.id);let t=null;
- if(['skip','vase','ghost-visit'].includes(c.id))t=await chooseTarget(others);
+ if(['skip','ban','ghost-visit','ghost-disguise'].includes(c.id))t=await chooseTarget(others);
  if(c.id==='friend-holy-water')t=await chooseTarget(others,x=>(Number(x.hearts)||0)<3);
  if(c.id==='cat')t=await chooseTarget(others,x=>playerKeyCount(x)>0);
  if(c.id==='eye')t=await chooseTarget(others,x=>x.hand?.length>0);
- if(['skip','vase','cat','eye','ghost-visit','friend-holy-water'].includes(c.id)&&!t)return toast('ยกเลิกการใช้การ์ด');
+ if(['skip','ban','cat','eye','ghost-visit','ghost-disguise','friend-holy-water'].includes(c.id)&&!t)return toast('ยกเลิกการใช้การ์ด');
  p.hand.splice(index,1);g.discard.push(c);
  if(c.id==='key'){p.keys=(p.keys||0)+1;logLocal(`${p.name} ใช้กุญแจ ได้ ${playerKeyCount(p)}/3`);}
  else if(c.id==='holy-water'){if(p.hearts<3){p.hearts=Math.min(3,p.hearts+1);p.hand.push({...byId('heart'),uid:`heart-${p.id}-water-${Date.now()}`});logLocal(`${p.name} ใช้น้ำมนต์ ฟื้นหัวใจเป็น ${p.hearts}/3 และเพิ่มการ์ดหัวใจเข้ามือ`);}else{p.shields=(p.shields||0)+1;logLocal(`${p.name} หัวใจเต็ม น้ำมนต์กลายเป็นเครื่องรางป้องกัน 1 ครั้ง`);}}
  else if(c.id==='friend-holy-water'){if(t&&t.hearts<3){t.hearts=Math.min(3,t.hearts+1);t.hand.push({...byId('heart'),uid:`heart-${t.id}-friend-water-${Date.now()}`});logLocal(`${p.name} พรมน้ำมนต์ให้ ${t.name} ฟื้นหัวใจเป็น ${t.hearts}/3 และเพิ่มการ์ดหัวใจเข้ามือ`);}else logLocal(`${t?.name||'เพื่อน'} มีหัวใจเต็มแล้ว น้ำมนต์จึงไม่เพิ่มหัวใจ`);}
- else if(['guardian','blessed-rice','ghost-puppy','ban'].includes(c.id)){p.shields=(p.shields||0)+1;logLocal(`${p.name} เตรียม ${c.name} เป็นเครื่องรางป้องกันผี 1 ครั้ง`);}
+ else if(['guardian','blessed-rice','ghost-puppy'].includes(c.id)){p.shields=(p.shields||0)+1;logLocal(`${p.name} เตรียม ${c.name} เป็นเครื่องรางป้องกันผี 1 ครั้ง`);}
  else if(c.id==='reverse'){g.direction*=-1;logLocal(`${p.name} ใช้ ${c.name} กลับทิศทางการเล่น`);}
- else if(['skip','vase'].includes(c.id)){t.skip=true;logLocal(`${p.name} ใช้ ${c.name} ข้ามเทิร์น ${t.name}`);}
+ else if(['skip','ban'].includes(c.id)){t.skip=true;logLocal(`${p.name} ใช้ ${c.name} ทำให้ ${t.name} อดเล่นรอบถัดไป`);}
+ else if(c.id==='vase'){const next=(()=>{for(let step=1;step<g.players.length;step++){const q=g.players[(g.turn+step)%g.players.length];if(q.alive)return q;}return null;})();if(next){next.skip=true;logLocal(`${p.name} ใช้ ${c.name} ทำให้ผู้เล่นคนถัดไป ${next.name} อดเล่น`);}}
+ else if(c.id==='ghost-disguise'){if(t){localHurt(t,`${p.name} ใช้ปลอมเป็นผีแกล้ง`);logLocal(`${p.name} ใช้ปลอมเป็นผีใส่ ${t.name} เสียหัวใจ 1 ดวง ป้องกันไม่ได้`);}}
  else if(c.id==='cat'){
   let stolen=null;const hi=(t.hand||[]).findIndex(x=>x.id==='key');if(hi>=0){stolen=t.hand.splice(hi,1)[0];p.hand.push(stolen);}else if((t.keys||0)>0){t.keys--;p.keys=(p.keys||0)+1;stolen={id:'key',name:'กุญแจเรือนไทย'};}
   if(stolen){logLocal(`${p.name} ขโมยกุญแจจาก ${t.name} สำเร็จ! คุณมีกุญแจ ${playerKeyCount(p)}/3 และ ${t.name} เหลือ ${playerKeyCount(t)}/3`);if(playerKeyCount(p)>=3)localFinish(p,`${p.name} มีกุญแจครบ 3 ดอกจากการขโมยและหนีออกจากบ้านได้สำเร็จ!`);}else logLocal(`${t.name} ไม่มีกุญแจให้ขโมย`);
@@ -632,7 +641,7 @@ async function playHandCard(index){
   const top=g.deck[g.deck.length-1];if(top){showOmenChoice('owl',[top],(keep)=>{if(keep){const got=g.deck.pop();if(got){if(['holy-water','lucky-flower'].includes(got.id)&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);p.hand.push({...byId('heart'),uid:`heart-${p.id}-owl-${Date.now()}`});g.discard.push(got);logLocal(`เสียงนก: เลือกได้ ${got.name} จึงทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`);showEffectCard(`${got.name} ทำงานอัตโนมัติ`,got);}else{p.hand.push(got);logLocal(`เสียงนก: เลือกเก็บ “${got.name}” เข้ามือ`);showEffectCard(`เสียงนก: เก็บ “${got.name}” เข้ามือ`,got);}}}else logLocal(`เสียงนก: เห็น “${top.name}” แล้วเลือกไม่เก็บ`);renderLocal();if(!g.pending&&!g.over)localAutoEndAfterUse(g,p);});renderLocal();return;}else logLocal('กองจั่วว่าง ไม่มีไพ่ให้ตรวจดู');
  }else if(c.id==='ghost-visit'){
   if((t.shields||0)>0){t.shields--;logLocal(`${p.name} พาผีไปเยี่ยม ${t.name} แต่เครื่องรางป้องกันไว้ได้`);announceTable(`${t.name} ใช้เครื่องรางที่เตรียมไว้ ป้องกันผีที่ ${p.name} ส่งมาได้สำเร็จ`,'เพื่อนใช้การ์ดป้องกัน');}
-  else {const prot=(t.hand||[]).findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','ban','lucky-flower','holy-water'].includes(x.id));if(prot>=0){const used=t.hand.splice(prot,1)[0];g.discard.push(used);logLocal(`${t.name} ใช้ ${used.name} ป้องกันผีที่ ${p.name} ส่งไป`);announceTable(`${t.name} ใช้การ์ด “${used.name}” ป้องกันผีที่ ${p.name} ส่งมาได้สำเร็จ`,'เพื่อนใช้การ์ดป้องกัน');}else{localHurt(t,`${p.name} พาผีไปเยี่ยม`);logLocal(`${p.name} พาผีไปเยี่ยม ${t.name} ทำให้เสียหัวใจ 1 ดวง`);announceTable(`${t.name} ไม่มีการ์ดป้องกัน เสียหัวใจ 1 ดวง`,'ผีหลอกสำเร็จ','danger');}}
+  else {const prot=(t.hand||[]).findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','lucky-flower','holy-water'].includes(x.id));if(prot>=0){const used=t.hand.splice(prot,1)[0];g.discard.push(used);logLocal(`${t.name} ใช้ ${used.name} ป้องกันผีที่ ${p.name} ส่งไป`);announceTable(`${t.name} ใช้การ์ด “${used.name}” ป้องกันผีที่ ${p.name} ส่งมาได้สำเร็จ`,'เพื่อนใช้การ์ดป้องกัน');}else{localHurt(t,`${p.name} พาผีไปเยี่ยม`);logLocal(`${p.name} พาผีไปเยี่ยม ${t.name} ทำให้เสียหัวใจ 1 ดวง`);announceTable(`${t.name} ไม่มีการ์ดป้องกัน เสียหัวใจ 1 ดวง`,'ผีหลอกสำเร็จ','danger');}}
  }else if(c.id==='eye'){
   const hidden=t.hand[Math.floor(Math.random()*t.hand.length)];if(hidden){logLocal(`${p.name} ใช้ตาวาวกระจกส่องไพ่ของ ${t.name}`);showEffectCard(`ไพ่ที่สุ่มเห็นจากมือ ${t.name}`,hidden);}else logLocal(`${t.name} ไม่มีไพ่ในมือให้ส่อง`);
  }else if(c.id==='lantern'){

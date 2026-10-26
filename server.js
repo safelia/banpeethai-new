@@ -150,6 +150,7 @@ function drawCard(r,p){
   }
   g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);return;
  }
+ if(c.id==='kumarn'){p.skip=true;g.discard.push(c);log(g,`${p.name} จั่วได้กุมารชวนไปเล่น จึงอดเล่นรอบถัดไปทันที`);g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);return;}
  if(ghost){g.pending={playerId:p.id,card:c};g.phase='resolve';g.turnToken=(g.turnToken||0)+1;}
  else {
   p.hand.push(c);
@@ -189,7 +190,7 @@ io.on('connection',socket=>{
   const c=g.pending.card;g.discard.push(c);
   if(useProtection){
    if((p.shields||0)>0){p.shields--;const msg=`${p.name} ใช้เครื่องรางที่เตรียมไว้ ป้องกัน ${c.name} ได้สำเร็จ`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ใช้การ์ดป้องกัน',message:msg,kind:'ward'});}
-   else {const i=p.hand.findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','ban','lucky-flower','holy-water'].includes(x.id));if(i>=0){const ward=p.hand.splice(i,1)[0];g.discard.push(ward);const msg=`${p.name} ใช้การ์ด “${ward.name}” ป้องกัน ${c.name} ได้สำเร็จ`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ใช้การ์ดป้องกัน',message:msg,kind:'ward'});}else{hurt(r,p,`ถูก ${c.name} หลอก`);const msg=`${p.name} ไม่มีการ์ดป้องกัน เสียหัวใจ 1 ดวง`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ผีหลอกสำเร็จ',message:msg,kind:'danger'});}}
+   else {const i=p.hand.findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','lucky-flower','holy-water'].includes(x.id));if(i>=0){const ward=p.hand.splice(i,1)[0];g.discard.push(ward);const msg=`${p.name} ใช้การ์ด “${ward.name}” ป้องกัน ${c.name} ได้สำเร็จ`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ใช้การ์ดป้องกัน',message:msg,kind:'ward'});}else{hurt(r,p,`ถูก ${c.name} หลอก`);const msg=`${p.name} ไม่มีการ์ดป้องกัน เสียหัวใจ 1 ดวง`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ผีหลอกสำเร็จ',message:msg,kind:'danger'});}}
   } else {hurt(r,p,`ถูก ${c.name} หลอก`);const msg=`${p.name} ยอมรับผีหลอก เสียหัวใจ 1 ดวง`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ผีหลอกสำเร็จ',message:msg,kind:'danger'});}
   g.pending=null;
   if(!g.over){
@@ -211,7 +212,7 @@ io.on('connection',socket=>{
   if(['heart','protection','lucky-flower'].includes(c.id)){socket.emit('game-error',c.id==='heart'?'หัวใจเป็นพลังชีวิต ไม่สามารถใช้เล่นได้':c.id==='lucky-flower'?'ดอกบัวนำโชคทำงานอัตโนมัติเมื่อจั่ว หรือเก็บไว้ป้องกันผีเมื่อหัวใจเต็ม':'เก็บเครื่องรางไว้ใช้ตอนเจอผี');return}
   const otherPlayers=()=>g.players.filter(x=>x.alive&&x.id!==p.id);
   const target=()=>g.players.find(x=>x.id===targetId&&x.alive&&x.id!==p.id);
-  if(['skip','vase','cat','eye','ghost-visit','friend-holy-water'].includes(c.id)&&!targetId){socket.emit('game-error','เลือกผู้เล่นเป้าหมายก่อนใช้การ์ด');return}
+  if(['skip','ban','cat','eye','ghost-visit','ghost-disguise','friend-holy-water'].includes(c.id)&&!targetId){socket.emit('game-error','เลือกผู้เล่นเป้าหมายก่อนใช้การ์ด');return}
   if(c.id==='friend-holy-water'&&!(target()?.hearts<3)){socket.emit('game-error','เลือกเพื่อนที่หัวใจยังไม่เต็ม');return}
   if(c.id==='cat'&&!(target()?.keys>0||(target()?.hand||[]).some(x=>x.id==='key'))){socket.emit('game-error','ผู้เล่นที่เลือกไม่มีกุญแจให้ขโมย');return}
   p.hand.splice(index,1);g.discard.push(c);
@@ -236,12 +237,16 @@ io.on('connection',socket=>{
    if((p.hearts||0)<3){p.hearts=Math.min(3,p.hearts+1);p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-water-${Date.now()}`});log(g,`${p.name} ใช้ ${c.name} ฟื้นหัวใจเป็น ${p.hearts}/3 และเพิ่มการ์ดหัวใจเข้ามือ`)}else{p.shields=(p.shields||0)+1;log(g,`${p.name} หัวใจเต็ม จึงเปลี่ยนน้ำมนต์เป็นเครื่องรางป้องกัน 1 ครั้ง`)}
   }else if(c.id==='friend-holy-water'){
    const t=target();if(t&&(t.hearts||0)<3){t.hearts=Math.min(3,(t.hearts||0)+1);t.hand.push({...clone(cardById('heart')),uid:`heart-${t.id}-friend-water-${Date.now()}`});log(g,`${p.name} พรมน้ำมนต์ให้ ${t.name} ฟื้นหัวใจเป็น ${t.hearts}/3 และเพิ่มการ์ดหัวใจเข้ามือ`);effect(`${t.name} ได้รับหัวใจเพิ่ม 1 ดวง (${t.hearts}/3)`,cardById('heart'));}else{log(g,`${t?.name||'เพื่อน'} มีหัวใจเต็มแล้ว น้ำมนต์จึงไม่เพิ่มหัวใจ`);effect('ผู้เล่นเป้าหมายมีหัวใจเต็มแล้ว');}
-  }else if(['guardian','blessed-rice','ghost-puppy','ban'].includes(c.id)){
+  }else if(['guardian','blessed-rice','ghost-puppy'].includes(c.id)){
    p.shields=(p.shields||0)+1;log(g,`${p.name} เตรียม ${c.name} เป็นเครื่องรางป้องกันผี 1 ครั้ง (มี ${p.shields} ชั้น)`);
   }else if(c.id==='reverse'){
    g.direction=(g.direction||1)*-1;log(g,`${p.name} ใช้ ${c.name} กลับทิศทางการเล่น`);
-  }else if(['skip','vase'].includes(c.id)){
-   const t=target();if(t){t.skip=true;log(g,`${p.name} ใช้ ${c.name} ข้ามเทิร์น ${t.name}`)}
+  }else if(['skip','ban'].includes(c.id)){
+   const t=target();if(t){t.skip=true;log(g,`${p.name} ใช้ ${c.name} ทำให้ ${t.name} อดเล่นรอบถัดไป`)}
+  }else if(c.id==='vase'){
+   const n=g.players.length;let t=null;for(let step=1;step<n;step++){const q=g.players[(g.turn+step)%n];if(q.alive){t=q;break;}}if(t){t.skip=true;log(g,`${p.name} ใช้ ${c.name} ทำให้ผู้เล่นคนถัดไป ${t.name} อดเล่น`)}
+  }else if(c.id==='ghost-disguise'){
+   const t=target();if(t){hurt(r,t,`ถูก ${p.name} ปลอมเป็นผีแกล้ง`);const msg=`${p.name} ใช้ปลอมเป็นผีใส่ ${t.name} ทำให้เสียหัวใจ 1 ดวงทันที ป้องกันไม่ได้`;log(g,msg);effect(msg);io.to(r.code).emit('table-announcement',{title:'ปลอมเป็นผี',message:msg,kind:'danger'});}
   }else if(c.id==='cat'){
    const t=target();let stolen=null;
    const hi=(t.hand||[]).findIndex(x=>x.id==='key');
@@ -257,7 +262,7 @@ io.on('connection',socket=>{
   }else if(c.id==='ghost-visit'){
    const t=target();if(t){
     if((t.shields||0)>0){t.shields--;const msg=`${t.name} ใช้เครื่องรางที่เตรียมไว้ ป้องกันผีที่ ${p.name} ส่งมาได้สำเร็จ`;log(g,msg);effect(msg);io.to(r.code).emit('table-announcement',{title:'เพื่อนใช้การ์ดป้องกัน',message:msg,kind:'ward'});}
-    else {const pi=(t.hand||[]).findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','ban','lucky-flower','holy-water'].includes(x.id));if(pi>=0){const prot=t.hand.splice(pi,1)[0];g.discard.push(prot);const msg=`${t.name} ใช้การ์ด “${prot.name}” ป้องกันผีที่ ${p.name} ส่งมาได้สำเร็จ`;log(g,msg);effect(msg,prot);io.to(r.code).emit('table-announcement',{title:'เพื่อนใช้การ์ดป้องกัน',message:msg,kind:'ward'});}else{hurt(r,t,`ถูกผีที่ ${p.name} ส่งมาเยี่ยม`);const msg=`${t.name} ไม่มีการ์ดป้องกัน ถูกผีที่ ${p.name} ส่งมาเยี่ยม เสียหัวใจ 1 ดวง`;log(g,msg);effect(msg);io.to(r.code).emit('table-announcement',{title:'ผีหลอกเพื่อนสำเร็จ',message:msg,kind:'danger'});}}
+    else {const pi=(t.hand||[]).findIndex(x=>['protection','guardian','blessed-rice','ghost-puppy','lucky-flower','holy-water'].includes(x.id));if(pi>=0){const prot=t.hand.splice(pi,1)[0];g.discard.push(prot);const msg=`${t.name} ใช้การ์ด “${prot.name}” ป้องกันผีที่ ${p.name} ส่งมาได้สำเร็จ`;log(g,msg);effect(msg,prot);io.to(r.code).emit('table-announcement',{title:'เพื่อนใช้การ์ดป้องกัน',message:msg,kind:'ward'});}else{hurt(r,t,`ถูกผีที่ ${p.name} ส่งมาเยี่ยม`);const msg=`${t.name} ไม่มีการ์ดป้องกัน ถูกผีที่ ${p.name} ส่งมาเยี่ยม เสียหัวใจ 1 ดวง`;log(g,msg);effect(msg);io.to(r.code).emit('table-announcement',{title:'ผีหลอกเพื่อนสำเร็จ',message:msg,kind:'danger'});}}
    }
   }else if(c.id==='eye'){
    const t=target();const hidden=t?.hand?.length?t.hand[Math.floor(Math.random()*t.hand.length)]:null;if(hidden){log(g,`${p.name} ใช้ ${c.name} ส่องดูไพ่ในมือ ${t.name}`);effect(`ตาวาวกระจก: ไพ่ที่สุ่มเห็นจากมือ ${t.name}`,hidden)}else{log(g,`${t?.name||'ผู้เล่น'} ไม่มีไพ่ในมือให้ส่อง`);effect(`${t?.name||'ผู้เล่น'} ไม่มีไพ่ในมือให้ส่อง`)}
