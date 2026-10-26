@@ -327,9 +327,13 @@ if(!countdownInterval)countdownInterval=setInterval(updateDrawCountdown,1000);
 function renderLastDrawPreview(lastDraw,fallback){
  const target=$('discardTop');if(!target)return;
  const card=lastDraw?.card||fallback||null;
- if(!card){target.innerHTML='<span class="discard-empty">—</span><small>ไพ่ล่าสุด</small>';return;}
+ target.classList.remove('hidden');
+ if(!card){
+  target.innerHTML='<span class="discard-empty">—</span><small>ไพ่ล่าสุด</small>';
+  return;
+ }
  const who=lastDraw?.playerName?`${lastDraw.playerName} • `:'';
- target.innerHTML=`<img class="discard-preview" src="${esc(imgUrl(card))}" alt="${esc(who+card.name||'ไพ่ล่าสุดที่จั่ว')}" draggable="false"><small>ไพ่ล่าสุดที่จั่ว</small>`;
+ target.innerHTML=`<img class="discard-preview" src="${esc(imgUrl(card))}" alt="${esc((who+card.name)||'ไพ่ล่าสุดที่จั่ว')}" draggable="false"><small>ไพ่ล่าสุดที่จั่ว</small>`;
 }
 function renderLocal(){
  const g=localGame;if(!g)return;const p=g.players.find(x=>x.id==='human');if(!p)return;
@@ -355,7 +359,7 @@ function renderOnline(){
  const myTurn=s.players[s.turn]?.id===socket?.id;
  $('turnBanner').textContent=s.over?'เกมจบแล้ว':s.pending?(s.pending.playerId===socket?.id?'ผีปรากฏตัว! เลือกว่าจะป้องกันหรือไม่':'มีผู้เล่นเจอผี!'):myTurn?'ถึงตาคุณแล้ว — จั่วการ์ด 1 ใบ':`ถึงตา ${s.players[s.turn]?.name||'ผู้เล่น'}`;
  $('tableMessage').textContent=s.over?'การผจญภัยสิ้นสุดลง':s.pending?'มีวิญญาณปรากฏตัว!':myTurn?'จั่วการ์ดเพื่อสำรวจบ้าน':'กำลังรอผู้เล่น...';
- renderLastDrawPreview(s.lastDraw,s.discard);
+ renderLastDrawPreview(s.lastDraw,Array.isArray(s.discard)?s.discard[s.discard.length-1]:s.discard);
  renderLogs(s.logs);
  if($('sidePlayersCount'))$('sidePlayersCount').textContent=`${(s.players||[]).filter(x=>x.alive!==false).length}/${(s.players||[]).length}`;if($('sideRoundCount'))$('sideRoundCount').textContent=String(s.round||1);if($('sideCurrentTurn'))$('sideCurrentTurn').textContent=s.over?'เกมจบ':(s.players[s.turn]?.name||'—');
  const canDraw=myTurn&&s.phase!=='afterdraw'&&!s.pending&&!s.over;

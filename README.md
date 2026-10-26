@@ -47,3 +47,9 @@ Deploy commands: Build `npm install`; Start `npm start`; Health check `/health`.
 - Hand cards are constrained to the bottom artwork panel with wrapped text and horizontal scrolling when needed.
 - Card reveal dialog is centered instead of clipping against the left edge.
 - CSS and JS cache version bumped to v2.1.2.
+
+
+## v2.1.3 hand/discard layout fix
+- Forces hand cards to render visibly inside the lower panel and allows horizontal scrolling without clipping card content.
+- Makes the discard/last-drawn card preview visible in the dashed left-side table slot.
+- Centers the reveal card dialog in the viewport and cache-busts CSS/JS to v2.1.3.

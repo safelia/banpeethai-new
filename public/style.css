@@ -339,3 +339,91 @@ html:has(#gameScreen:not(.hidden)),body:has(#gameScreen:not(.hidden)){width:100%
  transform:none!important;margin:auto!important;width:min(92vw,560px)!important;max-height:90dvh!important;
  overflow:auto!important;box-sizing:border-box!important;
 }
+
+
+
+/* v2.1.3 — hand panel and last-drawn-card placement hard fix */
+#gameScreen:not(.hidden) .table-panel.ritual-panel{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  overflow:hidden!important;isolation:isolate!important;
+}
+#gameScreen:not(.hidden) .hand-zone{
+  position:absolute!important;left:16.8%!important;right:16.8%!important;
+  bottom:2.5%!important;top:auto!important;width:66.4%!important;
+  height:29.5%!important;max-height:29.5%!important;min-height:0!important;
+  margin:0!important;padding:0!important;display:flex!important;flex-direction:column!important;
+  overflow:hidden!important;z-index:250!important;pointer-events:auto!important;
+  box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) .hand-heading{
+  display:flex!important;position:relative!important;flex:0 0 18%!important;
+  width:100%!important;height:18%!important;min-height:0!important;
+  margin:0!important;padding:0 1.2%!important;align-items:center!important;
+  box-sizing:border-box!important;overflow:hidden!important;pointer-events:none!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout{
+  position:relative!important;display:block!important;flex:1 1 82%!important;
+  width:100%!important;height:82%!important;min-width:0!important;min-height:0!important;
+  margin:0!important;padding:0 1%!important;overflow:hidden!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand{
+  position:relative!important;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  align-items:stretch!important;justify-content:flex-start!important;gap:clamp(4px,.45vw,8px)!important;
+  width:100%!important;max-width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;
+  margin:0!important;padding:0!important;overflow-x:auto!important;overflow-y:hidden!important;
+  visibility:visible!important;opacity:1!important;box-sizing:border-box!important;
+  pointer-events:auto!important;scrollbar-width:thin!important;scrollbar-color:#b67a43 #1a0e0c!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card{
+  position:relative!important;display:flex!important;flex:0 0 var(--hand-card-width,140px)!important;
+  width:var(--hand-card-width,140px)!important;min-width:84px!important;max-width:var(--hand-card-width,140px)!important;
+  height:100%!important;min-height:0!important;max-height:100%!important;
+  visibility:visible!important;opacity:1!important;overflow:hidden!important;
+  box-sizing:border-box!important;pointer-events:auto!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:disabled{
+  opacity:1!important;filter:none!important;cursor:default!important;
+}
+#gameScreen:not(.hidden) #hand .hand-art{
+  display:block!important;flex:0 0 35%!important;height:35%!important;min-height:0!important;
+  width:100%!important;background-size:cover!important;background-position:center!important;
+}
+#gameScreen:not(.hidden) #hand .hand-card-title,
+#gameScreen:not(.hidden) #hand .hand-card-type,
+#gameScreen:not(.hidden) #hand .hand-card-desc,
+#gameScreen:not(.hidden) #hand .hand-card-effect,
+#gameScreen:not(.hidden) #hand .hand-card-effect span{
+  display:block!important;max-width:100%!important;min-width:0!important;
+  white-space:normal!important;overflow:hidden!important;overflow-wrap:anywhere!important;word-break:break-word!important;
+}
+#gameScreen:not(.hidden) #discardTop.discard-pile{
+  display:flex!important;visibility:visible!important;opacity:1!important;
+  position:absolute!important;left:33.2%!important;top:41.2%!important;
+  right:auto!important;bottom:auto!important;width:8.3%!important;height:14%!important;
+  margin:0!important;padding:1px!important;overflow:hidden!important;
+  border:1px dashed #d98a28!important;border-radius:6px!important;
+  background:#180d0c22!important;box-shadow:none!important;z-index:80!important;
+  pointer-events:none!important;align-items:center!important;justify-content:center!important;
+}
+#gameScreen:not(.hidden) #discardTop .discard-preview{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  width:100%!important;height:100%!important;object-fit:cover!important;
+  object-position:center!important;border-radius:4px!important;
+}
+#gameScreen:not(.hidden) #discardTop small{display:none!important}
+#gameScreen:not(.hidden) #discardTop .discard-empty{display:none!important}
+#drawReveal:not(.hidden){
+  position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:16px!important;box-sizing:border-box!important;overflow:auto!important;
+  z-index:2147483001!important;transform:none!important;
+}
+#drawReveal:not(.hidden) > .reveal-card-shell{
+  position:relative!important;inset:auto!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;
+  transform:none!important;margin:auto!important;flex:0 1 auto!important;
+  width:min(92vw,560px)!important;max-width:560px!important;max-height:90dvh!important;
+}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .hand-zone{left:8%!important;right:8%!important;width:84%!important;bottom:2%!important;height:30%!important}
+ #gameScreen:not(.hidden) #discardTop.discard-pile{left:33.2%!important;top:41.2%!important;width:9%!important;height:14%!important}
+}
