@@ -150,6 +150,7 @@ function show(id){$(id)?.classList.remove('hidden');}
 function hide(id){$(id)?.classList.add('hidden');}
 function imgUrl(c){return c?.image || '/assets/cards/card-01.jpg';}
 function renderCardTile(c){
+ if(c?.fullArt) return `<article class="card card-parchment finished-ghost-card" title="${esc(c.name)}"><img class="finished-ghost-art" src="${esc(imgUrl(c))}" alt="${esc(c.name)} — ${esc(c.desc)}"></article>`;
  return `<article class="card card-parchment"><div class="card-art" style="background-image:url('${esc(imgUrl(c))}')"><span class="card-type">${esc(c.type||'การ์ด')}</span></div><h3>${esc(c.name)}</h3><p>${esc(c.desc)}</p><div class="effect"><b>ความสามารถ</b><span>${esc(c.effect)}</span></div></article>`;
 }
 function renderCatalog(){
@@ -371,12 +372,12 @@ function renderHand(hand,canPlay){
  el.style.setProperty('--hand-overlap',`${overlap}px`);
  el.style.setProperty('--hand-overlap-negative',`${-overlap}px`);
  el.style.setProperty('--hand-gap','0px');
- el.innerHTML=hand.map((c,i)=>`<button class="hand-card ${c.id==='heart'?'heart-card':''}" data-hand-index="${i}" style="--hand-index:${i};flex:0 1 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px" ${!canPlayCard(c)?'disabled':''} title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
-   <span class="hand-art" style="background-image:url('${esc(imgUrl(c))}')"></span>
+ el.innerHTML=hand.map((c,i)=>`<button class="hand-card ${c.id==='heart'?'heart-card':''} ${c.fullArt?'hand-full-art-card':''}" data-hand-index="${i}" style="--hand-index:${i};flex:0 1 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px" ${!canPlayCard(c)?'disabled':''} title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
+   ${c.fullArt?`<img class="hand-full-art" src="${esc(imgUrl(c))}" alt="${esc(c.name)}">`:`<span class="hand-art" style="background-image:url('${esc(imgUrl(c))}')"></span>
    <span class="hand-card-title">${esc(c.name||'การ์ด')}</span>
    <span class="hand-card-type">${esc(c.type||'การ์ด')}</span>
    <span class="hand-card-desc">${esc(c.desc||'การ์ดลึกลับจากบ้านผีไทย')}</span>
-   <span class="hand-card-effect"><b>ความสามารถ</b><span>${esc(c.effect||'ไม่มีความสามารถพิเศษ')}</span></span>
+   <span class="hand-card-effect"><b>ความสามารถ</b><span>${esc(c.effect||'ไม่มีความสามารถพิเศษ')}</span></span>`}
   </button>`).join('')||'<p class="muted">ยังไม่มีการ์ดในมือ</p>';
  el.querySelectorAll('[data-hand-index]').forEach(btn=>btn.addEventListener('click',()=>previewHandCard(Number(btn.dataset.handIndex))));
 }
@@ -541,11 +542,11 @@ function previewHandCard(index){
  modal.innerHTML=`<section class="card-preview-dialog" role="dialog" aria-modal="true" aria-label="ตรวจสอบการ์ด">
   <button class="card-preview-close" type="button" aria-label="ปิด">×</button>
   <div class="card-preview-kicker">ตรวจสอบการ์ดก่อนใช้</div>
-  <div class="card-preview-card">
-   <div class="card-preview-art" style="background-image:url('${esc(imgUrl(c))}')"></div>
+  <div class="card-preview-card ${c.fullArt?'finished-ghost-preview':''}">
+   ${c.fullArt?`<img class="finished-ghost-preview-art" src="${esc(imgUrl(c))}" alt="${esc(c.name||'การ์ดผีไทย')}">`:`<div class="card-preview-art" style="background-image:url('${esc(imgUrl(c))}')"></div>
    <h2>${esc(c.name||'การ์ด')}</h2><div class="card-preview-type">${esc(c.type||'การ์ด')}</div>
    <p>${esc(c.desc||'การ์ดลึกลับจากบ้านผีไทย')}</p>
-   <div class="card-preview-effect"><b>ความสามารถ</b><span>${esc(c.effect||'ไม่มีความสามารถพิเศษ')}</span></div>
+   <div class="card-preview-effect"><b>ความสามารถ</b><span>${esc(c.effect||'ไม่มีความสามารถพิเศษ')}</span></div>`}
   </div>
   <div class="card-preview-actions">
    <button type="button" class="card-preview-cancel">ยกเลิก</button>

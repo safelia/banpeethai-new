@@ -23,63 +23,68 @@
   },
   {
     "id": "hungry-ghost",
-    "name": "ผีหลอกในเรือนไทย",
-    "type": "ผีอันตราย",
+    "name": "ผีนักศึกษาสาว",
+    "type": "ผีไทย",
     "icon": "👻",
     "color": "red",
     "copies": 6,
-    "desc": "วิญญาณเจ้าถิ่นโผล่มาจากเงามืดบนชานเรือน คอยทดสอบความกล้าของผู้มาเยือน",
-    "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง หรือใช้เครื่องรางป้องกันแทนได้",
-    "image": "/assets/cards/card-06.jpg",
-    "kind": "ghost"
+    "desc": "สาวนักศึกษาที่ปรากฏตัวในคืนฝนตก",
+    "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
+    "image": "/assets/cards/finished-ghosts/ghost-student.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
     "id": "pret",
-    "name": "เปรตตัวสูง",
-    "type": "ผีอันตราย",
+    "name": "ผีพราย",
+    "type": "ผีไทย",
     "icon": "🧟",
     "color": "violet",
     "copies": 5,
-    "desc": "เปรตร่างสูงเฝ้าประตูเรือนไทย เสียงฝีเท้าดังมาจากปลายทางเดิน",
-    "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง หรือใช้เครื่องรางป้องกันแทนได้",
-    "image": "/assets/cards/card-02.jpg",
-    "kind": "ghost"
+    "desc": "วิญญาณหญิงสาวที่ปรากฏตัวกลางสายน้ำยามค่ำคืน",
+    "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
+    "image": "/assets/cards/finished-ghosts/ghost-phraya.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
     "id": "kra-sue",
-    "name": "กระสือขี้สงสัย",
+    "name": "ผีกระสือ",
     "type": "ผีไทย",
     "icon": "🌕",
     "color": "pink",
     "copies": 3,
     "desc": "แสงวูบวาบลอยผ่านหน้าต่างในคืนเดือนมืด",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/card-05.jpg",
-    "kind": "ghost"
+    "image": "/assets/cards/finished-ghosts/ghost-krasue.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
     "id": "nang-tani",
-    "name": "นางตานี",
+    "name": "ผีนางตานี",
     "type": "ผีไทย",
     "icon": "🌿",
     "color": "green",
     "copies": 3,
-    "desc": "หญิงสาวลึกลับปรากฏใต้ต้นกล้วยหลังบ้าน",
+    "desc": "หญิงสาวลึกลับที่ซ่อนตัวอยู่ใต้ต้นกล้วย",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/card-04.jpg",
-    "kind": "ghost"
+    "image": "/assets/cards/finished-ghosts/ghost-nang-tani.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
     "id": "pob",
-    "name": "ปอบจอมตะกละ",
+    "name": "ผีปอบ",
     "type": "ผีไทย",
     "icon": "🍲",
     "color": "orange",
     "copies": 3,
-    "desc": "เสียงหัวเราะดังจากครัวที่ปิดตาย",
+    "desc": "หญิงผมหยุ่งผู้เดินเร่ร่อนยามค่ำคืน",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/card-01.jpg",
-    "kind": "ghost"
+    "image": "/assets/cards/finished-ghosts/ghost-pob.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
     "id": "tani",
@@ -168,8 +173,9 @@
     "copies": 3,
     "desc": "แมงมุมแม่ม่ายเฝ้าห้องใต้หลังคา",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/card-14.jpg",
-    "kind": "ghost"
+    "image": "/assets/cards/finished-ghosts/ghost-widow-spider.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
     "id": "ban",
