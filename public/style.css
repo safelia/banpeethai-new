@@ -1844,3 +1844,10 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
  #gameScreen:not(.hidden) #discardTop.discard-pile{width:10%!important;height:17%!important;}
  #gameScreen:not(.hidden) #hand.hand>.hand-card,#gameScreen #hand.hand>.hand-card{flex-basis:var(--hand-card-width,105px)!important;width:var(--hand-card-width,105px)!important;min-width:var(--hand-card-width,105px)!important;max-width:var(--hand-card-width,105px)!important;}
 }
+
+/* v2.3.9 — hand cards sit below the hand label and keep their original proportions. */
+#gameScreen .hand-zone{overflow:hidden!important;}
+#gameScreen .hand-heading{flex:0 0 36px!important;height:36px!important;min-height:36px!important;padding-top:6px!important;position:relative!important;z-index:2!important;}
+#gameScreen .hand-content-layout{padding:8px 2% 4px!important;min-height:0!important;overflow:hidden!important;}
+#gameScreen:not(.hidden) #hand.hand>.hand-card.hand-full-art-card .hand-full-art,
+#gameScreen #hand.hand>.hand-card.hand-full-art-card .hand-full-art{object-fit:contain!important;object-position:center!important;}

@@ -12,17 +12,6 @@
     "fullArt": true
   },
   {
-    "id": "guardian",
-    "name": "เจ้าที่ให้กำลังใจ",
-    "type": "ผู้ช่วย",
-    "icon": "👼",
-    "color": "gold",
-    "copies": 0,
-    "desc": "เจ้าที่ใจดีช่วยคุ้มครองคุณจากอันตราย",
-    "effect": "ยกเลิกการเสียหัวใจ 1 ครั้ง",
-    "image": "/assets/cards/card-18.jpg"
-  },
-  {
     "id": "hungry-ghost",
     "name": "ผีนักศึกษาสาว",
     "type": "ผีไทย",
@@ -273,17 +262,6 @@
     "effect": "เมื่อจั่วได้ เพิ่มหัวใจ 1 ดวง หากหัวใจเต็ม สามารถเก็บไว้ใช้ป้องกันผีได้ 1 ครั้ง",
     "image": "/assets/cards/finished-helpers/lotus-heart.webp",
     "fullArt": true
-  },
-  {
-    "id": "ghost-puppy",
-    "name": "ผีน้อยเพื่อนรัก",
-    "type": "ตัวช่วย",
-    "icon": "🫧",
-    "color": "mint",
-    "copies": 0,
-    "desc": "ผีน้อยตัวจิ๋วอยากช่วยคุณหาทางออก",
-    "effect": "ป้องกันผลร้ายครั้งถัดไป",
-    "image": "/assets/cards/card-18.jpg"
   },
   {
     "id": "skip",

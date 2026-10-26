@@ -1,12 +1,8 @@
-BanPeeThai v2.3.8 UI and deck patch
+BanPeeThai v2.3.9 turn and card fixes
 
-Changes:
-- Player hand cards keep a readable fixed card width and overlap within the hand frame instead of shrinking or escaping the frame.
-- Full-art card faces use contain sizing to keep the complete card visible.
-- Latest card shown on the table uses contain sizing and a taller display area so the whole card face is visible.
-- Removed "เจ้าที่ให้กำลังใจ" and "ผีน้อยเพื่อนรัก" from the draw deck by setting copies to 0.
-
-Run:
-  npm install
-  npm start
-Then open http://localhost:3000
+- Removed obsolete cards เจ้าหน้าที่ให้กำลังใจ and ผีน้อยเพื่อนรัก from the card catalog.
+- Hand cards are positioned below the hand heading; full-art cards preserve aspect ratio.
+- Playing a card keeps the current player active during effect resolution, then advances to the next player.
+- ห้ามเล่น targets one player and skips their next turn.
+- Drawing กุมารชวนไปเล่น marks the drawer to skip their next turn immediately.
+Run npm install, then npm start, and open http://localhost:3000.
