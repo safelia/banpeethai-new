@@ -1,2 +1,1 @@
-BanPeeThai Rebuilt v2.0.0
-Clean UI stylesheet, original gameplay logic and assets preserved.
+BanPeeThai v2.3.2 — full-art protection cards. Replaces old artwork for protection, blessed rice, and holy water with supplied complete card images.

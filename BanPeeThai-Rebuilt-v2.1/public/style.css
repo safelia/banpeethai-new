@@ -274,3 +274,1520 @@ html:has(#gameScreen:not(.hidden)),body:has(#gameScreen:not(.hidden)){width:100%
 #gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-draw{left:44.4%!important;top:33.4%!important;width:11.8%!important;height:21.3%!important}
 #gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-escape{left:56.2%!important;top:39.4%!important;width:13.8%!important;height:16.8%!important}
 #gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-endturn{left:41.3%!important;top:51.3%!important;width:17.2%!important;height:9.2%!important}
+
+
+/* v2.1.2: robust viewport-aligned click targets and hand/reveal containment */
+#gameScreen:not(.hidden) > .reference-hotspot-layer{
+ position:fixed!important;left:50%!important;top:50%!important;
+ width:min(100vw,177.78dvh)!important;height:min(100dvh,56.25vw)!important;
+ transform:translate(-50%,-50%)!important;z-index:2147483000!important;
+ display:block!important;pointer-events:none!important;overflow:visible!important;
+}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .reference-hotspot{
+ position:absolute!important;display:block!important;opacity:0!important;
+ visibility:visible!important;pointer-events:auto!important;z-index:2147483000!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ padding:0!important;margin:0!important;min-width:0!important;min-height:0!important;
+ color:transparent!important;font-size:0!important;line-height:0!important;
+ cursor:pointer!important;touch-action:manipulation!important;
+}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-menu{left:0.5%!important;top:0.5%!important;width:5%!important;height:7%!important}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-sound{left:18%!important;top:0.5%!important;width:5%!important;height:7%!important}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-leave{left:86.5%!important;top:0.5%!important;width:13%!important;height:7%!important}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-draw{left:45%!important;top:34%!important;width:11%!important;height:20%!important}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-escape{left:57%!important;top:40%!important;width:14%!important;height:16%!important}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-endturn{left:41%!important;top:54.5%!important;width:18%!important;height:8%!important}
+
+/* Keep the hand within the artwork's bottom panel. */
+#gameScreen .hand-zone{
+ position:absolute!important;left:15.1%!important;right:15.1%!important;
+ bottom:2.3%!important;width:69.8%!important;height:29%!important;max-height:29%!important;
+ min-width:0!important;min-height:0!important;overflow:hidden!important;
+}
+#gameScreen .hand-content-layout{min-width:0!important;width:100%!important;overflow:hidden!important}
+#gameScreen #hand.hand{
+ display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;
+ justify-content:flex-start!important;gap:var(--hand-gap,5px)!important;
+ width:100%!important;max-width:100%!important;min-width:0!important;height:100%!important;
+ overflow-x:auto!important;overflow-y:hidden!important;box-sizing:border-box!important;
+}
+#gameScreen #hand .hand-card{
+ flex:0 0 var(--hand-card-width,110px)!important;width:var(--hand-card-width,110px)!important;
+ min-width:0!important;max-width:var(--hand-card-width,110px)!important;
+ height:100%!important;max-height:100%!important;box-sizing:border-box!important;
+ overflow:hidden!important;white-space:normal!important;
+}
+#gameScreen #hand .hand-card-title,
+#gameScreen #hand .hand-card-type,
+#gameScreen #hand .hand-card-desc,
+#gameScreen #hand .hand-card-effect,
+#gameScreen #hand .hand-card-effect span{
+ max-width:100%!important;min-width:0!important;overflow:hidden!important;
+ overflow-wrap:anywhere!important;word-break:break-word!important;white-space:normal!important;
+}
+#gameScreen .game-side-rail{display:none!important;pointer-events:none!important}
+
+/* Any card/reveal preview must be centered in the viewport, not clipped at the left edge. */
+#drawReveal:not(.hidden){
+ position:fixed!important;inset:0!important;left:0!important;top:0!important;
+ width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ padding:16px!important;box-sizing:border-box!important;overflow:auto!important;z-index:2147482000!important;
+}
+#drawReveal:not(.hidden) .reveal-card-shell{
+ position:relative!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;
+ transform:none!important;margin:auto!important;width:min(92vw,560px)!important;max-height:90dvh!important;
+ overflow:auto!important;box-sizing:border-box!important;
+}
+
+
+
+/* v2.1.3 — hand panel and last-drawn-card placement hard fix */
+#gameScreen:not(.hidden) .table-panel.ritual-panel{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  overflow:hidden!important;isolation:isolate!important;
+}
+#gameScreen:not(.hidden) .hand-zone{
+  position:absolute!important;left:16.8%!important;right:16.8%!important;
+  bottom:2.5%!important;top:auto!important;width:66.4%!important;
+  height:29.5%!important;max-height:29.5%!important;min-height:0!important;
+  margin:0!important;padding:0!important;display:flex!important;flex-direction:column!important;
+  overflow:hidden!important;z-index:250!important;pointer-events:auto!important;
+  box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) .hand-heading{
+  display:flex!important;position:relative!important;flex:0 0 18%!important;
+  width:100%!important;height:18%!important;min-height:0!important;
+  margin:0!important;padding:0 1.2%!important;align-items:center!important;
+  box-sizing:border-box!important;overflow:hidden!important;pointer-events:none!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout{
+  position:relative!important;display:block!important;flex:1 1 82%!important;
+  width:100%!important;height:82%!important;min-width:0!important;min-height:0!important;
+  margin:0!important;padding:0 1%!important;overflow:hidden!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand{
+  position:relative!important;display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  align-items:stretch!important;justify-content:flex-start!important;gap:clamp(4px,.45vw,8px)!important;
+  width:100%!important;max-width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;
+  margin:0!important;padding:0!important;overflow-x:auto!important;overflow-y:hidden!important;
+  visibility:visible!important;opacity:1!important;box-sizing:border-box!important;
+  pointer-events:auto!important;scrollbar-width:thin!important;scrollbar-color:#b67a43 #1a0e0c!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card{
+  position:relative!important;display:flex!important;flex:0 0 var(--hand-card-width,140px)!important;
+  width:var(--hand-card-width,140px)!important;min-width:84px!important;max-width:var(--hand-card-width,140px)!important;
+  height:100%!important;min-height:0!important;max-height:100%!important;
+  visibility:visible!important;opacity:1!important;overflow:hidden!important;
+  box-sizing:border-box!important;pointer-events:auto!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:disabled{
+  opacity:1!important;filter:none!important;cursor:default!important;
+}
+#gameScreen:not(.hidden) #hand .hand-art{
+  display:block!important;flex:0 0 35%!important;height:35%!important;min-height:0!important;
+  width:100%!important;background-size:cover!important;background-position:center!important;
+}
+#gameScreen:not(.hidden) #hand .hand-card-title,
+#gameScreen:not(.hidden) #hand .hand-card-type,
+#gameScreen:not(.hidden) #hand .hand-card-desc,
+#gameScreen:not(.hidden) #hand .hand-card-effect,
+#gameScreen:not(.hidden) #hand .hand-card-effect span{
+  display:block!important;max-width:100%!important;min-width:0!important;
+  white-space:normal!important;overflow:hidden!important;overflow-wrap:anywhere!important;word-break:break-word!important;
+}
+#gameScreen:not(.hidden) #discardTop.discard-pile{
+  display:flex!important;visibility:visible!important;opacity:1!important;
+  position:absolute!important;left:33.2%!important;top:41.2%!important;
+  right:auto!important;bottom:auto!important;width:8.3%!important;height:14%!important;
+  margin:0!important;padding:1px!important;overflow:hidden!important;
+  border:1px dashed #d98a28!important;border-radius:6px!important;
+  background:#180d0c22!important;box-shadow:none!important;z-index:80!important;
+  pointer-events:none!important;align-items:center!important;justify-content:center!important;
+}
+#gameScreen:not(.hidden) #discardTop .discard-preview{
+  display:block!important;visibility:visible!important;opacity:1!important;
+  width:100%!important;height:100%!important;object-fit:cover!important;
+  object-position:center!important;border-radius:4px!important;
+}
+#gameScreen:not(.hidden) #discardTop small{display:none!important}
+#gameScreen:not(.hidden) #discardTop .discard-empty{display:none!important}
+#drawReveal:not(.hidden){
+  position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:16px!important;box-sizing:border-box!important;overflow:auto!important;
+  z-index:2147483001!important;transform:none!important;
+}
+#drawReveal:not(.hidden) > .reveal-card-shell{
+  position:relative!important;inset:auto!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;
+  transform:none!important;margin:auto!important;flex:0 1 auto!important;
+  width:min(92vw,560px)!important;max-width:560px!important;max-height:90dvh!important;
+}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .hand-zone{left:8%!important;right:8%!important;width:84%!important;bottom:2%!important;height:30%!important}
+ #gameScreen:not(.hidden) #discardTop.discard-pile{left:33.2%!important;top:41.2%!important;width:9%!important;height:14%!important}
+}
+
+
+
+/* v2.1.4 — place the hand panel in viewport coordinates.
+   The old nested .hand-zone inherited conflicting parent positioning rules,
+   which placed its count/card row near the upper-left instead of the bottom panel. */
+#gameScreen:not(.hidden) .game-layout.ritual-layout{
+  position:fixed!important;left:50%!important;top:50%!important;
+  width:var(--stage-w)!important;height:var(--stage-h)!important;
+  transform:translate(-50%,-50%)!important;overflow:visible!important;
+}
+#gameScreen:not(.hidden) .table-panel.ritual-panel{
+  position:absolute!important;left:0!important;top:0!important;right:0!important;bottom:0!important;
+  width:100%!important;height:100%!important;overflow:visible!important;
+}
+#gameScreen:not(.hidden) .hand-zone{
+  position:fixed!important;
+  left:calc((100vw - min(100vw,177.68dvh))/2 + min(17.2vw,30.55dvh))!important;
+  top:calc((100dvh - min(100dvh,56.28vw))/2 + min(66.3dvh,37.3vw))!important;
+  right:auto!important;bottom:auto!important;
+  width:min(65.6vw,116.6dvh)!important;
+  height:min(29.6dvh,16.65vw)!important;max-height:none!important;
+  min-width:0!important;min-height:0!important;
+  margin:0!important;padding:0!important;
+  display:flex!important;flex-direction:column!important;
+  overflow:hidden!important;z-index:1200!important;
+  box-sizing:border-box!important;transform:none!important;
+  visibility:visible!important;opacity:1!important;pointer-events:auto!important;
+}
+#gameScreen:not(.hidden) .hand-heading{
+  position:relative!important;display:flex!important;flex:0 0 18%!important;
+  width:100%!important;height:18%!important;min-height:0!important;
+  margin:0!important;padding:0 2%!important;align-items:center!important;
+  justify-content:flex-start!important;box-sizing:border-box!important;
+  overflow:hidden!important;background:transparent!important;border:0!important;
+}
+#gameScreen:not(.hidden) .hand-heading h3{
+  display:none!important;
+}
+#gameScreen:not(.hidden) .hand-heading small{
+  display:block!important;margin-left:auto!important;
+  font-size:clamp(8px,.7vw,12px)!important;color:#f0d3a2!important;
+  text-shadow:0 1px 3px #000!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout{
+  position:relative!important;display:block!important;flex:1 1 82%!important;
+  width:100%!important;height:82%!important;min-width:0!important;min-height:0!important;
+  margin:0!important;padding:0 2% 1.5%!important;overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand{
+  position:relative!important;display:flex!important;flex-flow:row nowrap!important;
+  align-items:stretch!important;justify-content:flex-start!important;
+  gap:clamp(4px,.45vw,8px)!important;width:100%!important;max-width:100%!important;
+  height:100%!important;min-width:0!important;min-height:0!important;
+  margin:0!important;padding:0!important;overflow-x:auto!important;overflow-y:hidden!important;
+  visibility:visible!important;opacity:1!important;box-sizing:border-box!important;
+  pointer-events:auto!important;z-index:1201!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card{
+  position:relative!important;display:flex!important;flex-direction:column!important;
+  flex:0 0 var(--hand-card-width,140px)!important;width:var(--hand-card-width,140px)!important;
+  min-width:84px!important;max-width:var(--hand-card-width,140px)!important;
+  height:100%!important;min-height:0!important;max-height:100%!important;
+  margin:0!important;opacity:1!important;visibility:visible!important;
+  overflow:hidden!important;box-sizing:border-box!important;pointer-events:auto!important;
+  color:#f8e8c9!important;background:linear-gradient(180deg,#42261b,#1b0e0a)!important;
+  border:1px solid #b87b32!important;border-radius:6px!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-art{
+  display:block!important;flex:0 0 34%!important;width:100%!important;height:34%!important;
+  min-height:0!important;background-size:cover!important;background-position:center!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-title,
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-type,
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-desc,
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-effect{
+  display:block!important;position:relative!important;max-width:100%!important;min-width:0!important;
+  height:auto!important;white-space:normal!important;overflow:hidden!important;
+  overflow-wrap:anywhere!important;word-break:break-word!important;
+  padding:2px 5px!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-title{font-size:clamp(9px,.72vw,13px)!important;font-weight:800!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-type{font-size:clamp(8px,.58vw,10px)!important;color:#e9b96d!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-desc,
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-effect{font-size:clamp(7px,.5vw,9px)!important;line-height:1.2!important}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .hand-zone{
+  left:calc((100vw - min(100vw,177.68dvh))/2 + min(8vw,14.2dvh))!important;
+  top:calc((100dvh - min(100dvh,56.28vw))/2 + min(66.3dvh,37.3vw))!important;
+  width:min(84vw,149.3dvh)!important;height:min(29.6dvh,16.65vw)!important;
+ }
+ #gameScreen:not(.hidden) #hand.hand > .hand-card{min-width:78px!important}
+}
+
+
+/* v2.1.5 — Thai ornamental circular player markers at the chair positions */
+#gameScreen:not(.hidden) .players-ring .player-avatar{
+  position:relative!important;
+  display:grid!important;
+  place-items:center!important;
+  width:clamp(30px,2.7vw,42px)!important;
+  height:clamp(30px,2.7vw,42px)!important;
+  min-width:clamp(30px,2.7vw,42px)!important;
+  aspect-ratio:1/1!important;
+  box-sizing:border-box!important;
+  border-radius:50%!important;
+  overflow:visible!important;
+  font-size:clamp(15px,1.3vw,22px)!important;
+  line-height:1!important;
+  color:#fff0c9!important;
+  background:
+    radial-gradient(circle at 50% 50%,#51271c 0 43%,#26100c 45% 59%,#9d5b1f 61% 64%,#f4c56b 66% 69%,#32150c 71% 100%)!important;
+  border:2px solid #d99a3e!important;
+  outline:1px solid #4a210f!important;
+  box-shadow:0 0 0 2px #f1c56b55,0 2px 8px #000c,inset 0 0 0 2px #51250d!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-avatar::before{
+  content:"❀"!important;
+  position:absolute!important;
+  inset:-5px!important;
+  display:grid!important;
+  place-items:start center!important;
+  color:#efbd5d!important;
+  font-size:clamp(8px,.75vw,12px)!important;
+  line-height:1!important;
+  text-shadow:0 1px 2px #120603!important;
+  pointer-events:none!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-avatar::after{
+  content:"✦"!important;
+  position:absolute!important;
+  left:50%!important;
+  bottom:-6px!important;
+  transform:translateX(-50%)!important;
+  color:#f7d98b!important;
+  font-size:clamp(7px,.65vw,10px)!important;
+  line-height:1!important;
+  text-shadow:0 1px 2px #000!important;
+  pointer-events:none!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row{
+  grid-template-columns:clamp(34px,3vw,46px) minmax(0,1fr)!important;
+  align-items:center!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player .player-avatar{
+  border-color:#fff0a3!important;
+  box-shadow:0 0 0 2px #f5d87b88,0 0 16px #ffb642aa,inset 0 0 0 2px #51250d!important;
+}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .players-ring .player-avatar{
+  width:26px!important;height:26px!important;min-width:26px!important;
+  font-size:14px!important;border-width:1.5px!important;
+ }
+ #gameScreen:not(.hidden) .players-ring .player-row{
+  grid-template-columns:29px minmax(0,1fr)!important;
+ }
+ #gameScreen:not(.hidden) .players-ring .player-avatar::before{inset:-4px!important;font-size:8px!important}
+ #gameScreen:not(.hidden) .players-ring .player-avatar::after{bottom:-5px!important;font-size:7px!important}
+}
+
+
+/* v2.1.6 — reliable end-turn hit area, Thai circular seat markers, stacked hand */
+#gameScreen:not(.hidden) > .reference-hotspot-layer{
+  position:fixed!important;left:50%!important;top:50%!important;
+  width:min(100vw,177.78dvh)!important;height:min(100dvh,56.25vw)!important;
+  transform:translate(-50%,-50%)!important;overflow:visible!important;
+  z-index:2147483000!important;pointer-events:none!important;
+}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-endturn{
+  left:39.5%!important;top:55.3%!important;width:21%!important;height:10.5%!important;
+  z-index:2147483000!important;pointer-events:auto!important;cursor:pointer!important;
+}
+#gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-endturn:focus-visible{
+  outline:2px solid #f3c66b!important;outline-offset:-3px!important;
+}
+/* Turn the seat/player labels into compact circular Thai-inspired tokens. */
+#gameScreen:not(.hidden) .players-ring .player-row{
+  position:relative!important;display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;
+  width:clamp(54px,5.5vw,82px)!important;height:clamp(54px,5.5vw,82px)!important;
+  min-width:clamp(54px,5.5vw,82px)!important;min-height:clamp(54px,5.5vw,82px)!important;
+  padding:4px!important;gap:0!important;overflow:visible!important;
+  border-radius:50%!important;
+  border:2px solid #d69b42!important;
+  background:radial-gradient(circle,#4c2518 0 52%,#24100b 55% 68%,#9c5a20 70% 73%,#30140d 76%)!important;
+  box-shadow:0 0 0 2px #f4cb7a44,inset 0 0 0 2px #7d4219,0 3px 9px #000b!important;
+  box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row::before{
+  content:"❀"!important;position:absolute!important;top:-6px!important;left:50%!important;
+  transform:translateX(-50%)!important;color:#f2c66b!important;font-size:12px!important;
+  line-height:1!important;text-shadow:0 1px 2px #000!important;pointer-events:none!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{
+  display:grid!important;place-items:center!important;
+  width:clamp(25px,2.2vw,34px)!important;height:clamp(25px,2.2vw,34px)!important;
+  min-width:0!important;min-height:0!important;aspect-ratio:1/1!important;
+  border-radius:50%!important;border:1px solid #f4ce79!important;
+  background:radial-gradient(circle,#7a3d20,#210e0a)!important;
+  box-shadow:inset 0 0 0 2px #3b1a0c!important;overflow:hidden!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta{
+  display:block!important;max-width:100%!important;min-width:0!important;
+  text-align:center!important;overflow:hidden!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta strong{
+  display:block!important;max-width:100%!important;font-size:clamp(7px,.55vw,9px)!important;
+  line-height:1.05!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  color:#ffedc4!important;text-shadow:0 1px 2px #000!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta small,
+#gameScreen:not(.hidden) .players-ring .player-row .hearts,
+#gameScreen:not(.hidden) .players-ring .player-row .seat-turn{display:none!important}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player{
+  border-color:#fff0a3!important;box-shadow:0 0 0 3px #f5d87b88,0 0 18px #ffb642aa,inset 0 0 0 2px #f4ce79!important;
+}
+/* Cards overlap instead of scrolling; the container clips all card edges to the panel. */
+#gameScreen:not(.hidden) .hand-zone{
+  overflow:hidden!important;clip-path:inset(0 round 10px)!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout{
+  overflow:hidden!important;min-width:0!important;width:100%!important;
+}
+#gameScreen:not(.hidden) #hand.hand{
+  display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+  justify-content:flex-start!important;align-items:stretch!important;
+  gap:0!important;overflow:hidden!important;overscroll-behavior:none!important;
+  scrollbar-width:none!important;touch-action:pan-y!important;
+}
+#gameScreen:not(.hidden) #hand.hand::-webkit-scrollbar{display:none!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card{
+  flex:0 0 min(140px,calc((100% + (var(--hand-count,1) - 1)*42px)/var(--hand-count,1)))!important;
+  width:min(140px,calc((100% + (var(--hand-count,1) - 1)*42px)/var(--hand-count,1)))!important;
+  min-width:0!important;max-width:min(140px,calc((100% + (var(--hand-count,1) - 1)*42px)/var(--hand-count,1)))!important;
+  margin-left:-42px!important;position:relative!important;overflow:hidden!important;
+  border-radius:6px!important;transition:transform .12s ease!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:first-child{margin-left:0!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(1){z-index:1!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(2){z-index:2!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(3){z-index:3!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(4){z-index:4!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(5){z-index:5!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(6){z-index:6!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(7){z-index:7!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(n+8){z-index:8!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:hover,
+#gameScreen:not(.hidden) #hand.hand > .hand-card:focus-visible{
+  transform:translateY(-8px)!important;z-index:30!important;
+}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .players-ring .player-row{
+  width:46px!important;height:46px!important;min-width:46px!important;min-height:46px!important;
+ }
+ #gameScreen:not(.hidden) .players-ring .player-row .player-avatar{width:22px!important;height:22px!important}
+ #gameScreen:not(.hidden) #hand.hand > .hand-card{
+  flex-basis:min(112px,calc((100% + (var(--hand-count,1) - 1)*30px)/var(--hand-count,1)))!important;
+  width:min(112px,calc((100% + (var(--hand-count,1) - 1)*30px)/var(--hand-count,1)))!important;
+  max-width:min(112px,calc((100% + (var(--hand-count,1) - 1)*30px)/var(--hand-count,1)))!important;
+  margin-left:-30px!important;
+ }
+ #gameScreen:not(.hidden) #hand.hand > .hand-card:first-child{margin-left:0!important}
+ #gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-endturn{
+  left:38%!important;top:54.5%!important;width:24%!important;height:11%!important;
+ }
+}
+
+
+/* v2.1.7 — chair-anchored player badges, strict card clipping, Thai sound menu and lotus side ornaments */
+#gameScreen:not(.hidden) .players-ring{overflow:visible!important}
+#gameScreen:not(.hidden) .players-ring .player-row{
+  position:absolute!important;display:flex!important;flex-direction:column!important;
+  justify-content:center!important;align-items:center!important;
+  width:clamp(56px,5.1vw,78px)!important;height:clamp(56px,5.1vw,78px)!important;
+  min-width:0!important;min-height:0!important;padding:4px!important;gap:1px!important;
+  border-radius:50%!important;box-sizing:border-box!important;overflow:visible!important;
+  transform:translate(-50%,-50%)!important;
+  background:radial-gradient(circle,#542b1b 0 48%,#29120c 51% 63%,#a66a2d 66% 69%,#32150c 73%)!important;
+  border:2px solid #e4b45d!important;
+  box-shadow:0 0 0 2px #efc97744,inset 0 0 0 2px #6f3b1a,0 3px 10px #000c!important;
+}
+#gameScreen:not(.hidden) .players-ring .seat-1{left:31.5%!important;top:46%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-2{left:50%!important;top:23%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-3{left:68.5%!important;top:46%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-4{left:29%!important;top:64%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-5{left:71.5%!important;top:64%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{
+  width:clamp(24px,2.2vw,32px)!important;height:clamp(24px,2.2vw,32px)!important;
+  min-width:0!important;min-height:0!important;flex:0 0 auto!important;
+  border-radius:50%!important;display:grid!important;place-items:center!important;
+  background:radial-gradient(circle,#6c3b20,#25100a)!important;border:1px solid #f1c66d!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta{width:100%!important;min-width:0!important;overflow:hidden!important;text-align:center!important}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta b,
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta strong{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  white-space:nowrap!important;font-size:clamp(7px,.62vw,10px)!important;line-height:1.1!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta small,
+#gameScreen:not(.hidden) .players-ring .player-row .hearts{display:none!important}
+#gameScreen:not(.hidden) .players-ring .player-row .seat-turn{display:none!important}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player{
+  border-color:#fff0a3!important;box-shadow:0 0 0 3px #f5d87b88,0 0 18px #ffb642aa,inset 0 0 0 2px #f4ce79!important;
+}
+
+/* Keep the hand panel and every card inside its frame, including large hands. */
+#gameScreen:not(.hidden) .hand-zone{
+  overflow:hidden!important;clip-path:inset(0 round 10px)!important;
+  contain:paint!important;isolation:isolate!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout{
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  overflow:hidden!important;clip-path:inset(0)!important;
+}
+#gameScreen:not(.hidden) #hand.hand{
+  display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;
+  justify-content:flex-start!important;gap:0!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  overflow:hidden!important;clip-path:inset(0)!important;
+  padding:0!important;margin:0!important;box-sizing:border-box!important;
+  scrollbar-width:none!important;overscroll-behavior:none!important;
+}
+#gameScreen:not(.hidden) #hand.hand::-webkit-scrollbar{display:none!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card{
+  flex:0 0 var(--hand-card-width,120px)!important;
+  width:var(--hand-card-width,120px)!important;
+  min-width:0!important;max-width:var(--hand-card-width,120px)!important;
+  margin-left:var(--hand-overlap-negative,0px)!important;
+  position:relative!important;overflow:hidden!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:first-child{margin-left:0!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(1){z-index:1!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(2){z-index:2!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(3){z-index:3!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(4){z-index:4!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(5){z-index:5!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(6){z-index:6!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(7){z-index:7!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:nth-child(n+8){z-index:8!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:hover,
+#gameScreen:not(.hidden) #hand.hand > .hand-card:focus-visible{transform:translateY(-6px)!important;z-index:40!important}
+
+/* Gold Thai-lotus decoration only in the unused side gutters of the wide screen. */
+#gameScreen:not(.hidden) .thai-edge{
+  position:fixed!important;top:0!important;bottom:0!important;
+  width:calc((100vw - min(100vw,177.78dvh))/2)!important;
+  max-width:14vw!important;min-width:0!important;height:100dvh!important;
+  background-image:url('/assets/thai-lotus-edge.png?v=2.1.7')!important;
+  background-repeat:no-repeat!important;background-size:auto 100%!important;
+  background-position:center!important;mix-blend-mode:screen!important;
+  opacity:.82!important;pointer-events:none!important;z-index:1001!important;
+}
+#gameScreen:not(.hidden) .thai-edge-left{left:0!important;right:auto!important}
+#gameScreen:not(.hidden) .thai-edge-right{right:0!important;left:auto!important;transform:scaleX(-1)!important}
+
+/* Elegant Thai-inspired in-game options modal. */
+#gameScreen:not(.hidden) .thai-options-backdrop{
+  position:fixed!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:18px!important;background:rgba(5,2,3,.78)!important;backdrop-filter:blur(8px)!important;
+  z-index:2147483646!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) .thai-options-backdrop.hidden{display:none!important}
+#gameScreen:not(.hidden) .thai-options-card{
+  position:relative!important;width:min(92vw,440px)!important;max-height:90dvh!important;overflow:auto!important;
+  padding:30px 28px 24px!important;box-sizing:border-box!important;
+  color:#ffebca!important;text-align:center!important;
+  border:1px solid #dca64d!important;border-radius:22px!important;
+  background:radial-gradient(ellipse at 50% 0,#59321f 0,#2b1712 56%,#170b09 100%)!important;
+  box-shadow:0 0 0 4px #6c3b1b55,inset 0 0 0 2px #9a5c2d55,0 18px 60px #000e!important;
+}
+#gameScreen:not(.hidden) .thai-options-card::before,
+#gameScreen:not(.hidden) .thai-options-card::after{
+  content:"❧ ✦ ❧"!important;display:block!important;color:#e8b35c!important;
+  font-family:serif!important;font-size:18px!important;letter-spacing:5px!important;
+}
+#gameScreen:not(.hidden) .thai-options-card h2{margin:10px 0 6px!important;font-family:Pridi,serif!important;font-size:26px!important;color:#ffe6b0!important}
+#gameScreen:not(.hidden) .thai-options-kicker{font-size:11px!important;letter-spacing:3px!important;color:#e4b45d!important}
+#gameScreen:not(.hidden) .thai-options-subtitle{margin:0 0 22px!important;font-size:13px!important;color:#d5b48d!important}
+#gameScreen:not(.hidden) .thai-options-close{
+  position:absolute!important;top:10px!important;right:12px!important;width:34px!important;height:34px!important;
+  border:1px solid #b77b3b!important;border-radius:50%!important;color:#ffdfaa!important;
+  background:#29140f!important;font-size:23px!important;line-height:1!important;
+}
+#gameScreen:not(.hidden) .thai-options-row{
+  display:flex!important;align-items:center!important;gap:12px!important;text-align:left!important;
+  padding:13px!important;border:1px solid #98632f!important;border-radius:14px!important;
+  background:linear-gradient(135deg,#4b2a1c,#24120d)!important;
+  box-shadow:inset 0 0 0 1px #e3b86b22!important;
+}
+#gameScreen:not(.hidden) .thai-options-icon{
+  display:grid!important;place-items:center!important;flex:0 0 42px!important;width:42px!important;height:42px!important;
+  border:1px solid #d8a34c!important;border-radius:50%!important;color:#f6cb72!important;font-size:24px!important;
+  background:radial-gradient(circle,#6a3a1d,#24100b)!important;
+}
+#gameScreen:not(.hidden) .thai-options-label{flex:1 1 auto!important;min-width:0!important}
+#gameScreen:not(.hidden) .thai-options-label b{display:block!important;font-size:15px!important;color:#ffedce!important}
+#gameScreen:not(.hidden) .thai-options-label small{display:block!important;margin-top:3px!important;font-size:11px!important;color:#caa77c!important}
+#gameScreen:not(.hidden) .thai-toggle{
+  display:flex!important;align-items:center!important;gap:7px!important;min-width:82px!important;
+  padding:7px 10px!important;border:1px solid #9d6331!important;border-radius:999px!important;
+  background:#1c0d09!important;color:#e7c49b!important;font-size:12px!important;
+}
+#gameScreen:not(.hidden) .thai-toggle span{
+  width:14px!important;height:14px!important;border-radius:50%!important;background:#76594a!important;
+  box-shadow:inset 0 0 0 2px #b68a63!important;
+}
+#gameScreen:not(.hidden) .thai-toggle.is-on{border-color:#eac36f!important;background:linear-gradient(90deg,#66411b,#352014)!important;color:#fff0c4!important}
+#gameScreen:not(.hidden) .thai-toggle.is-on span{background:#f4cb6b!important;box-shadow:0 0 9px #f5c65c!important}
+#gameScreen:not(.hidden) .thai-options-note{margin:14px 0 18px!important;color:#b89570!important;font-size:11px!important}
+#gameScreen:not(.hidden) .thai-options-confirm{
+  width:100%!important;padding:11px 18px!important;border:1px solid #f1c46b!important;border-radius:12px!important;
+  color:#2b150b!important;font-weight:800!important;
+  background:linear-gradient(180deg,#ffdf91,#c58a37)!important;
+  box-shadow:inset 0 1px #fff1c8,0 4px 0 #75441b!important;
+}
+#gameScreen:not(.hidden) .thai-options-confirm:active{transform:translateY(2px)!important;box-shadow:inset 0 1px #fff1c8,0 2px 0 #75441b!important}
+@media(max-width:760px){
+  #gameScreen:not(.hidden) .players-ring .seat-1{left:27%!important;top:45%!important}
+  #gameScreen:not(.hidden) .players-ring .seat-2{left:50%!important;top:22%!important}
+  #gameScreen:not(.hidden) .players-ring .seat-3{left:73%!important;top:45%!important}
+  #gameScreen:not(.hidden) .players-ring .seat-4{left:28%!important;top:64%!important}
+  #gameScreen:not(.hidden) .players-ring .seat-5{left:72%!important;top:64%!important}
+  #gameScreen:not(.hidden) .players-ring .player-row{width:50px!important;height:50px!important;padding:2px!important}
+  #gameScreen:not(.hidden) .players-ring .player-row .player-avatar{width:22px!important;height:22px!important}
+  #gameScreen:not(.hidden) .thai-edge{display:none!important}
+  #gameScreen:not(.hidden) .thai-options-card{padding:25px 17px 19px!important}
+}
+
+
+/* v2.1.8 strict card fitting */
+#gameScreen:not(.hidden) .hand-zone,
+#gameScreen:not(.hidden) .hand-content-layout,
+#gameScreen:not(.hidden) #hand.hand{
+  overflow:hidden!important;clip-path:inset(0 round 8px)!important;contain:paint!important;
+  max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand{display:flex!important;flex-flow:row nowrap!important;gap:0!important}
+#gameScreen:not(.hidden) #hand.hand > .hand-card{
+  flex:0 0 var(--hand-card-width,100px)!important;width:var(--hand-card-width,100px)!important;
+  max-width:var(--hand-card-width,100px)!important;min-width:0!important;
+  margin-left:var(--hand-overlap-negative,0px)!important;overflow:hidden!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:first-child{margin-left:0!important}
+
+
+/* v2.1.9 recovery: result modal must stay clickable above invisible reference hitboxes. */
+#gameScreen:not(.hidden) .game-over{
+  position:fixed!important;inset:0!important;z-index:2147483647!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  pointer-events:auto!important;visibility:visible!important;
+  background:rgba(5,2,3,.82)!important;backdrop-filter:blur(10px)!important;
+}
+#gameScreen:not(.hidden) .game-over.hidden{display:none!important;visibility:hidden!important;pointer-events:none!important}
+#gameScreen:not(.hidden) .game-over .modal{
+  position:relative!important;z-index:2147483647!important;pointer-events:auto!important;
+  width:min(92vw,520px)!important;max-height:88dvh!important;overflow:auto!important;
+  padding:28px!important;border:1px solid #d9a65c!important;border-radius:22px!important;
+  background:linear-gradient(145deg,#392333,#211319 82%)!important;
+  box-shadow:0 0 0 3px #d9a65c22,0 24px 80px #000d!important;
+}
+#gameScreen:not(.hidden) .game-over-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;margin-top:18px!important}
+#gameScreen:not(.hidden) #playAgain,
+#gameScreen:not(.hidden) #closeGameOver{
+  position:relative!important;z-index:2147483647!important;display:block!important;
+  min-height:48px!important;pointer-events:auto!important;touch-action:manipulation!important;
+  cursor:pointer!important;border-radius:12px!important;
+}
+#gameScreen:not(.hidden) #closeGameOver{
+  color:#fbe6c5!important;border:1px solid #a8794d!important;
+  background:linear-gradient(#4c3028,#251512)!important;
+}
+
+
+/* v2.1.9 player markers: preserve the Thai circular badge while showing name, hearts and keys. */
+#gameScreen:not(.hidden) .players-ring{
+  overflow:visible!important;pointer-events:none!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row{
+  position:absolute!important;display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;gap:1px!important;
+  width:clamp(84px,6.2vw,104px)!important;height:clamp(84px,6.2vw,104px)!important;
+  min-width:0!important;min-height:0!important;max-width:none!important;
+  padding:5px 4px!important;box-sizing:border-box!important;overflow:visible!important;
+  border-radius:50%!important;transform:translate(-50%,-50%)!important;
+  background:radial-gradient(circle,#59301d 0 49%,#32180f 53% 66%,#c28a38 69% 72%,#29120b 76%)!important;
+  border:2px solid #e6bd69!important;color:#ffedcf!important;
+  box-shadow:0 0 0 2px #f3cf7a44,inset 0 0 0 2px #70401d,0 4px 14px #000c!important;
+  pointer-events:auto!important;
+}
+#gameScreen:not(.hidden) .players-ring .seat-1{left:31.5%!important;top:46%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-2{left:50%!important;top:23%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-3{left:68.5%!important;top:46%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-4{left:29%!important;top:64%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .seat-5{left:71.5%!important;top:64%!important;right:auto!important;bottom:auto!important}
+#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{
+  display:grid!important;place-items:center!important;flex:0 0 auto!important;
+  width:25px!important;height:25px!important;border-radius:50%!important;
+  font-size:16px!important;background:#26110c!important;border:1px solid #f0c970!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta{
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  justify-content:center!important;gap:1px!important;width:100%!important;min-width:0!important;
+  overflow:visible!important;text-align:center!important;line-height:1.1!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta b{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  white-space:nowrap!important;font-size:clamp(8px,.64vw,11px)!important;font-weight:800!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta small{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  white-space:nowrap!important;font-size:clamp(7px,.52vw,9px)!important;color:#ffd98c!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .hearts{
+  display:block!important;white-space:nowrap!important;font-size:clamp(8px,.65vw,11px)!important;
+  line-height:1!important;letter-spacing:-1px!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .seat-turn{
+  display:none!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player{
+  border-color:#fff0a3!important;box-shadow:0 0 0 3px #f5d87b88,0 0 18px #ffb642bb,inset 0 0 0 2px #f4ce79!important;
+}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .players-ring .player-row{width:72px!important;height:72px!important;padding:3px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-avatar{width:20px!important;height:20px!important;font-size:13px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-meta b{font-size:8px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-meta small{font-size:7px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .hearts{font-size:8px!important}
+ #gameScreen:not(.hidden) .game-over-actions{grid-template-columns:1fr!important}
+}
+
+
+/* v2.2.0 — locked stage coordinates; zoom/viewport changes scale the stage as one unit. */
+#gameScreen:not(.hidden) .game-layout.ritual-layout,
+#gameScreen:not(.hidden) .game-top{
+  position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+  width:var(--stage-w)!important;height:var(--stage-h)!important;
+  transform:translate(-50%,-50%)!important;transform-origin:center center!important;
+  margin:0!important;padding:0!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) .table-panel.ritual-panel,
+#gameScreen:not(.hidden) .ritual-scene{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;
+  margin:0!important;padding:0!important;transform:none!important;overflow:hidden!important;
+}
+#gameScreen:not(.hidden) .players-ring{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  overflow:visible!important;pointer-events:none!important;
+}
+/* Five exact chair anchors, expressed as percentages of the fixed 16:9 game stage. */
+#gameScreen:not(.hidden) .players-ring .player-row{
+  position:absolute!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  width:clamp(76px,5.2vw,92px)!important;height:clamp(76px,5.2vw,92px)!important;
+  min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;
+  margin:0!important;padding:4px!important;gap:1px!important;box-sizing:border-box!important;
+  transform:translate(-50%,-50%)!important;border-radius:50%!important;overflow:hidden!important;
+  border:2px solid #e7bd65!important;
+  background:radial-gradient(circle,#59301d 0 49%,#32180f 54% 67%,#c28a38 69% 72%,#29120b 76%)!important;
+  box-shadow:0 0 0 2px #f3cf7a44,inset 0 0 0 2px #70401d,0 4px 14px #000c!important;
+  color:#ffedcf!important;pointer-events:auto!important;
+}
+#gameScreen:not(.hidden) .players-ring .seat-1{left:27%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring .seat-2{left:50%!important;top:22%!important}
+#gameScreen:not(.hidden) .players-ring .seat-3{left:73%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring .seat-4{left:27%!important;top:60%!important}
+#gameScreen:not(.hidden) .players-ring .seat-5{left:73%!important;top:60%!important}
+/* For 2–4 players, leave empty chairs empty; never shift a marker away from its chair. */
+#gameScreen:not(.hidden) .players-ring.count-1 .seat-1{left:50%!important;top:22%!important}
+#gameScreen:not(.hidden) .players-ring.count-2 .seat-1{left:27%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-2 .seat-2{left:73%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-3 .seat-1{left:27%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-3 .seat-2{left:50%!important;top:22%!important}
+#gameScreen:not(.hidden) .players-ring.count-3 .seat-3{left:73%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-4 .seat-1{left:27%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-4 .seat-2{left:50%!important;top:22%!important}
+#gameScreen:not(.hidden) .players-ring.count-4 .seat-3{left:73%!important;top:40%!important}
+#gameScreen:not(.hidden) .players-ring.count-4 .seat-4{left:27%!important;top:60%!important}
+#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{
+  display:grid!important;place-items:center!important;width:22px!important;height:22px!important;flex:0 0 22px!important;
+  margin:0!important;border-radius:50%!important;background:#26110c!important;border:1px solid #f0c970!important;
+  font-size:14px!important;line-height:1!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta{
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  gap:2px!important;width:100%!important;min-width:0!important;overflow:hidden!important;text-align:center!important;line-height:1.1!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta b{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  white-space:nowrap!important;font-size:clamp(8px,.62vw,10px)!important;font-weight:800!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta small{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  white-space:nowrap!important;font-size:clamp(7px,.5vw,9px)!important;color:#ffd98c!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .hearts{
+  display:block!important;visibility:visible!important;white-space:nowrap!important;
+  font-size:clamp(8px,.63vw,10px)!important;line-height:1!important;letter-spacing:-1px!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .seat-turn{display:none!important}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player{
+  border-color:#fff0a3!important;box-shadow:0 0 0 3px #f5d87b88,0 0 18px #ffb642bb,inset 0 0 0 2px #f4ce79!important;
+}
+/* Hand is a clipped, non-scrolling fan; overlap is computed in JS and recalculated on zoom. */
+#gameScreen:not(.hidden) .hand-zone{
+  overflow:hidden!important;clip-path:inset(0 round 10px)!important;contain:paint!important;isolation:isolate!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout{
+  position:relative!important;flex:1 1 auto!important;width:100%!important;max-width:100%!important;min-width:0!important;
+  min-height:0!important;overflow:hidden!important;clip-path:inset(0)!important;
+}
+#gameScreen:not(.hidden) #hand.hand{
+  display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;justify-content:flex-start!important;
+  gap:0!important;width:100%!important;max-width:100%!important;min-width:0!important;height:100%!important;
+  overflow:hidden!important;clip-path:inset(0)!important;padding:0!important;margin:0!important;
+  box-sizing:border-box!important;scrollbar-width:none!important;overscroll-behavior:none!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card{
+  display:flex!important;flex:0 0 var(--hand-card-width,80px)!important;
+  width:var(--hand-card-width,80px)!important;min-width:0!important;max-width:var(--hand-card-width,80px)!important;
+  margin-left:var(--hand-overlap-negative,0px)!important;overflow:hidden!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card:first-child{margin-left:0!important}
+#gameScreen:not(.hidden) .hand-card .hand-art{flex:0 0 38%!important;min-width:0!important;width:100%!important}
+#gameScreen:not(.hidden) .hand-card .hand-card-title,
+#gameScreen:not(.hidden) .hand-card .hand-card-type,
+#gameScreen:not(.hidden) .hand-card .hand-card-desc,
+#gameScreen:not(.hidden) .hand-card .hand-card-effect{min-width:0!important;max-width:100%!important;overflow:hidden!important;overflow-wrap:anywhere!important}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .players-ring .player-row{width:68px!important;height:68px!important;padding:3px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-avatar{width:18px!important;height:18px!important;flex-basis:18px!important;font-size:12px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-meta b{font-size:7px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-meta small{font-size:6px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .hearts{font-size:7px!important}
+}
+
+
+/* v2.2.1 — stage-relative layout survives browser zoom without fixed-viewport drift. */
+#gameScreen:not(.hidden) .game-layout.ritual-layout{container-type:inline-size!important;overflow:hidden!important}
+#gameScreen:not(.hidden) .hand-zone{
+ position:absolute!important;left:17.2%!important;right:auto!important;top:66.3%!important;bottom:auto!important;
+ width:65.6%!important;height:29.6%!important;max-height:29.6%!important;min-width:0!important;min-height:0!important;
+ margin:0!important;padding:0!important;overflow:hidden!important;contain:paint!important;isolation:isolate!important;
+ transform:none!important;box-sizing:border-box!important;z-index:1200!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}
+#gameScreen:not(.hidden) #hand.hand{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important;gap:0!important}
+#gameScreen:not(.hidden) .players-ring .player-row{
+ width:5.2%!important;height:auto!important;aspect-ratio:1!important;min-width:0!important;min-height:0!important;
+ max-width:92px!important;max-height:92px!important;padding:2px!important;gap:1px!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{
+ width:28cqw!important;height:28cqw!important;max-width:22px!important;max-height:22px!important;
+ flex:0 0 auto!important;font-size:clamp(8px,1.15cqw,14px)!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta b{font-size:clamp(6px,1.15cqw,10px)!important}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta small{font-size:clamp(5px,.92cqw,9px)!important}
+#gameScreen:not(.hidden) .players-ring .player-row .hearts{font-size:clamp(6px,1.1cqw,10px)!important}
+#gameScreen:not(.hidden) .players-ring .player-row.dead-player{
+ filter:grayscale(1)!important;opacity:.62!important;border-color:#aaa!important;
+ background:radial-gradient(circle,#494343 0 49%,#2c2929 54% 67%,#8c8585 69% 72%,#1c1919 76%)!important;
+ box-shadow:0 0 0 2px #aaa5,inset 0 0 0 2px #666,0 4px 14px #000c!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.dead-player .player-avatar{
+ filter:grayscale(1)!important;background:#444!important;border-color:#aaa!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.dead-player .player-meta b,
+#gameScreen:not(.hidden) .players-ring .player-row.dead-player .player-meta small{color:#bdb6b6!important}
+#gameScreen:not(.hidden) .players-ring .player-row.dead-player .hearts{filter:grayscale(1)!important}
+
+/* v2.2.2 — turn clarity, safer card timing, and refined Thai-inspired side trim. */
+@keyframes banpee-turn-glow {
+  0%,100% { box-shadow: 0 0 0 2px #ffe8a866, 0 0 12px #ffc45b99, inset 0 0 0 2px #ffe4a7; filter:brightness(1.02); }
+  50% { box-shadow: 0 0 0 5px #fff0a6aa, 0 0 30px #ffbd45ee, 0 0 46px #ff7e28a8, inset 0 0 0 3px #fff2c8; filter:brightness(1.22); }
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player {
+  border:2px solid #fff0ad!important;
+  background:radial-gradient(circle at 50% 30%,#79502c 0%,#3b2118 58%,#1b100f 100%)!important;
+  animation:banpee-turn-glow 1.45s ease-in-out infinite!important;
+  z-index:30!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player:after {
+  content:'✦ ถึงตาเล่น ✦'; position:absolute;left:50%;bottom:-17px;transform:translateX(-50%);
+  white-space:nowrap;padding:2px 8px;border:1px solid #ffe3a0;border-radius:99px;
+  background:linear-gradient(180deg,#8d4b18,#49210e);color:#fff2c5;
+  font-size:clamp(7px,.62vw,10px);font-weight:800;letter-spacing:.03em;
+  box-shadow:0 0 12px #ffb84499;pointer-events:none;
+}
+#gameScreen:not(.hidden) .turn-banner:not(:empty) {
+  color:#fff2c5!important;text-shadow:0 0 8px #ffb83e,0 2px 4px #000!important;
+}
+/* Narrow decorative rails sit at the screen edges, never over the game controls. */
+#gameScreen:not(.hidden) .game-layout.ritual-layout::before,
+#gameScreen:not(.hidden) .game-layout.ritual-layout::after {
+  content:'✦\A❧\A✧\A❧\A✦'; position:fixed;top:7%;bottom:7%;width:clamp(16px,2.1vw,34px);
+  z-index:1500;pointer-events:none;display:flex;align-items:center;justify-content:space-around;
+  flex-direction:column;overflow:hidden;white-space:pre;text-align:center;
+  color:#f4ce86;font-family:Pridi,serif;font-size:clamp(11px,1.2vw,18px);line-height:1;
+  opacity:.72;text-shadow:0 0 7px #c78032,0 0 16px #8c411f;
+  background:linear-gradient(90deg,#1b0c0d99,#8d5a2b22 45%,#1b0c0d77);
+  border-top:1px solid #d7a85a88;border-bottom:1px solid #d7a85a88;
+  box-shadow:inset 0 0 8px #e8b65b22;
+}
+#gameScreen:not(.hidden) .game-layout.ritual-layout::before {left:0;border-right:1px solid #d7a85a77;}
+#gameScreen:not(.hidden) .game-layout.ritual-layout::after {right:0;border-left:1px solid #d7a85a77;transform:scaleX(-1);}
+@media (prefers-reduced-motion:reduce) {
+  #gameScreen:not(.hidden) .players-ring .player-row.active-player {animation:none!important;}
+}
+
+
+/* v2.2.3 — readable card text, polished card modals, haunted-house side atmosphere,
+   and stage-anchored seating that is unaffected by viewport breakpoint changes. */
+#gameScreen:not(.hidden) #hand .hand-card-title{
+  display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;
+  white-space:normal!important;overflow:hidden!important;text-overflow:clip!important;
+  font-size:clamp(9px,.78vw,13px)!important;line-height:1.18!important;font-weight:700!important;
+}
+#gameScreen:not(.hidden) #hand .hand-card-type{
+  font-size:clamp(8px,.62vw,10px)!important;line-height:1.18!important;font-weight:600!important;
+}
+#gameScreen:not(.hidden) #hand .hand-card-desc{
+  font-size:clamp(7.5px,.56vw,10px)!important;line-height:1.28!important;
+  -webkit-line-clamp:3!important;overflow-wrap:anywhere!important;color:#fff0d9!important;
+}
+#gameScreen:not(.hidden) #hand .hand-card-effect{max-height:25%!important;min-height:20px!important;padding:3px!important}
+#gameScreen:not(.hidden) #hand .hand-card-effect b{font-size:clamp(7.5px,.55vw,9px)!important;line-height:1.15!important}
+#gameScreen:not(.hidden) #hand .hand-card-effect span{font-size:clamp(7px,.5vw,8.5px)!important;line-height:1.2!important}
+
+/* The card preview uses a legible two-column layout and themed controls (never browser-default white buttons). */
+.card-preview-dialog,.omen-choice-dialog{
+  width:min(94vw,650px)!important;max-height:min(90dvh,850px)!important;overflow-y:auto!important;
+  padding:clamp(18px,2.4vw,30px)!important;border:1px solid #c9954d!important;border-radius:24px!important;
+  background:linear-gradient(145deg,#38251fef,#170e0df7 76%)!important;
+  box-shadow:0 24px 80px #000e, inset 0 1px #ffdf9b24!important;color:#ffedcf!important;
+}
+.card-preview-kicker,.omen-choice-dialog>.eyebrow{font-size:14px!important;font-weight:700!important;color:#eac17c!important;letter-spacing:.04em!important}
+.card-preview-card{grid-template-columns:minmax(125px,190px) minmax(0,1fr)!important;gap:18px!important;align-items:start!important;margin:16px 0!important}
+.card-preview-art{display:block!important;width:100%!important;min-height:230px!important;height:clamp(190px,32vh,310px)!important;background-size:cover!important;background-position:center!important;border:1px solid #d6ad63!important;border-radius:14px!important;box-shadow:0 8px 24px #0008!important}
+.card-preview-card h2{font-family:Pridi,serif!important;font-size:clamp(22px,2.2vw,32px)!important;line-height:1.25!important;color:#fff0d0!important;margin:10px 0!important}
+.card-preview-type{font-size:14px!important;color:#d7a35c!important}
+.card-preview-card>p,.card-preview-effect,.card-preview-note{font-size:clamp(14px,1.05vw,17px)!important;line-height:1.65!important;color:#f2dfc5!important;overflow-wrap:anywhere!important}
+.card-preview-effect{display:flex!important;flex-direction:column!important;gap:5px!important;margin-top:16px!important;padding:12px!important;border-left:3px solid #d9a34f!important;background:#09060655!important;border-radius:0 10px 10px 0!important}
+.card-preview-actions button,.omen-choice-buttons button,.omen-close,.card-preview-close{
+  font-family:Kanit,system-ui,sans-serif!important;font-size:15px!important;font-weight:700!important;
+  border:1px solid #c9934b!important;border-radius:12px!important;padding:10px 17px!important;
+  color:#ffedcf!important;background:linear-gradient(180deg,#674026,#321a14)!important;
+  box-shadow:0 3px 0 #180b08, inset 0 1px #ffe0a52a!important;
+}
+.card-preview-actions .card-preview-cancel,.omen-choice-buttons .secondary{background:linear-gradient(180deg,#30201e,#1b1110)!important;border-color:#88694b!important}
+.card-preview-actions button:disabled{opacity:.45!important;filter:grayscale(.5)!important;cursor:not-allowed!important}
+.card-preview-close,.omen-close{float:none!important;position:absolute!important;top:12px!important;right:14px!important;width:38px!important;height:38px!important;padding:0!important;font-size:24px!important;line-height:1!important;z-index:3!important}
+
+/* Omen choice cards were native buttons without their own skin; give the revealed card a real visible surface. */
+.omen-choice-cards{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;margin:18px 0 12px!important;align-items:stretch!important}
+.omen-choice-cards:has(.omen-choice-card:only-child){grid-template-columns:minmax(0,280px)!important;justify-content:center!important}
+.omen-choice-card{
+  display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:7px!important;
+  width:100%!important;min-width:0!important;min-height:0!important;padding:10px!important;
+  color:#ffedcf!important;text-align:left!important;white-space:normal!important;
+  border:1px solid #c99a55!important;border-radius:15px!important;
+  background:linear-gradient(160deg,#40291f,#1a100e)!important;
+  box-shadow:0 8px 24px #0009,inset 0 1px #ffe0a52b!important;
+  font-family:Kanit,system-ui,sans-serif!important;overflow:hidden!important;
+}
+.omen-choice-card:hover,.omen-choice-card:focus-visible{transform:translateY(-3px)!important;border-color:#ffe0a0!important;box-shadow:0 0 0 2px #e6b65b44,0 12px 28px #000b!important;outline:none!important}
+.omen-choice-art{display:block!important;flex:0 0 auto!important;width:100%!important;height:clamp(150px,24vh,220px)!important;min-height:0!important;background-position:center!important;background-size:cover!important;border:1px solid #d7a15c!important;border-radius:10px!important;box-shadow:0 4px 12px #0008!important}
+.omen-choice-card b{display:block!important;font-family:Pridi,serif!important;font-size:18px!important;line-height:1.3!important;color:#ffe6b4!important}
+.omen-choice-card small{display:block!important;font-size:13px!important;color:#e8bd78!important}
+.omen-choice-card p,.omen-choice-card em{display:block!important;font-size:14px!important;line-height:1.5!important;color:#f0dfc8!important;overflow-wrap:anywhere!important;margin:0!important;font-style:normal!important}
+.omen-choice-card strong{display:block!important;margin-top:auto!important;padding:8px 10px!important;border:1px solid #b9813e!important;border-radius:9px!important;background:#4a2a18!important;color:#ffe7b4!important;text-align:center!important;font-size:14px!important}
+.omen-choice-buttons{justify-content:center!important;gap:12px!important;margin-top:16px!important}
+
+/* Replace the gold glyph rails with a subtle, atmospheric Thai haunted-house backdrop. */
+#gameScreen:not(.hidden) .game-layout.ritual-layout::before,
+#gameScreen:not(.hidden) .game-layout.ritual-layout::after{
+  content:''!important;position:fixed!important;top:0!important;bottom:0!important;width:clamp(48px,7.5vw,150px)!important;
+  display:block!important;z-index:1!important;pointer-events:none!important;overflow:hidden!important;
+  opacity:.34!important;border:0!important;border-radius:0!important;box-shadow:none!important;text-shadow:none!important;
+  background-image:linear-gradient(90deg,#0704052a,#07040570),url('/assets/haunted-thai-house-backdrop.jpg?v=2.2.3')!important;
+  background-repeat:no-repeat!important;background-size:cover!important;
+}
+#gameScreen:not(.hidden) .game-layout.ritual-layout::before{left:0!important;right:auto!important;background-position:28% center!important;transform:none!important}
+#gameScreen:not(.hidden) .game-layout.ritual-layout::after{right:0!important;left:auto!important;background-position:76% center!important;transform:none!important}
+
+/* Keep seat anchors identical at every zoom level: viewport breakpoints must not move badges to new positions. */
+#gameScreen:not(.hidden) .players-ring .seat-1{left:17%!important;top:39%!important}
+#gameScreen:not(.hidden) .players-ring .seat-2{left:29%!important;top:34%!important}
+#gameScreen:not(.hidden) .players-ring .seat-3{left:43%!important;top:17%!important}
+#gameScreen:not(.hidden) .players-ring .seat-4{left:59%!important;top:34%!important}
+#gameScreen:not(.hidden) .players-ring .seat-5{left:70%!important;top:39%!important}
+#gameScreen:not(.hidden) .hand-zone{left:16.8%!important;top:65.4%!important;width:64.6%!important;height:29.6%!important;right:auto!important;bottom:auto!important}
+@media(max-width:600px){
+ .card-preview-card{grid-template-columns:minmax(95px,32%) minmax(0,1fr)!important;gap:12px!important}
+ .card-preview-art{height:210px!important;min-height:180px!important}
+ .card-preview-card h2{font-size:22px!important}
+ .card-preview-card>p,.card-preview-effect,.card-preview-note{font-size:14px!important}
+ .omen-choice-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ .omen-choice-art{height:145px!important}
+ .omen-choice-card{padding:7px!important}
+ .omen-choice-card b{font-size:15px!important}.omen-choice-card p,.omen-choice-card em{font-size:12px!important}
+}
+
+
+/* v2.2.5 — clear gap between the hand heading and cards; larger, readable Thai card typography. */
+#gameScreen:not(.hidden) .hand-zone{
+  display:flex!important;flex-direction:column!important;
+  overflow:hidden!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) .hand-heading{
+  position:relative!important;z-index:20!important;
+  flex:0 0 15%!important;height:15%!important;min-height:26px!important;
+  margin:0!important;padding:0 2.2%!important;
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  overflow:visible!important;pointer-events:none!important;
+}
+#gameScreen:not(.hidden) .hand-heading h3{
+  display:block!important;position:relative!important;z-index:21!important;
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  font-size:clamp(14px,1.05vw,19px)!important;font-weight:800!important;
+  line-height:1.2!important;white-space:nowrap!important;
+  color:#fff1d5!important;text-shadow:0 2px 5px #000,0 0 8px #e6b96a55!important;
+  margin:0!important;
+}
+#gameScreen:not(.hidden) .hand-heading small{
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  font-size:clamp(11px,.8vw,14px)!important;font-weight:700!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout{
+  position:relative!important;flex:1 1 0!important;
+  width:100%!important;height:auto!important;max-width:100%!important;min-width:0!important;
+  min-height:0!important;margin:0!important;padding:5px 2% 1.5%!important;
+  overflow:hidden!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand{
+  position:relative!important;top:0!important;left:0!important;
+  width:100%!important;height:100%!important;min-height:0!important;
+  align-items:stretch!important;overflow:hidden!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card{
+  flex-shrink:0!important;min-width:0!important;max-width:var(--hand-card-width,140px)!important;
+  height:100%!important;max-height:100%!important;
+  padding:0!important;gap:0!important;
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  line-height:1.3!important;overflow:hidden!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-art{
+  flex:0 0 31%!important;height:31%!important;min-height:0!important;
+  width:100%!important;display:block!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-title{
+  flex:0 0 auto!important;
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  font-size:clamp(12px,.88vw,15px)!important;font-weight:800!important;
+  line-height:1.3!important;padding:4px 7px 2px!important;
+  display:-webkit-box!important;-webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;white-space:normal!important;
+  overflow:hidden!important;overflow-wrap:anywhere!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-type{
+  flex:0 0 auto!important;
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  font-size:clamp(10.5px,.76vw,13px)!important;font-weight:700!important;
+  line-height:1.25!important;padding:1px 7px 3px!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-desc{
+  flex:1 1 auto!important;min-height:0!important;
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  font-size:clamp(10px,.72vw,12px)!important;font-weight:500!important;
+  line-height:1.35!important;padding:2px 7px 5px!important;
+  display:-webkit-box!important;-webkit-box-orient:vertical!important;
+  -webkit-line-clamp:4!important;white-space:normal!important;
+  overflow:hidden!important;overflow-wrap:anywhere!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-effect{
+  flex:0 0 auto!important;max-height:27%!important;min-height:0!important;
+  margin-top:auto!important;padding:5px 7px 6px!important;
+  border-top:1px solid #bd8a48!important;
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  font-size:clamp(10px,.7vw,12px)!important;line-height:1.3!important;
+  white-space:normal!important;overflow:hidden!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-effect b{
+  display:block!important;font-size:clamp(10px,.72vw,12px)!important;
+  line-height:1.3!important;font-weight:800!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-effect span{
+  display:block!important;font-size:clamp(9.5px,.68vw,11.5px)!important;
+  line-height:1.3!important;overflow-wrap:anywhere!important;
+}
+
+
+/* v2.2.6 — zoom-safe fixed viewport and hand cards kept inside the frame. */
+html,body{
+  width:100%!important;height:100%!important;min-height:0!important;
+  margin:0!important;overflow:hidden!important;overscroll-behavior:none!important;
+}
+#gameScreen:not(.hidden){
+  position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;
+  margin:0!important;padding:0!important;overflow:hidden!important;overscroll-behavior:none!important;
+  box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) > .game-top,
+#gameScreen:not(.hidden) > .game-layout.ritual-layout{
+  position:absolute!important;left:50%!important;top:50%!important;
+  width:min(100vw,177.7778dvh)!important;height:min(100dvh,56.25vw)!important;
+  max-width:none!important;max-height:none!important;min-width:0!important;min-height:0!important;
+  margin:0!important;transform:translate(-50%,-50%)!important;
+}
+#gameScreen:not(.hidden) > .game-layout.ritual-layout{
+  display:block!important;overflow:hidden!important;
+}
+#gameScreen:not(.hidden) .table-panel.ritual-panel{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;
+  margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
+  overflow:hidden!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) .ritual-scene{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;
+  overflow:hidden!important;
+}
+/* The card heading was duplicated/overlapped by the hand at high zoom; keep only the count. */
+#gameScreen:not(.hidden) .hand-heading h3{display:none!important}
+#gameScreen:not(.hidden) .hand-heading{
+  flex:0 0 8%!important;height:8%!important;min-height:0!important;
+  margin:0!important;padding:0 2%!important;justify-content:flex-end!important;
+  overflow:visible!important;
+}
+#gameScreen:not(.hidden) .hand-heading small{
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  font-size:clamp(10px,.8vw,14px)!important;font-weight:800!important;
+  color:#ffdfa8!important;text-shadow:0 1px 4px #000!important;
+}
+#gameScreen:not(.hidden) .hand-zone{
+  overflow:hidden!important;clip-path:inset(0 round 10px)!important;
+  min-width:0!important;min-height:0!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout{
+  flex:1 1 0!important;height:auto!important;min-width:0!important;min-height:0!important;
+  width:100%!important;max-width:100%!important;margin:0!important;
+  padding:1.5% 1.8% 1.8%!important;overflow:hidden!important;box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand{
+  position:relative!important;top:0!important;left:0!important;
+  display:flex!important;flex-flow:row nowrap!important;align-items:stretch!important;
+  justify-content:flex-start!important;gap:0!important;
+  width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;
+  max-width:100%!important;max-height:100%!important;overflow:hidden!important;
+  padding:0!important;margin:0!important;box-sizing:border-box!important;
+}
+/* Each card has a bounded width; cards may fan/stack, but text remains clipped to its own card. */
+#gameScreen:not(.hidden) #hand.hand>.hand-card{
+  flex:0 0 clamp(68px,9.6%,132px)!important;
+  width:clamp(68px,9.6%,132px)!important;
+  min-width:0!important;max-width:clamp(68px,9.6%,132px)!important;
+  height:100%!important;min-height:0!important;max-height:100%!important;
+  margin:0 0 0 -22px!important;padding:0!important;gap:0!important;
+  display:flex!important;flex-direction:column!important;overflow:hidden!important;
+  box-sizing:border-box!important;white-space:normal!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card:first-child{margin-left:0!important}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-art{
+  flex:0 0 29%!important;height:29%!important;min-height:0!important;max-height:29%!important;
+  width:100%!important;margin:0!important;display:block!important;
+  background-size:cover!important;background-position:center!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-title{
+  flex:0 0 auto!important;min-width:0!important;max-width:100%!important;
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  font-size:clamp(9px,.68vw,12px)!important;font-weight:800!important;
+  line-height:1.22!important;padding:3px 4px 1px!important;
+  display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:2!important;
+  overflow:hidden!important;overflow-wrap:anywhere!important;white-space:normal!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-type{
+  flex:0 0 auto!important;min-width:0!important;
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  font-size:clamp(8px,.58vw,10.5px)!important;font-weight:700!important;
+  line-height:1.2!important;padding:1px 4px 2px!important;overflow:hidden!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-desc{
+  flex:1 1 auto!important;min-height:0!important;min-width:0!important;
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  font-size:clamp(7.5px,.54vw,9.5px)!important;font-weight:500!important;
+  line-height:1.24!important;padding:1px 4px 3px!important;
+  display:-webkit-box!important;-webkit-box-orient:vertical!important;-webkit-line-clamp:3!important;
+  overflow:hidden!important;overflow-wrap:anywhere!important;white-space:normal!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-effect{
+  flex:0 0 auto!important;min-height:0!important;max-height:24%!important;
+  margin-top:auto!important;padding:3px 4px!important;overflow:hidden!important;
+  border-top:1px solid #bd8a48!important;
+  font-family:"Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif!important;
+  font-size:clamp(7px,.5vw,9px)!important;line-height:1.2!important;
+  white-space:normal!important;overflow-wrap:anywhere!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-effect b,
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-effect span{
+  display:block!important;font-size:inherit!important;line-height:1.2!important;
+  white-space:normal!important;overflow-wrap:anywhere!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card:hover,
+#gameScreen:not(.hidden) #hand.hand>.hand-card:focus-visible{
+  transform:translateY(-3px)!important;z-index:40!important;
+}
+/* Any card-detail / result overlay scrolls inside itself instead of moving the game page. */
+#gameScreen .card-preview-modal,
+#gameScreen .card-preview-dialog,
+#gameScreen .modal,
+.card-preview-modal,.card-preview-dialog{
+  max-height:calc(100dvh - 24px)!important;overflow:auto!important;
+  overscroll-behavior:contain!important;box-sizing:border-box!important;
+}
+
+
+/* v2.2.7 — remove hand title/icon and shrink card overlap to protect text. */
+#gameScreen:not(.hidden) .hand-heading h3,
+#gameScreen:not(.hidden) .hand-heading .hand-icon,
+#gameScreen:not(.hidden) .hand-heading .icon,
+#gameScreen:not(.hidden) .hand-heading svg,
+#gameScreen:not(.hidden) .hand-heading img{
+  display:none!important;
+}
+#gameScreen:not(.hidden) .hand-heading{
+  justify-content:flex-end!important;
+  padding:0 2%!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card{
+  flex-basis:clamp(62px,7.8%,108px)!important;
+  width:clamp(62px,7.8%,108px)!important;
+  max-width:clamp(62px,7.8%,108px)!important;
+  margin-left:-13px!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card:first-child{
+  margin-left:0!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-art{
+  flex-basis:25%!important;height:25%!important;max-height:25%!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-title{
+  font-size:clamp(9px,.62vw,11px)!important;
+  line-height:1.22!important;
+  padding:3px 4px 2px!important;
+  -webkit-line-clamp:2!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-type{
+  font-size:clamp(8px,.54vw,9.5px)!important;
+  line-height:1.18!important;
+  padding:1px 4px 2px!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-desc{
+  font-size:clamp(7.5px,.5vw,9px)!important;
+  line-height:1.2!important;
+  -webkit-line-clamp:3!important;
+  padding:1px 4px 3px!important;
+}
+#gameScreen:not(.hidden) #hand.hand>.hand-card .hand-card-effect{
+  font-size:clamp(7px,.46vw,8.5px)!important;
+  line-height:1.18!important;
+  max-height:22%!important;
+  padding:3px 4px!important;
+}
+
+
+/* v2.2.8 — hard fix: no hand-card overlap; remove heading and symbol completely. */
+.hand-zone .hand-heading h3,
+.hand-zone .hand-heading h3 *,
+#gameScreen .hand-zone .hand-heading h3,
+#gameScreen .hand-zone .hand-heading h3 *{
+  display:none!important;
+  visibility:hidden!important;
+}
+.hand-zone .hand-heading,
+#gameScreen .hand-zone .hand-heading{
+  display:flex!important;
+  justify-content:flex-end!important;
+  align-items:center!important;
+  min-height:0!important;
+  height:7%!important;
+  margin:0!important;
+  padding:0 2%!important;
+  overflow:hidden!important;
+}
+.hand-zone .hand-heading #handCount,
+#gameScreen .hand-zone .hand-heading #handCount{
+  display:block!important;
+  margin:0!important;
+  padding:0!important;
+}
+#gameScreen:not(.hidden) .hand-content-layout,
+#gameScreen .hand-content-layout{
+  min-width:0!important;
+  max-width:100%!important;
+  width:100%!important;
+  overflow:hidden!important;
+}
+#gameScreen:not(.hidden) #hand.hand,
+#gameScreen #hand.hand{
+  display:flex!important;
+  flex-flow:row nowrap!important;
+  justify-content:flex-start!important;
+  align-items:stretch!important;
+  gap:6px!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:100%!important;
+  padding:0 2px!important;
+  margin:0!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card,
+#gameScreen #hand.hand > .hand-card{
+  flex:0 0 clamp(96px,10.5%,132px)!important;
+  width:clamp(96px,10.5%,132px)!important;
+  min-width:96px!important;
+  max-width:132px!important;
+  margin:0!important;
+  transform:none!important;
+  position:relative!important;
+  inset:auto!important;
+  float:none!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-self:stretch!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:first-child,
+#gameScreen #hand.hand > .hand-card:first-child{
+  margin-left:0!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-art,
+#gameScreen #hand.hand > .hand-card .hand-art{
+  flex:0 0 27%!important;
+  height:27%!important;
+  max-height:27%!important;
+  min-height:0!important;
+  width:100%!important;
+  margin:0!important;
+  display:block!important;
+  background-size:cover!important;
+  background-position:center!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-title,
+#gameScreen #hand.hand > .hand-card .hand-card-title{
+  flex:0 0 auto!important;
+  font-size:clamp(10px,.68vw,12px)!important;
+  line-height:1.2!important;
+  padding:4px 5px 2px!important;
+  overflow:hidden!important;
+  overflow-wrap:anywhere!important;
+  white-space:normal!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-type,
+#gameScreen #hand.hand > .hand-card .hand-card-type{
+  flex:0 0 auto!important;
+  font-size:clamp(9px,.58vw,10.5px)!important;
+  line-height:1.2!important;
+  padding:1px 5px 3px!important;
+  overflow:hidden!important;
+  overflow-wrap:anywhere!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-desc,
+#gameScreen #hand.hand > .hand-card .hand-card-desc{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  font-size:clamp(8px,.54vw,9.5px)!important;
+  line-height:1.25!important;
+  padding:1px 5px 3px!important;
+  overflow:hidden!important;
+  overflow-wrap:anywhere!important;
+  white-space:normal!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card .hand-card-effect,
+#gameScreen #hand.hand > .hand-card .hand-card-effect{
+  flex:0 0 auto!important;
+  max-height:22%!important;
+  margin-top:auto!important;
+  padding:3px 5px!important;
+  font-size:clamp(7.5px,.5vw,9px)!important;
+  line-height:1.2!important;
+  overflow:hidden!important;
+  overflow-wrap:anywhere!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:hover,
+#gameScreen:not(.hidden) #hand.hand > .hand-card:focus-visible,
+#gameScreen #hand.hand > .hand-card:hover,
+#gameScreen #hand.hand > .hand-card:focus-visible{
+  transform:translateY(-2px)!important;
+  z-index:2!important;
+}
+
+
+/* v2.2.9: supplied Thai ghost cards are complete card faces, not cropped art. */
+.finished-ghost-card{
+  padding:0!important;
+  overflow:hidden!important;
+  aspect-ratio:2/3!important;
+  background:#100b0b!important;
+  border-radius:14px!important;
+}
+.finished-ghost-card .finished-ghost-art{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  border-radius:inherit!important;
+}
+#gameScreen:not(.hidden) #hand .hand-full-art-card{
+  padding:0!important;
+  border-radius:8px!important;
+  background:#100b0b!important;
+  overflow:hidden!important;
+}
+#gameScreen:not(.hidden) #hand .hand-full-art{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  object-fit:fill!important;
+  object-position:center!important;
+  border-radius:inherit!important;
+  pointer-events:none!important;
+}
+#cardPreviewModal .finished-ghost-preview{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:12px!important;
+  background:#100b0b!important;
+}
+#cardPreviewModal .finished-ghost-preview-art{
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:min(100%,360px)!important;
+  max-height:58vh!important;
+  aspect-ratio:2/3!important;
+  object-fit:contain!important;
+  border:1px solid #d7a15c!important;
+  border-radius:10px!important;
+}
+
+
+/* v2.3.0: lobby and full-face ghost reveal fixes */
+html, body {
+  height:auto!important;
+  min-height:100%!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior-y:auto!important;
+}
+body { display:block!important; }
+main { display:block!important; min-height:calc(100vh - 76px)!important; overflow:visible!important; }
+#setupModal.modal-backdrop {
+  align-items:flex-start!important;
+  justify-content:center!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  padding:clamp(18px,5vh,56px) 16px 28px!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+#setupModal .modal { margin:0 auto!important; flex:0 0 auto!important; }
+#drawReveal.finished-ghost-reveal:not(.hidden) {
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:auto!important;
+  padding:clamp(10px,2vh,22px)!important;
+}
+#drawReveal.finished-ghost-reveal:not(.hidden) > .reveal-card-shell {
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:10px!important;
+  width:auto!important;
+  max-width:min(94vw,560px)!important;
+  max-height:96dvh!important;
+  padding:0!important;
+  margin:auto!important;
+  overflow:visible!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#drawReveal.finished-ghost-reveal .reveal-kicker,
+#drawReveal.finished-ghost-reveal #revealTitle,
+#drawReveal.finished-ghost-reveal .reveal-paper { display:none!important; }
+#drawReveal.finished-ghost-reveal .reveal-card {
+  display:block!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:min(90vw,430px)!important;
+  max-height:calc(100dvh - 112px)!important;
+  aspect-ratio:2/3!important;
+  margin:0 auto!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border:1px solid #d7a15c!important;
+  border-radius:12px!important;
+  background:#090607!important;
+  box-shadow:0 16px 48px #000b,0 0 22px #d7a15c2b!important;
+}
+#drawReveal.finished-ghost-reveal #revealArt {
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:inherit!important;
+  background:none!important;
+  overflow:hidden!important;
+}
+#drawReveal.finished-ghost-reveal .reveal-full-card-art {
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:inherit!important;
+}
+#drawReveal.finished-ghost-reveal .reveal-actions {
+  width:min(94vw,430px)!important;
+  max-width:100%!important;
+  margin:0 auto!important;
+  padding:10px 12px!important;
+  border:1px solid #8c6345!important;
+  border-radius:12px!important;
+  background:#160d0df2!important;
+  box-sizing:border-box!important;
+}
+#drawReveal.finished-ghost-reveal .reveal-warning { margin:0 0 8px!important; }
+@media(max-width:600px) {
+  #drawReveal.finished-ghost-reveal .reveal-card { max-width:min(86vw,360px)!important; max-height:calc(100dvh - 150px)!important; }
+  #drawReveal.finished-ghost-reveal .reveal-actions { width:min(92vw,360px)!important; }
+}
+
+
+/* Finished dangerous ghost cards already contain their full title, lore and rules. */
+#drawReveal.instant-danger-reveal:not(.hidden) .reveal-kicker,
+#drawReveal.instant-danger-reveal:not(.hidden) #revealTitle,
+#drawReveal.instant-danger-reveal:not(.hidden) .reveal-paper,
+#drawReveal.instant-danger-reveal:not(.hidden) .reveal-actions { display:none!important; }
+#drawReveal.instant-danger-reveal:not(.hidden) > .reveal-card-shell { gap:0!important; }
+#drawReveal.instant-danger-reveal:not(.hidden) .reveal-card {
+  width:auto!important;height:auto!important;aspect-ratio:2/3!important;
+  max-width:min(90vw,430px)!important;max-height:calc(100dvh - 32px)!important;
+  padding:0!important;overflow:hidden!important;background:#090607!important;
+}
+#drawReveal.instant-danger-reveal:not(.hidden) #revealArt { width:100%!important;height:100%!important;min-height:0!important;margin:0!important;padding:0!important; }
+#drawReveal.instant-danger-reveal:not(.hidden) .reveal-full-card-art { display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important; }

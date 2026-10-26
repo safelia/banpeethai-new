@@ -23,86 +23,122 @@
   },
   {
     "id": "hungry-ghost",
-    "name": "ผีหลอกในเรือนไทย",
-    "type": "ผีอันตราย",
+    "name": "ผีนักศึกษาสาว",
+    "type": "ผีไทย",
     "icon": "👻",
     "color": "red",
     "copies": 6,
-    "desc": "วิญญาณเจ้าถิ่นโผล่มาจากเงามืดบนชานเรือน คอยทดสอบความกล้าของผู้มาเยือน",
-    "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง หรือใช้เครื่องรางป้องกันแทนได้",
-    "image": "/assets/cards/card-06.jpg",
-    "kind": "ghost"
+    "desc": "สาวนักศึกษาที่ปรากฏตัวในคืนฝนตก",
+    "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
+    "image": "/assets/cards/finished-ghosts/ghost-student.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
     "id": "pret",
-    "name": "เปรตตัวสูง",
-    "type": "ผีอันตราย",
+    "name": "ผีพราย",
+    "type": "ผีไทย",
     "icon": "🧟",
     "color": "violet",
     "copies": 5,
-    "desc": "เปรตร่างสูงเฝ้าประตูเรือนไทย เสียงฝีเท้าดังมาจากปลายทางเดิน",
-    "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง หรือใช้เครื่องรางป้องกันแทนได้",
-    "image": "/assets/cards/card-02.jpg",
-    "kind": "ghost"
+    "desc": "วิญญาณหญิงสาวที่ปรากฏตัวกลางสายน้ำยามค่ำคืน",
+    "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
+    "image": "/assets/cards/finished-ghosts/ghost-phraya.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
     "id": "kra-sue",
-    "name": "กระสือขี้สงสัย",
+    "name": "ผีกระสือ",
     "type": "ผีไทย",
     "icon": "🌕",
     "color": "pink",
     "copies": 3,
     "desc": "แสงวูบวาบลอยผ่านหน้าต่างในคืนเดือนมืด",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/card-05.jpg",
-    "kind": "ghost"
+    "image": "/assets/cards/finished-ghosts/ghost-krasue.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
     "id": "nang-tani",
-    "name": "นางตานี",
+    "name": "ผีนางตานี",
     "type": "ผีไทย",
     "icon": "🌿",
     "color": "green",
     "copies": 3,
-    "desc": "หญิงสาวลึกลับปรากฏใต้ต้นกล้วยหลังบ้าน",
+    "desc": "หญิงสาวลึกลับที่ซ่อนตัวอยู่ใต้ต้นกล้วย",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/card-04.jpg",
-    "kind": "ghost"
+    "image": "/assets/cards/finished-ghosts/ghost-nang-tani.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
     "id": "pob",
-    "name": "ปอบจอมตะกละ",
+    "name": "ผีปอบ",
     "type": "ผีไทย",
     "icon": "🍲",
     "color": "orange",
     "copies": 3,
-    "desc": "เสียงหัวเราะดังจากครัวที่ปิดตาย",
+    "desc": "หญิงผมหยุ่งผู้เดินเร่ร่อนยามค่ำคืน",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/card-01.jpg",
-    "kind": "ghost"
+    "image": "/assets/cards/finished-ghosts/ghost-pob.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
-    "id": "tani",
-    "name": "นางตานีพรางตัว",
-    "type": "ผีไทย",
-    "icon": "🌙",
-    "color": "teal",
-    "copies": 2,
-    "desc": "เงาร่างสีเขียวปรากฏท่ามกลางใบตอง",
-    "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/card-03.jpg",
-    "kind": "ghost"
+    "id": "danger-nang-ram",
+    "name": "ผีนางรำ",
+    "type": "ผีอันตราย",
+    "icon": "👻",
+    "color": "red",
+    "copies": 1,
+    "desc": "เสียงดนตรีไทยคลอ ๆ คนตรงนั้นคือใครกัน!!!",
+    "effect": "เมื่อจั่วเจอ ลดหัวใจทันที 1 ดวง ไม่สามารถป้องกันได้",
+    "image": "/assets/cards/finished-ghosts/ghost-nang-ram.webp",
+    "kind": "ghost",
+    "fullArt": true,
+    "instantDanger": true
+  },
+  {
+    "id": "danger-chao-kam",
+    "name": "ผีเจ้ากรรมนายเวร",
+    "type": "ผีอันตราย",
+    "icon": "👹",
+    "color": "red",
+    "copies": 1,
+    "desc": "ในที่สุดกูก็เจอมึงแล้ว",
+    "effect": "เมื่อจั่วเจอ ลดหัวใจทันที 1 ดวง ไม่สามารถป้องกันได้",
+    "image": "/assets/cards/finished-ghosts/ghost-chao-kam.webp",
+    "kind": "ghost",
+    "fullArt": true,
+    "instantDanger": true
+  },
+  {
+    "id": "danger-pret",
+    "name": "ผีเปรต",
+    "type": "ผีอันตราย",
+    "icon": "👹",
+    "color": "red",
+    "copies": 1,
+    "desc": "เงาสูงเท่าต้นตาลกำลังเดินมาทางนี้",
+    "effect": "เมื่อจั่วเจอ ลดหัวใจทันที 1 ดวง ไม่สามารถป้องกันได้",
+    "image": "/assets/cards/finished-ghosts/ghost-pret-danger.webp",
+    "kind": "ghost",
+    "fullArt": true,
+    "instantDanger": true
   },
   {
     "id": "protection",
-    "name": "เครื่องรางป้องกัน",
+    "name": "สร้อยคอห้อยพระ",
     "type": "ป้องกัน",
     "icon": "🧿",
     "color": "blue",
     "copies": 8,
-    "desc": "เครื่องรางทองคำสลักยันต์ ช่วยปกป้องผู้ถือจากวิญญาณร้าย",
-    "effect": "เมื่อจั่วเจอผี เลือกทิ้งใบนี้แทนการเสียหัวใจ 1 ดวง",
-    "image": "/assets/cards/card-09.jpg"
+    "desc": "นะโม นะโม นะโม หลวงพ่อช่วยลูกด้วย!!!!!",
+    "effect": "เมื่อเจอผี ใช้การ์ดป้องกันการลดหัวใจ 1 ดวง",
+    "image": "/assets/cards/finished-protection/ward-amulet-necklace.webp",
+    "fullArt": true
   },
   {
     "id": "holy-water",
@@ -111,9 +147,10 @@
     "icon": "🏺",
     "color": "cyan",
     "copies": 5,
-    "desc": "น้ำมนต์ช่วยให้ใจสงบและไล่เงามืด",
-    "effect": "ลบผลผีที่กำลังโจมตี หรือฟื้นหัวใจ 1 ดวง (สูงสุด 3)",
-    "image": "/assets/cards/card-11.jpg"
+    "desc": "โดนน้ำนี้เข้าไปต้องปวดร้าวแน่ๆ!!!",
+    "effect": "เมื่อเจอผี ใช้การ์ดป้องกันการลดหัวใจ 1 ดวง หรือฟื้นหัวใจอัตโนมัติเมื่อหัวใจไม่เต็ม",
+    "image": "/assets/cards/finished-protection/ward-holy-water.webp",
+    "fullArt": true
   },
   {
     "id": "friend-holy-water",
@@ -133,9 +170,10 @@
     "icon": "🍚",
     "color": "yellow",
     "copies": 5,
-    "desc": "โปรยข้าวสารเสกเพื่อเปิดทางหนี",
-    "effect": "ยกเลิกผลผีที่เพิ่งจั่วเจอ",
-    "image": "/assets/cards/card-24.jpg"
+    "desc": "กำเม็ดข้าวสารขว้างใส่ผี",
+    "effect": "เมื่อเจอผี ใช้การ์ดป้องกันการลดหัวใจ 1 ดวง",
+    "image": "/assets/cards/finished-protection/ward-blessed-rice.webp",
+    "fullArt": true
   },
   {
     "id": "skip",
@@ -168,8 +206,9 @@
     "copies": 3,
     "desc": "แมงมุมแม่ม่ายเฝ้าห้องใต้หลังคา",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/card-14.jpg",
-    "kind": "ghost"
+    "image": "/assets/cards/finished-ghosts/ghost-widow-spider.webp",
+    "kind": "ghost",
+    "fullArt": true
   },
   {
     "id": "ban",
@@ -178,8 +217,8 @@
     "icon": "🚫",
     "color": "red",
     "copies": 4,
-    "desc": "ยันต์ห้ามผ่านหน้าประตูห้องลับ",
-    "effect": "หยุดผลของการ์ดแอ็กชันใบล่าสุด",
+    "desc": "เตรียมยันต์ห้ามเล่นไว้คุ้มครองตัวเองจากวิญญาณ",
+    "effect": "เก็บเป็นเครื่องรางป้องกันผี 1 ครั้ง",
     "image": "/assets/cards/card-10.jpg"
   },
   {
@@ -255,8 +294,8 @@
     "icon": "🏮",
     "color": "orange",
     "copies": 5,
-    "desc": "แสงโคมลอยบอกทางกลับไปยังชานเรือน",
-    "effect": "จั่วเพิ่ม 1 ใบ แล้วเลือกเก็บหนึ่งใบ",
+    "desc": "จุดโคมลอยเพื่อจั่วการ์ดเพิ่ม 1 ใบและเก็บเข้ามือ หากจั่วเจอผีต้องแก้เหตุการณ์ตามปกติ",
+    "effect": "จั่วเพิ่ม 1 ใบและเก็บเข้ามือทันที หากเป็นน้ำมนต์หรือดอกบัวจะฟื้นหัวใจอัตโนมัติเมื่อหัวใจไม่เต็ม",
     "image": "/assets/cards/card-20.jpg"
   },
   {
