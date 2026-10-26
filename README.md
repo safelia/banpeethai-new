@@ -71,3 +71,11 @@ Deploy commands: Build `npm install`; Start `npm start`; Health check `/health`.
 - Replaces rectangular player plates with round Thai-inspired gold tokens around the seats.
 - Overlaps hand cards, removes horizontal scrolling, and clips the cards to the hand frame.
 - Bumps CSS/JS cache versions to v2.1.6.
+
+
+## v2.1.7 Thai UI and edge decoration
+- Moves player badges onto the five chair locations.
+- Reworks hand layout using a measured overlap width and hard clipping at the hand panel.
+- Adds a Thai-inspired sound settings panel to the top-left menu, with a music on/off switch.
+- Adds the provided gold lotus ornament to the empty left/right screen gutters.
+- Adds cache-busting version 2.1.7 for CSS and JavaScript.
