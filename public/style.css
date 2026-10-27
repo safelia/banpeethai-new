@@ -2062,3 +2062,41 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
   #gameScreen:not(.hidden) .game-options-panel,
   #gameScreen:not(.hidden) .table-announcement {z-index:2147483100!important}
 }
+
+
+/* v2.3.18 — mobile: use ONE background layer only; remove the legacy desktop table artwork.
+   Cache-busted with the HTML asset query so hosted browsers do not retain v2.3.17 CSS. */
+@media (max-width: 760px) and (orientation: portrait) {
+  #gameScreen:not(.hidden) {
+    background-color:#090505!important;
+    background-image:url('/assets/haunted-thai-house-mobile-ui.png?v=2.3.18')!important;
+    background-repeat:no-repeat!important;
+    background-position:center center!important;
+    background-size:100% 100%!important;
+  }
+  #gameScreen:not(.hidden) .game-layout.ritual-layout,
+  #gameScreen:not(.hidden) .table-panel.ritual-panel,
+  #gameScreen:not(.hidden) .ritual-scene,
+  #gameScreen:not(.hidden) .ritual-table {
+    background:transparent!important;
+    background-image:none!important;
+    box-shadow:none!important;
+  }
+  #gameScreen:not(.hidden) .ritual-scene {
+    border:0!important;
+  }
+  #gameScreen:not(.hidden) .ritual-scene::before,
+  #gameScreen:not(.hidden) .ritual-scene::after,
+  #gameScreen:not(.hidden) .game-layout.ritual-layout::before,
+  #gameScreen:not(.hidden) .game-layout.ritual-layout::after,
+  #gameScreen:not(.hidden) .table-panel.ritual-panel::before,
+  #gameScreen:not(.hidden) .table-panel.ritual-panel::after {
+    content:none!important;display:none!important;background:none!important;background-image:none!important;
+  }
+  /* Seat centers aligned to the five chairs in the portrait artwork. */
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-1 {left:9.5%!important;top:52.5%!important}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-2 {left:9.5%!important;top:40.0%!important}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-3 {left:50%!important;top:29.0%!important}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-4 {left:90.5%!important;top:40.0%!important}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-5 {left:90.5%!important;top:52.5%!important}
+}

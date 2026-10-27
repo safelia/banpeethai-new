@@ -1,0 +1,9 @@
+BanPeeThai v2.3.18 — Mobile duplicate-background and chair alignment fix
+
+- Force the portrait mobile artwork as the only background layer.
+- Explicitly remove the legacy desktop table image and pseudo-element backgrounds on mobile.
+- Bump stylesheet and app cache keys so hosted mobile browsers request the updated files.
+- Recalibrate mobile seat centers to the five chairs in the supplied portrait artwork.
+- Desktop styles are unchanged; online game state remains shared across devices.
+
+Validation: checked JavaScript syntax, HTML/CSS patch presence, and ZIP integrity. Real-device multiplayer/browser testing remains recommended.
