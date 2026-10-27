@@ -2113,3 +2113,34 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
     background-repeat:no-repeat!important;background-position:center center!important;background-size:100% 100%!important;
   }
 }
+
+/* v2.3.20 — keep every hand card inside its frame with adaptive overlap; recalibrate only the two left desktop seats. */
+#gameScreen:not(.hidden) #hand.hand > .hand-card {
+  flex:0 0 var(--hand-card-width,140px)!important;
+  width:var(--hand-card-width,140px)!important;
+  min-width:0!important;
+  max-width:var(--hand-card-width,140px)!important;
+  margin-left:var(--hand-overlap-negative,-42px)!important;
+  box-sizing:border-box!important;
+}
+#gameScreen:not(.hidden) #hand.hand > .hand-card:first-child {margin-left:0!important}
+@media (min-width:761px) {
+  /* Center the left player badges on the left-side chair cushions in the desktop scene. */
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-1 {left:14.2%!important;top:56.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-2 {left:26.0%!important;top:47.2%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+}
+@media (max-width:760px) and (orientation:portrait) {
+  /* Mobile: use JS-computed card width and overlap so the last card never exits the frame. */
+  #gameScreen:not(.hidden) .hand-zone,
+  #gameScreen:not(.hidden) .hand-zone .hand-content-layout,
+  #gameScreen:not(.hidden) #hand.hand {min-width:0!important;max-width:100%!important;overflow:hidden!important;box-sizing:border-box!important}
+  #gameScreen:not(.hidden) #hand.hand > .hand-card {
+    flex:0 0 var(--hand-card-width,92px)!important;
+    width:var(--hand-card-width,92px)!important;
+    min-width:0!important;max-width:var(--hand-card-width,92px)!important;
+    height:94%!important;min-height:0!important;max-height:94%!important;
+    margin-left:var(--hand-overlap-negative,-19px)!important;
+    aspect-ratio:2/3!important;box-sizing:border-box!important;
+  }
+  #gameScreen:not(.hidden) #hand.hand > .hand-card:first-child {margin-left:0!important}
+}

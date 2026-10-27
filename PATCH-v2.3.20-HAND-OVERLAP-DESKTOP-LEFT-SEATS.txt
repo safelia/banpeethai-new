@@ -1,0 +1,14 @@
+BanPeeThai v2.3.20
+
+Changes:
+- Hand cards now use the runtime-computed card width and negative overlap value, preventing the final card from extending beyond the hand frame on mobile and desktop.
+- Mobile cards keep their proportions and overlap more as the hand grows instead of shrinking or overflowing.
+- Adjusted only the two left-side desktop player badges (seat 1 and seat 2) to better align with their chair cushions. Mobile seat positions and other desktop seat positions are unchanged.
+- Package version updated to 2.3.20.
+
+Validation performed:
+- JavaScript syntax check.
+- ZIP archive integrity check.
+- CSS override inspection for mobile/desktop media scopes.
+
+Note: Browser gameplay visual testing was not available in this environment.
