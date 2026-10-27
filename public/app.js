@@ -8,12 +8,14 @@ let localDrawTimer = null, localDrawTimerKey = '', countdownInterval = null;
 const byId = id => cards.find(c => c.id === id) || {id, name:id, type:'การ์ด', desc:'', effect:'', image:''};
 const playerKeyCount = p => p?.keyCountTotal ? (Number(p.keys)||0) : (Number(p?.storedKeys ?? p?.keys)||0) + (p?.hand||[]).filter(c=>c.id==='key').length;
 let musicEnabled=false, ambientAudio=null, localEndTimer=null, localEndTimerKey='';
+let pendingCardSoundTimer=null;
  let targetSelectionOpen=false, lastOmenRound=-1;
 const soundFiles={
- draw:'/assets/audio/draw-card.mp3',
- ghost:'/assets/audio/ghost-encounter.mp3',
- helper:'/assets/audio/helper-card.mp3',
- ambient:'/assets/audio/ambient-loop.mp3'
+ draw:'/assets/audio/draw-card.mp3?v=2.3.19',
+ ghost:'/assets/audio/ghost-encounter.mp3?v=2.3.19',
+ helper:'/assets/audio/helper-card.mp3?v=2.3.19',
+ click:'/assets/audio/button-click.mp3?v=2.3.19',
+ ambient:'/assets/audio/ambient-loop.mp3?v=2.3.19'
 };
 function playSoundFile(path,volume=0.8){
  if(!musicEnabled)return;
@@ -24,12 +26,13 @@ function playSoundFile(path,volume=0.8){
  }catch(_){/* Audio playback may be unavailable in a restricted browser. */}
 }
 function startAmbient(){
- if(musicEnabled){if(ambientAudio&&ambientAudio.paused)ambientAudio.play().catch(()=>{});return;}
  musicEnabled=true;
  try{
-  if(!ambientAudio){ambientAudio=new Audio(soundFiles.ambient);ambientAudio.loop=true;ambientAudio.preload='auto';ambientAudio.volume=.22;}
-  ambientAudio.currentTime=0;const promise=ambientAudio.play();if(promise&&typeof promise.catch==='function')promise.catch(()=>{});
- }catch(_){/* The toggle still remains usable if audio is unavailable. */}
+  if(!ambientAudio){ambientAudio=new Audio(soundFiles.ambient);ambientAudio.loop=true;ambientAudio.preload='auto';ambientAudio.volume=.075;}
+  if(!$('gameScreen')?.classList.contains('hidden')){
+   if(ambientAudio.paused){const promise=ambientAudio.play();if(promise&&typeof promise.catch==='function')promise.catch(()=>{});}
+  }else{ambientAudio.pause();ambientAudio.currentTime=0;}
+ }catch(_){/* Audio playback may be unavailable in a restricted browser. */}
  const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: เปิด';btn.setAttribute('aria-pressed','true');}
  const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: เปิด';gameBtn.setAttribute('aria-pressed','true');}
  syncGameMusicControls();
@@ -49,16 +52,24 @@ function syncGameMusicControls(){
 function openGameOptions(){const panel=$('gameOptionsPanel');if(!panel)return;syncGameMusicControls();panel.classList.remove('hidden');}
 function closeGameOptions(){$('gameOptionsPanel')?.classList.add('hidden');}
 function playDrawSound(){playSoundFile(soundFiles.draw,.82);}
+function playClickSound(){playSoundFile(soundFiles.click,.58);}
 function playCardEventSound(card){
  if(!musicEnabled||!card)return;
  const isGhost=card.kind==='ghost'||card.type==='ผีอันตราย';
  if(isGhost){playSoundFile(soundFiles.ghost,.9);return;}
  if(['ตัวช่วย','ช่วยเหลือ','ป้องกัน','ลางบอกเหตุ'].includes(card.type))playSoundFile(soundFiles.helper,.82);
 }
-
+function scheduleCardEventSound(card){
+ if(pendingCardSoundTimer)clearTimeout(pendingCardSoundTimer);
+ // The draw SFX is 0.432 s long; wait slightly longer so the reveal sound never overlaps it.
+ pendingCardSoundTimer=setTimeout(()=>{pendingCardSoundTimer=null;playCardEventSound(card);},520);
+}
 function updateSoundForScreen(){
- // Keep the uploaded ambience track running in both lobby and gameplay.
- if(musicEnabled && ambientAudio && ambientAudio.paused)ambientAudio.play().catch(()=>{});
+ // Ambient music belongs to gameplay only, never to the lobby or setup screen.
+ const inGame=!!$('gameScreen')&&!$('gameScreen').classList.contains('hidden');
+ if(!musicEnabled||!inGame){if(ambientAudio&&!ambientAudio.paused){ambientAudio.pause();if(!inGame)ambientAudio.currentTime=0;}return;}
+ if(!ambientAudio){ambientAudio=new Audio(soundFiles.ambient);ambientAudio.loop=true;ambientAudio.preload='auto';ambientAudio.volume=.075;}
+ if(ambientAudio.paused){const promise=ambientAudio.play();if(promise&&typeof promise.catch==='function')promise.catch(()=>{});}
 }
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -163,7 +174,7 @@ function startBotGame(){
  const deck=[];cards.forEach(c=>{for(let i=0;i<(Number(c.copies)||0);i++){if(c.id!=='heart')deck.push({...c,uid:`${c.id}-${Math.random().toString(36).slice(2,9)}`});}});
  for(let i=deck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}
  localGame={players:[{id:'human',name:currentPlayerName,hearts:3,keys:0,alive:true,hand:[heart(),heart(),heart()],bot:false,skip:false},...bots],deck,discard:[],turn:0,round:1,logs:['ทุกคนเริ่มด้วยหัวใจ 3 ดวง','ถึงตาคุณแล้ว ต้องจั่วการ์ด 1 ใบ'],over:false,winner:null,pending:null,phase:'draw',direction:1,lastDraw:null,turnStartedAt:Date.now()};
- mode='bot';onlineRoom='';onlineState=null;closeSetup();show('gameScreen');hide('gameOver');$('roomTag').textContent='โหมดบอท';renderLocal();toast('เกมเริ่มแล้ว! คุณมีหัวใจ 3 ใบ');
+ mode='bot';onlineRoom='';onlineState=null;closeSetup();show('gameScreen');hide('gameOver');updateSoundForScreen();$('roomTag').textContent='โหมดบอท';renderLocal();toast('เกมเริ่มแล้ว! คุณมีหัวใจ 3 ใบ');
 }
 let tableAnnouncementTimer=null;
 function announceTable(message,title='เหตุการณ์ในบ้านผีไทย',kind='ward'){
@@ -222,7 +233,7 @@ function localDraw(p){
  if(localGame.over||localGame.pending||localGame.phase!=='draw'||localGame.players[localGame.turn].id!==p.id||!p.alive)return;
  if(localDrawTimer){clearTimeout(localDrawTimer);localDrawTimer=null;} localDrawTimerKey='';
  if(!localGame.deck.length){toast('กองจั่วหมดแล้ว');localNext();return;}
- const c=drawCardRespectingCatLimit(localGame.deck,p.hand);if(!c){toast('มีแต่การ์ดแมวในกองจั่ว รอใช้การ์ดแมวในมือก่อน');localGame.turnStartedAt=Date.now();syncLocalDrawTimer(localGame,true);return;}playDrawSound();playCardEventSound(c);localGame.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
+ const c=drawCardRespectingCatLimit(localGame.deck,p.hand);if(!c){toast('มีแต่การ์ดแมวในกองจั่ว รอใช้การ์ดแมวในมือก่อน');localGame.turnStartedAt=Date.now();syncLocalDrawTimer(localGame,true);return;}playDrawSound();scheduleCardEventSound(c);localGame.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
  logLocal(`${p.name} จั่วได้ “${c.name}”`);
  if(c.instantDanger){
   localGame.discard.push(c);localHurt(p,`จั่วได้ ${c.name} ซึ่งเป็นผีอันตราย ป้องกันไม่ได้`);
@@ -262,7 +273,7 @@ function botTurn(){
  if(playerKeyCount(p)>=3){localFinish(p,`${p.name} มีกุญแจครบ 3 ดอกแล้ว หนีออกจากบ้านผีไทยได้สำเร็จ!`);return;}
  if(p.skip){p.skip=false;logLocal(`${p.name} ถูกข้ามเทิร์น`);localNext();return;}
  if(!g.deck.length){localNext();return;}
- const c=drawCardRespectingCatLimit(g.deck,p.hand);if(!c){logLocal(`${p.name} ยังจั่วการ์ดแมวเพิ่มไม่ได้ เพราะมีแมวอยู่ในมือแล้ว`);localNext();return;}playDrawSound();playCardEventSound(c);g.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
+ const c=drawCardRespectingCatLimit(g.deck,p.hand);if(!c){logLocal(`${p.name} ยังจั่วการ์ดแมวเพิ่มไม่ได้ เพราะมีแมวอยู่ในมือแล้ว`);localNext();return;}playDrawSound();scheduleCardEventSound(c);g.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
  logLocal(`${p.name} จั่วได้ “${c.name}”`);
  if(c.instantDanger){
   g.discard.push(c);localHurt(p,`จั่วได้ ${c.name} ซึ่งเป็นผีอันตราย ป้องกันไม่ได้`);renderLocal();showReveal(g.lastDraw,true);
@@ -410,7 +421,7 @@ function renderOnline(){
  if($('sidePlayersCount'))$('sidePlayersCount').textContent=`${(s.players||[]).filter(x=>x.alive!==false).length}/${(s.players||[]).length}`;if($('sideRoundCount'))$('sideRoundCount').textContent=String(s.round||1);if($('sideCurrentTurn'))$('sideCurrentTurn').textContent=s.over?'เกมจบ':(s.players[s.turn]?.name||'—');
  const canDraw=myTurn&&s.phase!=='afterdraw'&&!s.pending&&!s.over;
  $('drawCard').disabled=!canDraw;$('tableDeck').disabled=!canDraw;$('endTurn').disabled=!(myTurn&&s.phase==='afterdraw'&&!s.pending&&!s.over);$('escapeBtn').disabled=!(myTurn&&!s.pending&&!s.over);
- if(s.lastDraw&&s.lastDraw.token!==lastRevealToken){lastRevealToken=s.lastDraw.token;playCardEventSound({...s.lastDraw.card,kind:s.lastDraw.ghost?'ghost':s.lastDraw.card?.kind});showReveal(s.lastDraw,!!s.lastDraw.ghost);}
+ if(s.lastDraw&&s.lastDraw.token!==lastRevealToken){lastRevealToken=s.lastDraw.token;playDrawSound();scheduleCardEventSound({...s.lastDraw.card,kind:s.lastDraw.ghost?'ghost':s.lastDraw.card?.kind});showReveal(s.lastDraw,!!s.lastDraw.ghost);}
  if(s.pending&&s.pending.playerId===socket?.id){showGhostChoicesOnline(s.pending.card);}
  if(s.over){show('gameOver');$('resultTitle').textContent=s.winner===socket?.id?'คุณหนีออกมาได้!':s.winner?`${s.players.find(p=>p.id===s.winner)?.name||'ผู้เล่น'} ชนะ!`:'เกมจบแล้ว';$('resultText').textContent=s.logs?.[0]||'การผจญภัยสิ้นสุดลง';}
  else hide('gameOver');
@@ -621,7 +632,7 @@ function leaveGame(){
    socket?.emit('leave-room',{room:leavingRoom});
    hide('gameScreen');hide('gameOver');show('setupModal');
    localGame=null;onlineState=null;onlineRoom='';isHost=false;
-   startAmbient();
+   updateSoundForScreen();
   },250);
   return;
  }
@@ -629,7 +640,7 @@ function leaveGame(){
   const p=localGame.players.find(x=>x.id==='human');
   if(p){p.alive=false;localFinish(null,`${p.name} ยอมแพ้และออกจากเกม`);}
  }
- hide('gameScreen');hide('drawReveal');hide('gameOver');show('setupModal');localGame=null;onlineState=null;onlineRoom='';isHost=false;startAmbient();
+ hide('gameScreen');hide('drawReveal');hide('gameOver');show('setupModal');localGame=null;onlineState=null;onlineRoom='';isHost=false;updateSoundForScreen();
 }
 function enterOnlineGame(room){
  if($('gamePlayerName'))$('gamePlayerName').textContent=currentPlayerName;
@@ -642,6 +653,7 @@ function enterOnlineGame(room){
  hide('drawReveal');
  show('gameScreen');
  hide('gameOver');
+ updateSoundForScreen();
  if($('roomTag'))$('roomTag').textContent=`ออนไลน์ • ${onlineRoom}`;
 }
 function requestOnlineState(){
@@ -698,6 +710,7 @@ function init(){
    refHotspotDraw: () => draw(),
    refHotspotEscape: () => escape(),
    refHotspotEndTurn: () => {
+     playClickSound();
      if(mode==='bot'&&localGame&&localGame.turn===0&&localGame.phase==='afterdraw'&&!localGame.pending&&!localGame.over){
        if(localEndTimer)clearTimeout(localEndTimer);
        localEndTimer=null;localEndTimerKey='';localNext();
@@ -722,7 +735,7 @@ function init(){
  $('createRoomBtn')?.addEventListener('click',createRoom);$('joinRoomBtn')?.addEventListener('click',joinRoom);$('startOnlineGame')?.addEventListener('click',startOnline);
  $('copyRoomCode')?.addEventListener('click',()=>{const code=$('createdRoomCode').textContent;navigator.clipboard?.writeText(code).then(()=>toast('คัดลอกรหัสห้องแล้ว')).catch(()=>toast(`รหัสห้อง: ${code}`));});
  $('drawCard')?.addEventListener('click',draw);$('tableDeck')?.addEventListener('click',draw);$('escapeBtn')?.addEventListener('click',escape);
- $('endTurn')?.addEventListener('click',()=>{if(mode==='bot'&&localGame&&localGame.turn===0&&localGame.phase==='afterdraw'&&!localGame.pending){if(localEndTimer)clearTimeout(localEndTimer);localEndTimer=null;localEndTimerKey='';localNext();}else if(mode==='online'&&onlineRoom&&onlineState?.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'){socket.emit('end-turn',{room:onlineRoom});}else toast('จบเทิร์นได้หลังจั่วการ์ดแล้ว');});
+ $('endTurn')?.addEventListener('click',()=>{playClickSound();if(mode==='bot'&&localGame&&localGame.turn===0&&localGame.phase==='afterdraw'&&!localGame.pending){if(localEndTimer)clearTimeout(localEndTimer);localEndTimer=null;localEndTimerKey='';localNext();}else if(mode==='online'&&onlineRoom&&onlineState?.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'){socket.emit('end-turn',{room:onlineRoom});}else toast('จบเทิร์นได้หลังจั่วการ์ดแล้ว');});
  $('leaveGame')?.addEventListener('click',leaveGame);
  const exitResultScreen=()=>{hide('gameOver');hide('gameScreen');hide('drawReveal');hide('gameOptionsPanel');localGame=null;onlineState=null;onlineRoom='';isHost=false;openSetup();};
  $('closeGameOver')?.addEventListener('click',exitResultScreen);

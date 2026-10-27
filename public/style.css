@@ -2100,3 +2100,16 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
   #gameScreen:not(.hidden) .players-ring .player-row.seat-4 {left:90.5%!important;top:40.0%!important}
   #gameScreen:not(.hidden) .players-ring .player-row.seat-5 {left:90.5%!important;top:52.5%!important}
 }
+
+
+/* v2.3.19 — mobile uses only the supplied portrait artwork; suppress the legacy desktop-stage pseudo background. */
+@media (max-width: 760px) and (orientation: portrait) {
+  #gameScreen:not(.hidden)::before,
+  #gameScreen:not(.hidden)::after {
+    content:none!important;display:none!important;background:none!important;background-image:none!important;
+  }
+  #gameScreen:not(.hidden) {
+    background-image:url('/assets/haunted-thai-house-mobile-ui.png?v=2.3.19')!important;
+    background-repeat:no-repeat!important;background-position:center center!important;background-size:100% 100%!important;
+  }
+}

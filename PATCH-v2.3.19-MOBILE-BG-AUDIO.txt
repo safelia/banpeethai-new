@@ -1,0 +1,10 @@
+BanPeeThai v2.3.19 patch
+
+- Mobile portrait: hide legacy #gameScreen pseudo-element used for the desktop stage background so only the supplied portrait artwork remains. Desktop styles unchanged.
+- Draw sound plays first; card-specific sound is delayed 520 ms to avoid overlapping the 0.432 s draw sound. Online clients play the draw sound before the card event sound as well.
+- Lower ambient volume to 7.5%, use the newly supplied 30-second music-box track as the looped game ambience.
+- Ambient music pauses while lobby/setup is visible and resumes only when gameplay is visible and sound is enabled.
+- Add supplied click sound to End Turn button and invisible End Turn hotspot.
+- Removed duplicate sound-toggle listeners.
+
+Validation: JavaScript syntax and ZIP integrity checked; browser/mobile multiplayer runtime test not performed.
