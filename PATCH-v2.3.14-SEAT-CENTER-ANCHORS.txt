@@ -1,0 +1,5 @@
+BanPeeThai v2.3.14 — Seat Center Anchors
+
+Fix: player markers were positioned using the top-left corner of each badge, causing them to appear away from the chair centers. Updated all five seat anchors using the supplied 5-player screenshot and centered each marker on its target with translate(-50%, -50%).
+
+The 5 seat centers are calibrated against the 16:9 game stage. Same seat anchors are applied in the mobile media query. No gameplay rules changed.

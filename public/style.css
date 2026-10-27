@@ -1893,3 +1893,18 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
   #gameScreen:not(.hidden) .players-ring .seat-4{left:60%!important;top:50.5%!important}
   #gameScreen:not(.hidden) .players-ring .seat-5{left:72%!important;top:59%!important}
 }
+
+/* v2.3.14 — seat markers anchored by their CENTERS, matching the actual chair centers in the 5-player screenshot.
+   The previous rules positioned each marker's top-left corner at the seat percentage, visibly shifting names off chairs. */
+#gameScreen:not(.hidden) .players-ring .player-row.seat-1{left:13.5%!important;top:56.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+#gameScreen:not(.hidden) .players-ring .player-row.seat-2{left:26.2%!important;top:48.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+#gameScreen:not(.hidden) .players-ring .player-row.seat-3{left:47.6%!important;top:18.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+#gameScreen:not(.hidden) .players-ring .player-row.seat-4{left:57.0%!important;top:48.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+#gameScreen:not(.hidden) .players-ring .player-row.seat-5{left:68.1%!important;top:57.2%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .players-ring .player-row.seat-1{left:13.5%!important;top:56.5%!important;transform:translate(-50%,-50%)!important}
+ #gameScreen:not(.hidden) .players-ring .player-row.seat-2{left:26.2%!important;top:48.5%!important;transform:translate(-50%,-50%)!important}
+ #gameScreen:not(.hidden) .players-ring .player-row.seat-3{left:47.6%!important;top:18.5%!important;transform:translate(-50%,-50%)!important}
+ #gameScreen:not(.hidden) .players-ring .player-row.seat-4{left:57.0%!important;top:48.5%!important;transform:translate(-50%,-50%)!important}
+ #gameScreen:not(.hidden) .players-ring .player-row.seat-5{left:68.1%!important;top:57.2%!important;transform:translate(-50%,-50%)!important}
+}
