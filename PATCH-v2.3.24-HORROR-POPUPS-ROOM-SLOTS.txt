@@ -1,0 +1,7 @@
+BanPeeThai v2.3.24 — Horror Popup Polish & Room Slots
+
+- Restyled lobby setup modal with Thai horror atmosphere, deep black, blood red, ash gray, restrained borders and improved proportions.
+- Removed emoji icons from the mode selection and room creation buttons; simplified button labels.
+- Replaced the online waiting-room player text list and 1/5 counter presentation with five circular player slots. Occupied slots show a stylized dark portrait and player name underneath; empty slots show a dim ritual-mark circle.
+- Room count remains visible as a small 0/5 count; host label is shown under the host player.
+- Kept gameplay screen and game logic unchanged except rendering lobby player slots.

@@ -2251,3 +2251,54 @@ footer small{color:#8d8183;}
 #startOnlineGame:disabled{opacity:.45;}
 /* Keep the redesigned mood on lobby and setup UI only; gameplay styling stays on its prior palette. */
 @media(max-width:760px){.topbar{background:#090708f0;}.hero{margin-top:12px;}.hero-copy{background:linear-gradient(180deg,#090708e8,#10090bf5),url('/assets/haunted-thai-house-mobile.jpg') center/cover;}.logo-drawing{width:94px;height:94px;}.hero-copy:after{font-size:10px;letter-spacing:2px;right:14px;}.feature-strip>div{padding:12px;}}
+
+
+/* v2.3.24 — polished Thai occult popup flow and five circular room seats */
+:root{--horror-red:#9f101c;--horror-red-bright:#d51f2b;--horror-black:#090708;--horror-charcoal:#171112;--horror-ash:#a99a98;}
+#setupModal.modal-backdrop{background:radial-gradient(ellipse at 50% 35%,#26080bd9 0%,#080607f2 72%),url('/assets/haunted-thai-house.webp') center/cover fixed;backdrop-filter:blur(8px);padding:22px;}
+#setupModal .setup-flow-modal{width:min(100%,520px)!important;max-height:min(92dvh,820px);overflow:auto;box-sizing:border-box;padding:34px 32px 30px!important;border:1px solid #8f1c24;border-radius:15px;background:linear-gradient(155deg,#1b1112f7 0%,#0d090afc 68%,#17090bf7 100%);box-shadow:0 24px 90px #000e,0 0 34px #7b07151a,inset 0 1px #c13a3a24;color:#e9dfdc;}
+#setupModal .setup-flow-modal:before{content:"";position:absolute;inset:7px;border:1px solid #8b25251c;border-radius:10px;pointer-events:none;}
+#setupModal .setup-step{position:relative;z-index:1;}
+#setupModal .eyebrow{color:#b62a32;letter-spacing:1.8px;text-transform:none;font-size:11px;}
+#setupModal .setup-step h2{font-family:Pridi,serif;font-size:clamp(27px,4vw,33px);line-height:1.3;color:#eee3e0;margin:8px 0 20px!important;text-shadow:0 2px 12px #9d101b20;}
+#setupModal .muted,#setupModal label{color:#b9a9a8;font-size:13px;}
+#setupModal .modal label{margin:17px 0;}
+#setupModal .modal input,#setupModal input,#setupModal select{background:#080708;border:1px solid #572127;border-radius:7px;color:#eee5e1;min-height:46px;padding:12px 14px;box-sizing:border-box;}
+#setupModal input:focus{border-color:#c12631;box-shadow:0 0 0 2px #a8172424;outline:none;}
+#setupModal .primary,#setupModal .secondary{font-family:inherit;border-radius:8px;font-weight:650;transition:background .16s,border-color .16s,transform .16s;}
+#setupModal .primary{background:linear-gradient(110deg,#b51a26,#780c15);border:1px solid #d33b43;color:#f8eeee;box-shadow:0 4px 0 #3b080d,0 10px 22px #650b142c;}
+#setupModal .primary:hover{background:linear-gradient(110deg,#cf202c,#92101b);}
+#setupModal .secondary{background:#100b0c;border:1px solid #642129;color:#d8cbca;box-shadow:0 4px 0 #050303;}
+#setupModal .setup-choice-btn{margin-top:12px;min-height:58px;font-size:15px;letter-spacing:.2px;}
+#setupModal .setup-back{display:inline-flex;border-radius:6px;padding:9px 13px;margin-bottom:15px;background:#100a0b;border:1px solid #68212a;color:#cfc1c0;}
+#setupModal .count-buttons{gap:9px;margin:12px 0 22px;}
+#setupModal .count-buttons button{background:#100b0c;border:1px solid #65212a;border-radius:7px;color:#d9cccc;min-height:54px;}
+#setupModal .count-buttons button.selected{background:linear-gradient(140deg,#bd1d29,#7b0c15);border-color:#e54a50;box-shadow:0 0 0 1px #a61b24,0 0 18px #b21a292b;color:#fff;}
+#setupModal .setup-submit{min-height:50px;margin-top:9px;}
+#setupModal .setup-divider{color:#8e7e7e;margin:20px 0;}
+#setupModal .setup-divider:before,#setupModal .setup-divider:after{background:linear-gradient(90deg,transparent,#5c2228,transparent);}
+#setupModal .room-code-panel{background:#080607;border:1px solid #63232a;border-radius:9px;padding:16px;margin:14px 0 22px;}
+#setupModal .room-code-panel small{color:#a99796;}
+#setupModal .room-code-panel strong{color:#f0e4df;letter-spacing:6px;font-family:Pridi,serif;}
+#setupModal .room-code-panel button{background:#130c0d;border-color:#70232a;border-radius:6px;}
+#setupModal .close{color:#b9aaaa;font-size:25px;right:15px;top:9px;z-index:3;}
+#setupModal .room-players-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:20px 0 12px;font:600 19px Pridi,serif;color:#e7d9d5;}
+#setupModal .room-players-heading span{font-size:12px;font-weight:500;color:#a99896;letter-spacing:1px;}
+#setupModal .room-player-slots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:10px 0 18px;background:transparent;line-height:normal;}
+#setupModal .room-player-slot{min-width:0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:7px;}
+#setupModal .room-avatar{position:relative;width:clamp(44px,10vw,72px);aspect-ratio:1;border-radius:50%;overflow:hidden;border:1px solid #743039;background:radial-gradient(ellipse at 50% 35%,#3c2929 0%,#130d0e 60%,#080607 100%);box-shadow:inset 0 0 0 4px #070607,0 0 0 1px #2c1114;}
+#setupModal .room-avatar:before{content:"";position:absolute;width:29%;height:34%;border-radius:50% 50% 43% 43%;left:35.5%;top:19%;background:linear-gradient(90deg,#090708,#574140 48%,#10090a);box-shadow:0 0 8px #000;}
+#setupModal .room-avatar:after{content:"";position:absolute;width:62%;height:48%;left:19%;bottom:-8%;border-radius:48% 48% 10% 10%;background:linear-gradient(90deg,#080607,#332020 48%,#090607);}
+#setupModal .room-avatar span{position:absolute;z-index:2;top:33%;left:39%;width:22%;height:5%;background:#b11d27;box-shadow:0 0 8px #e41e2c;opacity:.55;}
+#setupModal .room-avatar i{position:absolute;z-index:1;left:26%;top:10%;width:48%;height:55%;border-radius:48% 48% 35% 35%;background:linear-gradient(90deg,#050405,#0b0809 60%,#1d1112);clip-path:polygon(12% 0,88% 0,100% 100%,75% 78%,65% 100%,48% 80%,30% 100%,20% 72%,0 100%);}
+#setupModal .room-player-slot.is-filled .room-avatar{border-color:#b22b34;box-shadow:inset 0 0 0 3px #080607,0 0 13px #8d121b42;}
+#setupModal .room-player-slot.is-empty .room-avatar{border:1px dashed #5c282c;background:radial-gradient(circle,#1a1011,#080607 72%);box-shadow:inset 0 0 0 3px #080607;}
+#setupModal .room-player-slot.is-empty .room-avatar:before,#setupModal .room-player-slot.is-empty .room-avatar:after,#setupModal .room-player-slot.is-empty .room-avatar span,#setupModal .room-player-slot.is-empty .room-avatar i{display:none;}
+#setupModal .room-player-slot.is-empty .room-avatar:before{content:"";display:block;position:absolute;left:50%;top:50%;width:28%;height:1px;transform:translate(-50%,-50%);background:#62252b;}
+#setupModal .room-player-slot.is-empty .room-avatar:after{content:"";display:block;position:absolute;left:50%;top:50%;width:1px;height:28%;transform:translate(-50%,-50%);background:#62252b;}
+#setupModal .room-player-name{max-width:100%;font-size:clamp(10px,2.4vw,12px);color:#e4d6d2;overflow-wrap:anywhere;line-height:1.35;}
+#setupModal .is-empty .room-player-name{color:#79696a;}
+#setupModal .room-host-label{font-size:9px;color:#bd454b;line-height:1.2;}
+#setupModal #roomHostNote{line-height:1.6;margin:12px 0 0;color:#9d8d8c;}
+#setupModal #startOnlineGame:disabled{opacity:.42;filter:grayscale(.5);box-shadow:none;}
+@media(max-width:520px){#setupModal.modal-backdrop{padding:12px;}#setupModal .setup-flow-modal{padding:28px 20px 23px!important;border-radius:12px;}#setupModal .room-player-slots{gap:4px;}#setupModal .room-avatar{width:clamp(42px,13vw,60px);}#setupModal .room-code-panel strong{font-size:24px;letter-spacing:4px;}}

@@ -136,7 +136,7 @@ async function createRoom(){
  try{await connectSocket();socket.emit('create-room',{name:currentPlayerName},res=>{
   if(!res?.ok)return onlineError(res?.error);
   onlineRoom=res.room;isHost=true;showSetupStep('roomLobby');$('createdRoomCode').textContent=onlineRoom;
-  $('roomTag').textContent=`ห้อง ${onlineRoom}`;$('lobbyPlayers').textContent='สร้างห้องแล้ว กำลังรอเพื่อนเข้าร่วม…';
+  $('roomTag').textContent=`ห้อง ${onlineRoom}`;renderRoomPlayers([{name:currentPlayerName,id:socket.id}],socket.id);
   $('startOnlineGame').disabled=true;toast(`สร้างห้อง ${onlineRoom} แล้ว ส่งรหัสให้เพื่อนได้เลย`);
  });}catch(e){onlineError('เชื่อมต่อไม่ได้ กรุณาลองใหม่อีกครั้ง');}
 }
@@ -150,7 +150,7 @@ async function joinRoom(){
    if(btn){btn.disabled=false;btn.textContent='เข้าร่วมห้อง';}
    if(!res?.ok)return onlineError(res?.error||'เข้าห้องไม่สำเร็จ');
    onlineRoom=res.room;isHost=false;showSetupStep('roomLobby');$('createdRoomCode').textContent=onlineRoom;
-   $('lobbyPlayers').textContent='เข้าห้องสำเร็จ กำลังรอเจ้าของห้องเริ่มเกม';$('startOnlineGame').disabled=true;
+   renderRoomPlayers([{name:currentPlayerName,id:socket.id}]);$('startOnlineGame').disabled=true;
    $('roomTag').textContent=`ห้อง ${onlineRoom}`;toast('เข้าห้องแล้ว รอเจ้าของห้องเริ่มเกม');
   });
  }catch(e){
@@ -663,6 +663,20 @@ function enterOnlineGame(room){
 function requestOnlineState(){
  if(socket?.connected&&onlineRoom)socket.emit('request-online-state',{room:onlineRoom});
 }
+function renderRoomPlayers(players=[],hostId=null){
+ const root=$('lobbyPlayers');if(!root)return;
+ const safePlayers=(players||[]).slice(0,5);
+ $('roomPlayerCount').textContent=`${safePlayers.length}/5`;
+ root.innerHTML=Array.from({length:5},(_,i)=>{
+  const player=safePlayers[i];
+  if(!player)return `<div class="room-player-slot is-empty"><div class="room-avatar" aria-hidden="true"><span></span></div><div class="room-player-name">รอผู้เล่น</div></div>`;
+  const name=esc(player.name||'ผู้เล่น');
+  const isHost=hostId&&player.id===hostId;
+  const seed=[...String(player.id||player.name||i)].reduce((a,c)=>a+c.charCodeAt(0),0)%5;
+  return `<div class="room-player-slot is-filled"><div class="room-avatar avatar-tone-${seed}" aria-hidden="true"><span></span><i></i></div><div class="room-player-name" title="${name}">${name}</div>${isHost?'<div class="room-host-label">เจ้าของห้อง</div>':''}</div>`;
+ }).join('');
+}
+
 function bindSocket(){
  if(!socket||socket.__banpeeBound)return;socket.__banpeeBound=true;
  socket.on('game-started',data=>{
@@ -671,7 +685,7 @@ function bindSocket(){
  });
  socket.on('room-update',r=>{
   if(!onlineRoom||r.room!==onlineRoom)return;
-  $('createdRoomCode').textContent=r.room;$('lobbyPlayers').innerHTML=(r.players||[]).map(p=>`${esc(p.name)} ${p.id===r.host?'👑':''}`).join('　•　')+`<br>${r.players.length}/5 คน`;
+  $('createdRoomCode').textContent=r.room;renderRoomPlayers(r.players||[],r.host);
   $('startOnlineGame').disabled=!isHost||r.players.length<2;
   // The room update is also a fallback start signal in case a client misses game-started.
   if(r.started){enterOnlineGame(r.room);requestOnlineState();}
