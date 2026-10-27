@@ -8,7 +8,7 @@ let localDrawTimer = null, localDrawTimerKey = '', countdownInterval = null;
 const byId = id => cards.find(c => c.id === id) || {id, name:id, type:'การ์ด', desc:'', effect:'', image:''};
 const playerKeyCount = p => p?.keyCountTotal ? (Number(p.keys)||0) : (Number(p?.storedKeys ?? p?.keys)||0) + (p?.hand||[]).filter(c=>c.id==='key').length;
 let musicEnabled=false, ambientAudio=null, lobbyAudio=null, screamAudio=null, localEndTimer=null, localEndTimerKey='', screamLoopTimer=null;
-let pendingCardSoundTimer=null, lastPreviewTurnToken='', onlineEndTimer=null, onlineEndTimerKey='';
+let pendingCardSoundTimer=null, lastPreviewTurnToken='';
  let targetSelectionOpen=false, lastOmenRound=-1;
 const soundFiles={
  draw:'/assets/audio/draw-card.mp3?v=2.3.33',
@@ -113,7 +113,7 @@ function toast(msg){ const el=$('toast'); if(!el)return; el.textContent=msg; el.
  }
 
 function show(id){$(id)?.classList.remove('hidden');if(id==='gameEscapeMenu'){document.body.classList.add('escape-menu-open');}}
-function hide(id){$(id)?.classList.add('hidden');if(id==='drawReveal')revealPending=false;if(id==='gameEscapeMenu'){document.body.classList.remove('escape-menu-open');}}
+function hide(id){$(id)?.classList.add('hidden');if(id==='gameEscapeMenu'){document.body.classList.remove('escape-menu-open');}}
 function imgUrl(c){return c?.image || '/assets/cards/card-01.jpg';}
 function renderCardTile(c){
  if(c?.fullArt) return `<article class="card card-parchment finished-ghost-card" title="${esc(c.name)}"><img class="finished-ghost-art" src="${esc(imgUrl(c))}" alt="${esc(c.name)} — ${esc(c.desc)}"></article>`;
@@ -377,21 +377,7 @@ function syncLocalDrawTimer(g,myTurn){
   }
  },Math.max(0,10000-(Date.now()-started)));
 }
-function syncLocalEndTimer(g,active){
- if(!active||!g||g.over||g.pending||g.phase!=='afterdraw'){
-  if(localEndTimer){clearTimeout(localEndTimer);localEndTimer=null;}localEndTimerKey='';return;
- }
- const p=g.players[g.turn];const key=`${g.round}:${p?.id}:${g.lastDraw?.token||''}`;
- if(localEndTimer&&localEndTimerKey===key)return;
- if(localEndTimer)clearTimeout(localEndTimer);
- localEndTimerKey=key;
- localEndTimer=setTimeout(()=>{
-  localEndTimer=null;localEndTimerKey='';
-  if(localGame===g&&!g.over&&!g.pending&&g.phase==='afterdraw'&&g.players[g.turn]?.id===p?.id){
-   logLocal(`${p.name} หมดเวลา 25 วินาที ระบบจบรอบอัตโนมัติ`);localNext();
-  }
- },25000);
- }
+function syncLocalEndTimer(g,active){ if(localEndTimer){clearTimeout(localEndTimer);localEndTimer=null;} localEndTimerKey=''; }
 
 function updateDrawCountdown(){
  const banner=$('turnBanner');if(!banner)return;
@@ -419,7 +405,7 @@ if(!countdownInterval)countdownInterval=setInterval(updateDrawCountdown,1000);
 function renderLastDrawPreview(lastDraw,fallback){
  const target=$('discardTop');if(!target)return;
  // Hold the table-side discard preview until the central reveal has finished.
- if(revealPending||!$('drawReveal')?.classList.contains('hidden')){target.classList.add('hidden');return;}
+ if(!$('drawReveal')?.classList.contains('hidden')){target.classList.add('hidden');return;}
  const card=lastDraw?.card||fallback||null;
  target.classList.remove('hidden');
  if(!card){
@@ -451,20 +437,6 @@ function renderLocal(){
  if(g.over){show('gameOver');$('resultTitle').textContent=g.winner==='human'?'คุณหนีออกมาได้!':g.winner?`${g.players.find(x=>x.id===g.winner)?.name||'ผู้เล่น'} ชนะ!`:'เกมจบแล้ว';$('resultText').textContent=g.logs[0]||'การผจญภัยสิ้นสุดลง';}
  else hide('gameOver');
 }
-function syncOnlineAutoEnd(s,myTurn){
- const active=!!(s&&myTurn&&!s.over&&!s.pending&&s.phase==='afterdraw');
- if(!active){if(onlineEndTimer)clearTimeout(onlineEndTimer);onlineEndTimer=null;onlineEndTimerKey='';return;}
- const key=`${onlineRoom}:${s.round}:${s.players?.[s.turn]?.id}:${s.lastDraw?.token||''}`;
- if(onlineEndTimer&&onlineEndTimerKey===key)return;
- if(onlineEndTimer)clearTimeout(onlineEndTimer);
- onlineEndTimerKey=key;
- onlineEndTimer=setTimeout(()=>{
-  onlineEndTimer=null;onlineEndTimerKey='';
-  if(mode==='online'&&onlineState&&!onlineState.over&&!onlineState.pending&&onlineState.phase==='afterdraw'&&onlineState.players?.[onlineState.turn]?.id===socket?.id){
-   socket.emit('end-turn',{room:onlineRoom});toast('หมดเวลา 25 วินาที ระบบจบรอบอัตโนมัติ');
-  }
- },25000);
-}
 function renderOnline(){
  const s=onlineState;if(!s)return;
  const current=s.players?.[s.turn];maybeClosePreviewOnTurnStart(current?.id,s.phase,current?.id===socket?.id&&!s.over&&!s.pending);
@@ -472,7 +444,6 @@ function renderOnline(){
  const surrenderBtn=$('leaveGame');if(surrenderBtn){const living=(s.players||[]).filter(p=>p.alive!==false).length;surrenderBtn.disabled=!!(mode==='online'&&living<=2);surrenderBtn.title=living<=2?'ออนไลน์ต้องมีผู้เล่นที่ยังอยู่มากกว่า 2 คนจึงยอมแพ้ได้':'ยอมแพ้และออกจากเกม';}
  $('deckCount').textContent=`เหลือ ${s.deckCount} ใบ`;$('tableDeckCount').textContent=`${s.deckCount} ใบ`;if($('sideDeckCount'))$('sideDeckCount').textContent=`${s.deckCount} ใบ`;$('roundCount').textContent=s.round||1;updateNightOmen(s.round||1);
  const myTurn=s.players[s.turn]?.id===socket?.id;
- syncOnlineAutoEnd(s,myTurn);
  $('turnBanner').textContent=s.over?'เกมจบแล้ว':s.pending?(s.pending.playerId===socket?.id?'ผีปรากฏตัว! เลือกว่าจะป้องกันหรือไม่':'มีผู้เล่นเจอผี!'):myTurn?'ถึงตาคุณแล้ว — จั่วการ์ด 1 ใบ':`ถึงตา ${s.players[s.turn]?.name||'ผู้เล่น'}`;
  $('tableMessage').textContent=s.over?'การผจญภัยสิ้นสุดลง':s.pending?'มีวิญญาณปรากฏตัว!':myTurn?'จั่วการ์ดเพื่อสำรวจบ้าน':'กำลังรอผู้เล่น...';
  renderLastDrawPreview(s.lastDraw,Array.isArray(s.discard)?s.discard[s.discard.length-1]:s.discard);
@@ -485,13 +456,13 @@ function renderOnline(){
  if(s.over){show('gameOver');$('resultTitle').textContent=s.winner===socket?.id?'คุณหนีออกมาได้!':s.winner?`${s.players.find(p=>p.id===s.winner)?.name||'ผู้เล่น'} ชนะ!`:'เกมจบแล้ว';$('resultText').textContent=s.logs?.[0]||'การผจญภัยสิ้นสุดลง';}
  else hide('gameOver');
 }
-let revealTimer=null, revealDelayTimer=null, revealPending=false;
+let revealTimer=null, revealDelayTimer=null;
 function closeRevealAndShowDiscard(){
  hide('drawReveal');
  const g=currentState();
  if(g){renderLastDrawPreview(g.lastDraw,Array.isArray(g.discard)?g.discard[g.discard.length-1]:g.discard);}
 }
- function showReveal(draw,isGhost){revealPending=true;clearTimeout(revealDelayTimer);revealDelayTimer=setTimeout(()=>showRevealNow(draw,isGhost),1000);} function showRevealNow(draw,isGhost){
+ function showReveal(draw,isGhost){clearTimeout(revealDelayTimer);revealDelayTimer=setTimeout(()=>showRevealNow(draw,isGhost),1000);} function showRevealNow(draw,isGhost){
  const c=draw.card||byId('heart');clearTimeout(revealTimer);scheduleCardEventSound({...c,kind:isGhost?'ghost':c.kind});show('drawReveal');
  const ownDraw=mode==='bot'?draw.playerId==='human':draw.playerId===socket?.id;
  const playerFromState=(mode==='online'?(onlineState?.players||[]):(localGame?.players||[])).find(p=>p.id===draw.playerId);
