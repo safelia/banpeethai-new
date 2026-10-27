@@ -1,0 +1,1 @@
+v2.3.32 fix: removed the full-screen gameplay smoke pseudo-elements that were layered above the game board and making the view look blurred/obscured. Lobby smoke remains. Added only subtle localized smoke inside the table-art area.
