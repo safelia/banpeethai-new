@@ -7,125 +7,58 @@ let localGame = null, toastTimer = null, lastRevealToken = '', currentPlayerName
 let localDrawTimer = null, localDrawTimerKey = '', countdownInterval = null;
 const byId = id => cards.find(c => c.id === id) || {id, name:id, type:'การ์ด', desc:'', effect:'', image:''};
 const playerKeyCount = p => p?.keyCountTotal ? (Number(p.keys)||0) : (Number(p?.storedKeys ?? p?.keys)||0) + (p?.hand||[]).filter(c=>c.id==='key').length;
-let audioCtx=null, ambientNodes=[], musicEnabled=false, audioReady=false, musicTimer=null, localEndTimer=null, localEndTimerKey='';
+let musicEnabled=false, ambientAudio=null, localEndTimer=null, localEndTimerKey='';
  let targetSelectionOpen=false, lastOmenRound=-1;
-function ensureAudio(){
- if(audioCtx)return audioCtx;
- const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx)return null;
- audioCtx=new Ctx();return audioCtx;
-}
-function playPluck(freq, when, duration=1.15, volume=.045){
- const ctx=ensureAudio();if(!ctx)return;
- const osc=ctx.createOscillator(),gain=ctx.createGain(),filter=ctx.createBiquadFilter();
- osc.type='triangle';osc.frequency.setValueAtTime(freq,when);osc.frequency.exponentialRampToValueAtTime(Math.max(60,freq*.995),when+duration);
- filter.type='lowpass';filter.frequency.value=1800;gain.gain.setValueAtTime(.0001,when);gain.gain.exponentialRampToValueAtTime(volume,when+.035);gain.gain.exponentialRampToValueAtTime(.0001,when+duration);
- osc.connect(filter);filter.connect(gain);gain.connect(ctx.destination);osc.start(when);osc.stop(when+duration+.03);
+const soundFiles={
+ draw:'/assets/audio/draw-card.mp3',
+ ghost:'/assets/audio/ghost-encounter.mp3',
+ helper:'/assets/audio/helper-card.mp3',
+ ambient:'/assets/audio/ambient-loop.mp3'
+};
+function playSoundFile(path,volume=0.8){
+ if(!musicEnabled)return;
+ try{
+  const audio=new Audio(path);audio.preload='auto';audio.volume=volume;
+  const promise=audio.play();if(promise&&typeof promise.catch==='function')promise.catch(()=>{});
+  audio.addEventListener('ended',()=>{audio.src='';},{once:true});
+ }catch(_){/* Audio playback may be unavailable in a restricted browser. */}
 }
 function startAmbient(){
- const ctx=ensureAudio();if(!ctx)return;if(ctx.state==='suspended')ctx.resume();if(musicEnabled)return;
- musicEnabled=true;audioReady=true;
- const master=ctx.createGain();master.gain.value=.48;master.connect(ctx.destination);ambientNodes.push(master);
- // Gentle Thai-inspired pentatonic music, played as soft plucked notes and warm sustained tones.
- const progression=[[220,261.63,329.63],[196,246.94,293.66],[174.61,220,261.63],[196,246.94,329.63]];
- let step=0;
- const playBar=()=>{
-  if(!musicEnabled||!audioCtx)return;
-  const now=ctx.currentTime, chord=progression[Math.floor(step/4)%progression.length];
-  const melody=[chord[2]*2,chord[1]*2,chord[0]*2,chord[1]*2][step%4];
-  playPluck(melody,now,.9,.018);
-  if(step%4===0){
-   chord.forEach((hz,i)=>{const osc=ctx.createOscillator(),gain=ctx.createGain(),filter=ctx.createBiquadFilter();osc.type='sine';osc.frequency.value=hz;filter.type='lowpass';filter.frequency.value=700;gain.gain.setValueAtTime(.0001,now);gain.gain.linearRampToValueAtTime(i===0?.012:.008,now+.25);gain.gain.exponentialRampToValueAtTime(.0001,now+2.7);osc.connect(filter);filter.connect(gain);gain.connect(master);osc.start(now);osc.stop(now+2.8);});
-  }
-  step++;
- };
- playBar();musicTimer=setInterval(playBar,720);
- const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: เปิด';btn.setAttribute('aria-pressed','true');}const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: เปิด';gameBtn.setAttribute('aria-pressed','true');}if(typeof syncGameMusicControls==='function')syncGameMusicControls();syncGameMusicControls();
+ if(musicEnabled){if(ambientAudio&&ambientAudio.paused)ambientAudio.play().catch(()=>{});return;}
+ musicEnabled=true;
+ try{
+  if(!ambientAudio){ambientAudio=new Audio(soundFiles.ambient);ambientAudio.loop=true;ambientAudio.preload='auto';ambientAudio.volume=.22;}
+  ambientAudio.currentTime=0;const promise=ambientAudio.play();if(promise&&typeof promise.catch==='function')promise.catch(()=>{});
+ }catch(_){/* The toggle still remains usable if audio is unavailable. */}
+ const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: เปิด';btn.setAttribute('aria-pressed','true');}
+ const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: เปิด';gameBtn.setAttribute('aria-pressed','true');}
+ syncGameMusicControls();
 }
 function stopAmbient(){
- if(musicTimer){clearInterval(musicTimer);musicTimer=null;}
- ambientNodes.forEach(n=>{try{if(n.disconnect)n.disconnect();}catch(_){}});ambientNodes=[];musicEnabled=false;
- const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: ปิด';btn.setAttribute('aria-pressed','false');}const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: ปิด';gameBtn.setAttribute('aria-pressed','false');}if(typeof syncGameMusicControls==='function')syncGameMusicControls();syncGameMusicControls();
+ musicEnabled=false;
+ if(ambientAudio){ambientAudio.pause();ambientAudio.currentTime=0;}
+ const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: ปิด';btn.setAttribute('aria-pressed','false');}
+ const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: ปิด';gameBtn.setAttribute('aria-pressed','false');}
+ syncGameMusicControls();
 }
 function syncGameMusicControls(){
  const toggle=$('settingsMusicToggle'), status=$('gameMusicStatus');
- if(toggle){
-  toggle.setAttribute('aria-pressed',musicEnabled?'true':'false');
-  toggle.classList.toggle('is-on',musicEnabled);
-  const label=toggle.querySelector('b');if(label)label.textContent=musicEnabled?'เปิด':'ปิด';
- }
- if(status)status.textContent=musicEnabled?'กำลังเล่นเพลงบรรเลง':'ปิดอยู่';
+ if(toggle){toggle.setAttribute('aria-pressed',musicEnabled?'true':'false');toggle.classList.toggle('is-on',musicEnabled);const label=toggle.querySelector('b');if(label)label.textContent=musicEnabled?'เปิด':'ปิด';}
+ if(status)status.textContent=musicEnabled?'กำลังเล่นเสียงบรรยากาศ':'ปิดอยู่';
 }
-function openGameOptions(){
- const panel=$('gameOptionsPanel');if(!panel)return;
- syncGameMusicControls();panel.classList.remove('hidden');
-}
-function closeGameOptions(){
- $('gameOptionsPanel')?.classList.add('hidden');
-}
-function playDrawSound(){
- const ctx=ensureAudio();if(!ctx)return;if(ctx.state==='suspended')ctx.resume();
- // Paper-card swish: short filtered noise sweep plus a soft card-on-table tap.
- const now=ctx.currentTime,buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*.24),ctx.sampleRate),data=buffer.getChannelData(0);
- for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*(1-i/data.length);
- const noise=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();noise.buffer=buffer;filter.type='bandpass';filter.frequency.setValueAtTime(1700,now);filter.frequency.exponentialRampToValueAtTime(520,now+.19);filter.Q.value=.7;
- gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.16,now+.025);gain.gain.exponentialRampToValueAtTime(.0001,now+.23);noise.connect(filter);filter.connect(gain);gain.connect(ctx.destination);noise.start(now);noise.stop(now+.24);
- const tap=ctx.createOscillator(),tg=ctx.createGain();tap.type='sine';tap.frequency.setValueAtTime(190,now+.13);tap.frequency.exponentialRampToValueAtTime(90,now+.21);tg.gain.setValueAtTime(.0001,now+.13);tg.gain.exponentialRampToValueAtTime(.055,now+.145);tg.gain.exponentialRampToValueAtTime(.0001,now+.24);tap.connect(tg);tg.connect(ctx.destination);tap.start(now+.13);tap.stop(now+.25);
-}
-
-
+function openGameOptions(){const panel=$('gameOptionsPanel');if(!panel)return;syncGameMusicControls();panel.classList.remove('hidden');}
+function closeGameOptions(){$('gameOptionsPanel')?.classList.add('hidden');}
+function playDrawSound(){playSoundFile(soundFiles.draw,.82);}
 function playCardEventSound(card){
  if(!musicEnabled||!card)return;
- const ctx=ensureAudio();if(!ctx)return;if(ctx.state==='suspended')ctx.resume();
- const now=ctx.currentTime;
- const id=card.id||'';
  const isGhost=card.kind==='ghost'||card.type==='ผีอันตราย';
- // Ghost: short eerie rising/falling scream made from filtered noise and wavering tones.
- if(isGhost){
-  const duration=.95;
-  const buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*duration),ctx.sampleRate);
-  const data=buffer.getChannelData(0);
-  for(let i=0;i<data.length;i++){
-   const t=i/data.length;
-   const envelope=Math.pow(Math.sin(Math.PI*t),1.3)*(1-t*.28);
-   data[i]=(Math.random()*2-1)*envelope;
-  }
-  const noise=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
-  noise.buffer=buffer;filter.type='bandpass';filter.Q.value=2.4;
-  filter.frequency.setValueAtTime(520,now);filter.frequency.exponentialRampToValueAtTime(1450,now+.22);filter.frequency.exponentialRampToValueAtTime(620,now+.72);
-  gain.gain.setValueAtTime(.0001,now);gain.gain.linearRampToValueAtTime(.20,now+.12);gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
-  noise.connect(filter);filter.connect(gain);gain.connect(ctx.destination);noise.start(now);noise.stop(now+duration);
-  const scream=ctx.createOscillator(),sg=ctx.createGain();scream.type='sawtooth';
-  scream.frequency.setValueAtTime(470,now);scream.frequency.exponentialRampToValueAtTime(1080,now+.18);scream.frequency.exponentialRampToValueAtTime(390,now+.62);
-  sg.gain.setValueAtTime(.0001,now);sg.gain.linearRampToValueAtTime(.055,now+.1);sg.gain.exponentialRampToValueAtTime(.0001,now+.68);
-  scream.connect(sg);sg.connect(ctx.destination);scream.start(now);scream.stop(now+.7);
-  return;
- }
- // Siamese cat: a short two-part meow synthesized from a voiced, bending tone.
- if(id==='cat'||/แมว/.test(card.name||'')){
-  [0,.24].forEach((offset,i)=>{
-   const osc=ctx.createOscillator(),gain=ctx.createGain(),filter=ctx.createBiquadFilter();
-   osc.type='triangle';filter.type='lowpass';filter.frequency.value=1900;
-   osc.frequency.setValueAtTime(i?690:840,now+offset);
-   osc.frequency.exponentialRampToValueAtTime(i?410:520,now+offset+.19);
-   gain.gain.setValueAtTime(.0001,now+offset);gain.gain.linearRampToValueAtTime(.11,now+offset+.035);gain.gain.exponentialRampToValueAtTime(.0001,now+offset+.22);
-   osc.connect(filter);filter.connect(gain);gain.connect(ctx.destination);osc.start(now+offset);osc.stop(now+offset+.23);
-  });
-  return;
- }
- // Helper cards: a gentle magical sparkle.
- if(card.type==='ตัวช่วย'||['key','lantern','lucky-flower'].includes(id)){
-  [0,.09,.19].forEach((offset,i)=>{
-   const osc=ctx.createOscillator(),gain=ctx.createGain();
-   osc.type='sine';osc.frequency.setValueAtTime([1046.5,1318.5,1568][i],now+offset);
-   gain.gain.setValueAtTime(.0001,now+offset);gain.gain.linearRampToValueAtTime(.065,now+offset+.018);gain.gain.exponentialRampToValueAtTime(.0001,now+offset+.32);
-   osc.connect(gain);gain.connect(ctx.destination);osc.start(now+offset);osc.stop(now+offset+.33);
-  });
- }
+ if(isGhost){playSoundFile(soundFiles.ghost,.9);return;}
+ if(['ตัวช่วย','ช่วยเหลือ','ป้องกัน','ลางบอกเหตุ'].includes(card.type))playSoundFile(soundFiles.helper,.82);
 }
 
 function updateSoundForScreen(){
- // Keep the same gentle background music running in both lobby and gameplay.
- if(musicEnabled && audioCtx?.state==='suspended')audioCtx.resume();
+ // Keep the uploaded ambience track running in both lobby and gameplay.
+ if(musicEnabled && ambientAudio && ambientAudio.paused)ambientAudio.play().catch(()=>{});
 }
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -484,7 +417,6 @@ function renderOnline(){
 }
 let revealTimer=null;
 function showReveal(draw,isGhost){
- playDrawSound();
  const c=draw.card||byId('heart');clearTimeout(revealTimer);show('drawReveal');
  const ownDraw=mode==='bot'?draw.playerId==='human':draw.playerId===socket?.id;
  $('revealTitle').textContent=ownDraw?'คุณจั่วได้':`${draw.playerName||'ผู้เล่น'} จั่วได้`;

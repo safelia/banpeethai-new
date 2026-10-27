@@ -113,3 +113,8 @@ Syntax checked with Node.js; full live multiplayer gameplay still requires deplo
 
 ## v2.3.15 — Seat centers recalibrated
 The five player markers are centered on the five chair cushions in the game background, with matching stage-relative anchors for desktop and mobile. See `PATCH-v2.3.15-SEAT-CENTERS-RECALIBRATED.txt`.
+
+
+## Custom audio (v2.3.16)
+
+The game uses the supplied audio files in `public/assets/audio/`: `draw-card.mp3` when drawing, `ghost-encounter.mp3` when a ghost is drawn, `helper-card.mp3` for helper/protection/omen cards, and `ambient-loop.mp3` as low-volume looping ambience. Use the in-game sound toggle to enable or disable them.

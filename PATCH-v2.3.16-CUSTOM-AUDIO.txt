@@ -1,0 +1,12 @@
+BanPeeThai v2.3.16 — CUSTOM AUDIO
+
+Changes:
+- Replaced the previous synthesized draw-card sound with the uploaded หยิบไพ่.mp3.
+- Replaced the previous synthesized ghost encounter sound with เจอผี.mp3.
+- Replaced the previous synthesized helper-card chime with ตัวช่วย(1).mp3 for helper, protection, and omen cards.
+- Replaced synthesized background music with คลอๆ.mp3, looping at reduced volume while sound is enabled.
+- Removed the duplicate draw sound that played again when the reveal panel opened.
+- Sound toggle controls both uploaded sound effects and the ambient track.
+- Audio assets are stored in public/assets/audio/ and referenced with relative web paths.
+
+Validation: JavaScript syntax check passed with node --check. Browser-based playtest was not available in this environment.
