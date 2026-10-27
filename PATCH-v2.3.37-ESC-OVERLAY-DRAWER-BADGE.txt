@@ -1,0 +1,5 @@
+v2.3.37 fixes:
+- ESC pause menu uses a maximum modal stacking layer and disables pointer interaction with the game underneath while open, preventing draw/end-turn hotspots from being clicked and preventing the gold hotspot frame from appearing over the dialog.
+- Card reveal adds a dedicated fixed drawer-name badge independent of card art. It displays the drawing player's name even when full-art card CSS hides the regular reveal title.
+- Validated public/app.js syntax with node --check.
+- Card definitions in cards.json were reviewed against the card ids referenced by app.js; full end-to-end game behavior still requires browser testing.

@@ -112,8 +112,8 @@ function toast(msg){ const el=$('toast'); if(!el)return; el.textContent=msg; el.
   if(lastOmenRound!==n){lastOmenRound=n;el.classList.remove('omen-pulse');void el.offsetWidth;el.classList.add('omen-pulse');}
  }
 
-function show(id){$(id)?.classList.remove('hidden');}
-function hide(id){$(id)?.classList.add('hidden');}
+function show(id){$(id)?.classList.remove('hidden');if(id==='gameEscapeMenu'){document.body.classList.add('escape-menu-open');}}
+function hide(id){$(id)?.classList.add('hidden');if(id==='gameEscapeMenu'){document.body.classList.remove('escape-menu-open');}}
 function imgUrl(c){return c?.image || '/assets/cards/card-01.jpg';}
 function renderCardTile(c){
  if(c?.fullArt) return `<article class="card card-parchment finished-ghost-card" title="${esc(c.name)}"><img class="finished-ghost-art" src="${esc(imgUrl(c))}" alt="${esc(c.name)} — ${esc(c.desc)}"></article>`;
@@ -453,6 +453,7 @@ let revealTimer=null, revealDelayTimer=null; function showReveal(draw,isGhost){c
  $('revealTitle').textContent=`${drawerName} จั่วไพ่ได้`; 
  $('revealTitle').setAttribute('aria-label',`ผู้จั่วไพ่: ${drawerName}`);
  const reveal=$('drawReveal');
+ let drawerBadge=$('revealDrawerBadge');if(!drawerBadge){drawerBadge=document.createElement('div');drawerBadge.id='revealDrawerBadge';drawerBadge.className='reveal-drawer-badge';reveal.appendChild(drawerBadge);}drawerBadge.textContent=`🃏 ${drawerName} จั่วได้`;
  reveal.classList.toggle('finished-ghost-reveal',!!c.fullArt);
  reveal.classList.toggle('single-full-card-reveal',!!c.fullArt&&!isGhost);
  reveal.classList.toggle('instant-danger-reveal',!!c.instantDanger);

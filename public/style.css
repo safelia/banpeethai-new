@@ -2321,3 +2321,12 @@ footer small{color:#8d8183;}
 .game-escape-card p{margin:0 0 20px;color:#cdb8b2}
 .game-escape-card button{display:block;width:100%;margin-top:10px;min-height:46px}
 #drawReveal:not(.hidden) #revealTitle{display:block!important;margin:8px 0 14px!important;padding:10px 14px!important;border:1px solid #e0ad63!important;border-radius:12px!important;background:linear-gradient(100deg,#351215,#170d0e)!important;color:#fff0c9!important;font-size:clamp(18px,3.2vw,26px)!important;font-weight:800!important;text-align:center!important;text-shadow:0 2px 8px #000!important;box-shadow:0 0 18px #a52b3744!important}
+
+
+/* v2.3.37: hard modal layer for ESC and drawer name over full-art cards */
+.game-escape-menu{z-index:2147483000!important;isolation:isolate!important;backdrop-filter:blur(8px)!important;background:rgba(4,2,3,.94)!important;pointer-events:auto!important}
+.game-escape-menu .game-escape-card{position:relative;z-index:1}
+body.escape-menu-open #gameScreen{pointer-events:none!important}
+body.escape-menu-open #gameScreen button,body.escape-menu-open #gameScreen [role=button]{pointer-events:none!important}
+.reveal-drawer-badge{position:fixed;z-index:2147482000;left:50%;top:clamp(12px,4vh,38px);transform:translateX(-50%);max-width:min(92vw,520px);padding:10px 20px;border:1px solid #b83a43;border-radius:999px;background:linear-gradient(100deg,#3b1018f5,#16090df5);color:#fff0d7;font-size:clamp(16px,2.8vw,24px);font-weight:900;text-align:center;box-shadow:0 6px 26px #000d;text-shadow:0 2px 5px #000;pointer-events:none;white-space:normal}
+#drawReveal.hidden #revealDrawerBadge{display:none}
