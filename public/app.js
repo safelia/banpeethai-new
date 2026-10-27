@@ -7,7 +7,7 @@ let localGame = null, toastTimer = null, lastRevealToken = '', currentPlayerName
 let localDrawTimer = null, localDrawTimerKey = '', countdownInterval = null;
 const byId = id => cards.find(c => c.id === id) || {id, name:id, type:'การ์ด', desc:'', effect:'', image:''};
 const playerKeyCount = p => p?.keyCountTotal ? (Number(p.keys)||0) : (Number(p?.storedKeys ?? p?.keys)||0) + (p?.hand||[]).filter(c=>c.id==='key').length;
-let musicEnabled=false, ambientAudio=null, lobbyAudio=null, localEndTimer=null, localEndTimerKey='', screamLoopTimer=null;
+let musicEnabled=false, ambientAudio=null, lobbyAudio=null, screamAudio=null, localEndTimer=null, localEndTimerKey='', screamLoopTimer=null;
 let pendingCardSoundTimer=null;
  let targetSelectionOpen=false, lastOmenRound=-1;
 const soundFiles={
@@ -17,20 +17,29 @@ const soundFiles={
  click:'/assets/audio/button-click.mp3?v=2.3.33',
  ambient:'/assets/audio/ambient-loop.mp3?v=2.3.33',
  lobby:'/assets/audio/lobby-music.mp3?v=2.3.33',
- scream:'/assets/audio/periodic-scream.mp3?v=2.3.33'
+ scream:'/assets/audio/periodic-scream.mp3?v=2.3.34'
 };
 function playSoundFile(path,volume=0.8){
  if(!musicEnabled)return;
  try{
   const audio=new Audio(path);audio.preload='auto';audio.volume=Math.min(volume,0.52);
+  if(path===soundFiles.scream){screamAudio=audio;audio.volume=Math.min(volume,0.096);}
   const promise=audio.play();if(promise&&typeof promise.catch==='function')promise.catch(()=>{});
-  audio.addEventListener('ended',()=>{audio.src='';},{once:true});
+  audio.addEventListener('ended',()=>{if(audio===screamAudio)screamAudio=null;audio.src='';},{once:true});
  }catch(_){/* Audio playback may be unavailable in a restricted browser. */}
 }
 function startAmbient(){
  musicEnabled=true;
- if(screamLoopTimer)clearInterval(screamLoopTimer);
- screamLoopTimer=setInterval(()=>{if(musicEnabled)playSoundFile(soundFiles.scream,.48);},5000);
+ if(screamLoopTimer)clearTimeout(screamLoopTimer);
+ const scheduleRareScream=()=>{
+  if(!musicEnabled){screamLoopTimer=null;return;}
+  const delay=45000+Math.random()*30000;
+  screamLoopTimer=setTimeout(()=>{
+   if(musicEnabled)playSoundFile(soundFiles.scream,.096);
+   scheduleRareScream();
+  },delay);
+ };
+ scheduleRareScream();
  updateSoundForScreen();
  const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: เปิด';btn.setAttribute('aria-pressed','true');}
  const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: เปิด';gameBtn.setAttribute('aria-pressed','true');}
@@ -38,8 +47,9 @@ function startAmbient(){
 }
 function stopAmbient(){
  musicEnabled=false;
- if(screamLoopTimer){clearInterval(screamLoopTimer);screamLoopTimer=null;}
- for(const audio of [ambientAudio,lobbyAudio]){if(audio){audio.pause();audio.currentTime=0;}}
+ if(screamLoopTimer){clearTimeout(screamLoopTimer);screamLoopTimer=null;}
+ for(const audio of [ambientAudio,lobbyAudio,screamAudio]){if(audio){audio.pause();audio.currentTime=0;audio.src='';}}
+  screamAudio=null;
  const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: ปิด';btn.setAttribute('aria-pressed','false');}
  const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: ปิด';gameBtn.setAttribute('aria-pressed','false');}
  syncGameMusicControls();
@@ -67,7 +77,8 @@ function scheduleCardEventSound(card){
 function updateSoundForScreen(){
  const inGame=!!$('gameScreen')&&!$('gameScreen').classList.contains('hidden');
  if(!musicEnabled){
-  for(const audio of [ambientAudio,lobbyAudio])if(audio&&!audio.paused){audio.pause();audio.currentTime=0;}
+  for(const audio of [ambientAudio,lobbyAudio,screamAudio])if(audio&&!audio.paused){audio.pause();audio.currentTime=0;audio.src='';}
+   screamAudio=null;
   return;
  }
  try{
@@ -435,7 +446,7 @@ function renderOnline(){
  else hide('gameOver');
 }
 let revealTimer=null, revealDelayTimer=null; function showReveal(draw,isGhost){clearTimeout(revealDelayTimer);revealDelayTimer=setTimeout(()=>showRevealNow(draw,isGhost),1000);} function showRevealNow(draw,isGhost){
- const c=draw.card||byId('heart');clearTimeout(revealTimer);playDrawSound();scheduleCardEventSound({...c,kind:isGhost?'ghost':c.kind});show('drawReveal');
+ const c=draw.card||byId('heart');clearTimeout(revealTimer);scheduleCardEventSound({...c,kind:isGhost?'ghost':c.kind});show('drawReveal');
  const ownDraw=mode==='bot'?draw.playerId==='human':draw.playerId===socket?.id;
  $('revealTitle').textContent=`${draw.playerName||(ownDraw?'คุณ':'ผู้เล่น')} จั่วได้`;
  const reveal=$('drawReveal');
@@ -619,8 +630,8 @@ function showEffectCard(message,card){
 }
 
 function draw(){
- if(mode==='online'){if(!onlineRoom||!socket?.connected)return toast('ยังไม่ได้เชื่อมต่อห้อง');socket.emit('draw-card',{room:onlineRoom});return;}
- if(!localGame)return toast('เริ่มเกมก่อน');localDraw(localGame.players[0]);
+ if(mode==='online'){if(!onlineRoom||!socket?.connected)return toast('ยังไม่ได้เชื่อมต่อห้อง');playDrawSound();socket.emit('draw-card',{room:onlineRoom});return;}
+ if(!localGame)return toast('เริ่มเกมก่อน');playDrawSound();localDraw(localGame.players[0]);
 }
 function escape(){
  if(mode==='online'){const me=onlineState?.players?.find(x=>x.id===socket?.id);if(!me||!onlineState||onlineState.over||onlineState.players[onlineState.turn]?.id!==socket?.id||onlineState.pending)return toast('ยังไม่ใช่เทิร์นของคุณ');if(playerKeyCount(me)<3)return toast(`กุญแจยังไม่ครบ (${playerKeyCount(me)}/3) ต้องสะสมให้ครบ 3 ดอกก่อนจึงจะออกได้`);socket?.emit('escape-room',{room:onlineRoom});return;}
