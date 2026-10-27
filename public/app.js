@@ -11,12 +11,12 @@ let musicEnabled=false, ambientAudio=null, lobbyAudio=null, localEndTimer=null, 
 let pendingCardSoundTimer=null;
  let targetSelectionOpen=false, lastOmenRound=-1;
 const soundFiles={
- draw:'/assets/audio/draw-card.mp3?v=2.3.23',
- ghost:'/assets/audio/ghost-encounter.mp3?v=2.3.23',
- helper:'/assets/audio/helper-card.mp3?v=2.3.23',
- click:'/assets/audio/button-click.mp3?v=2.3.23',
- ambient:'/assets/audio/ambient-loop.mp3?v=2.3.23',
- lobby:'/assets/audio/lobby-music.mp3?v=2.3.23'
+ draw:'/assets/audio/draw-card.mp3?v=2.3.25',
+ ghost:'/assets/audio/ghost-encounter.mp3?v=2.3.25',
+ helper:'/assets/audio/helper-card.mp3?v=2.3.25',
+ click:'/assets/audio/button-click.mp3?v=2.3.25',
+ ambient:'/assets/audio/ambient-loop.mp3?v=2.3.25',
+ lobby:'/assets/audio/lobby-music.mp3?v=2.3.25'
 };
 function playSoundFile(path,volume=0.8){
  if(!musicEnabled)return;
