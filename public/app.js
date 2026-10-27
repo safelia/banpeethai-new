@@ -28,6 +28,8 @@ function playSoundFile(path,volume=0.8){
 }
 function startAmbient(){
  musicEnabled=true;
+ if(screamLoopTimer)clearInterval(screamLoopTimer);
+ screamLoopTimer=setInterval(()=>{if(musicEnabled)playSoundFile(soundFiles.scream,.48);},5000);
  updateSoundForScreen();
  const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: เปิด';btn.setAttribute('aria-pressed','true');}
  const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: เปิด';gameBtn.setAttribute('aria-pressed','true');}
@@ -35,6 +37,7 @@ function startAmbient(){
 }
 function stopAmbient(){
  musicEnabled=false;
+ if(screamLoopTimer){clearInterval(screamLoopTimer);screamLoopTimer=null;}
  for(const audio of [ambientAudio,lobbyAudio]){if(audio){audio.pause();audio.currentTime=0;}}
  const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: ปิด';btn.setAttribute('aria-pressed','false');}
  const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: ปิด';gameBtn.setAttribute('aria-pressed','false');}
@@ -430,11 +433,10 @@ function renderOnline(){
  if(s.over){show('gameOver');$('resultTitle').textContent=s.winner===socket?.id?'คุณหนีออกมาได้!':s.winner?`${s.players.find(p=>p.id===s.winner)?.name||'ผู้เล่น'} ชนะ!`:'เกมจบแล้ว';$('resultText').textContent=s.logs?.[0]||'การผจญภัยสิ้นสุดลง';}
  else hide('gameOver');
 }
-let revealTimer=null;
-function showReveal(draw,isGhost){
+let revealTimer=null, revealDelayTimer=null; function showReveal(draw,isGhost){clearTimeout(revealDelayTimer);revealDelayTimer=setTimeout(()=>showRevealNow(draw,isGhost),1000);} function showRevealNow(draw,isGhost){
  const c=draw.card||byId('heart');clearTimeout(revealTimer);show('drawReveal');
  const ownDraw=mode==='bot'?draw.playerId==='human':draw.playerId===socket?.id;
- $('revealTitle').textContent=ownDraw?'คุณจั่วได้':`${draw.playerName||'ผู้เล่น'} จั่วได้`;
+ $('revealTitle').textContent=`${draw.playerName||(ownDraw?'คุณ':'ผู้เล่น')} จั่วได้`;
  const reveal=$('drawReveal');
  reveal.classList.toggle('finished-ghost-reveal',!!c.fullArt);
  reveal.classList.toggle('single-full-card-reveal',!!c.fullArt&&!isGhost);

@@ -1,0 +1,6 @@
+BanPeeThai v2.3.30
+- Adds uploaded horror scream SFX over background music every 5 seconds while sound is enabled.
+- Adds short gameplay rules to the start-mode dialog.
+- Delays drawn-card reveal by 1 second and identifies the drawing player by name.
+- Adds subtle drifting smoke atmosphere to the lobby.
+- Existing lobby/game music and other card SFX retained.
