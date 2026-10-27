@@ -1,0 +1,4 @@
+v2.3.39 changes
+- Fix ESC menu click handling by preserving pointer events on the menu while blocking background controls.
+- Defer the table discard preview until the central card reveal closes, then restore it.
+- Remove gold Thai edge ornaments from the gameplay screen.

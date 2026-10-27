@@ -404,6 +404,8 @@ function updateDrawCountdown(){
 if(!countdownInterval)countdownInterval=setInterval(updateDrawCountdown,1000);
 function renderLastDrawPreview(lastDraw,fallback){
  const target=$('discardTop');if(!target)return;
+ // Hold the table-side discard preview until the central reveal has finished.
+ if(!$('drawReveal')?.classList.contains('hidden')){target.classList.add('hidden');return;}
  const card=lastDraw?.card||fallback||null;
  target.classList.remove('hidden');
  if(!card){
@@ -454,7 +456,13 @@ function renderOnline(){
  if(s.over){show('gameOver');$('resultTitle').textContent=s.winner===socket?.id?'คุณหนีออกมาได้!':s.winner?`${s.players.find(p=>p.id===s.winner)?.name||'ผู้เล่น'} ชนะ!`:'เกมจบแล้ว';$('resultText').textContent=s.logs?.[0]||'การผจญภัยสิ้นสุดลง';}
  else hide('gameOver');
 }
-let revealTimer=null, revealDelayTimer=null; function showReveal(draw,isGhost){clearTimeout(revealDelayTimer);revealDelayTimer=setTimeout(()=>showRevealNow(draw,isGhost),1000);} function showRevealNow(draw,isGhost){
+let revealTimer=null, revealDelayTimer=null;
+function closeRevealAndShowDiscard(){
+ hide('drawReveal');
+ const g=currentState();
+ if(g){renderLastDrawPreview(g.lastDraw,Array.isArray(g.discard)?g.discard[g.discard.length-1]:g.discard);}
+}
+ function showReveal(draw,isGhost){clearTimeout(revealDelayTimer);revealDelayTimer=setTimeout(()=>showRevealNow(draw,isGhost),1000);} function showRevealNow(draw,isGhost){
  const c=draw.card||byId('heart');clearTimeout(revealTimer);scheduleCardEventSound({...c,kind:isGhost?'ghost':c.kind});show('drawReveal');
  const ownDraw=mode==='bot'?draw.playerId==='human':draw.playerId===socket?.id;
  const playerFromState=(mode==='online'?(onlineState?.players||[]):(localGame?.players||[])).find(p=>p.id===draw.playerId);
@@ -473,11 +481,11 @@ let revealTimer=null, revealDelayTimer=null; function showReveal(draw,isGhost){c
  const actions=$('revealActions');actions.innerHTML='';
  if(c.instantDanger){
   // Finished dangerous-ghost artwork already contains its title and rules: show only that single card.
-  clearTimeout(revealTimer);revealTimer=setTimeout(()=>hide('drawReveal'),4500);return;
+  clearTimeout(revealTimer);revealTimer=setTimeout(closeRevealAndShowDiscard,4500);return;
  }
  if(c.fullArt && !isGhost){
   $('revealType').textContent='';$('revealName').textContent='';$('revealDesc').textContent='';$('revealEffect').textContent='';
-  clearTimeout(revealTimer);revealTimer=setTimeout(()=>hide('drawReveal'),4000);return;
+  clearTimeout(revealTimer);revealTimer=setTimeout(closeRevealAndShowDiscard,4000);return;
  }
  if(isGhost && ownDraw){
   if(mode==='bot'){
@@ -487,16 +495,16 @@ let revealTimer=null, revealDelayTimer=null; function showReveal(draw,isGhost){c
   }else showGhostChoicesOnline(c);
  }else if(isGhost && mode==='online' && onlineState?.pending){
   actions.innerHTML='<p class="reveal-warning">👻 ผู้เล่นกำลังเลือกว่าจะใช้เครื่องรางหรือไม่</p><span class="reveal-countdown">การ์ดจะแสดง 3 วินาที</span>';
-  revealTimer=setTimeout(()=>hide('drawReveal'),3000);
+  revealTimer=setTimeout(closeRevealAndShowDiscard,3000);
  }else if(mode==='bot'&&!ownDraw){
   actions.innerHTML='<p class="reveal-countdown">การ์ดที่ผู้เล่นได้รับ • เล่นต่อในอีก 3 วินาที</p>';
-  revealTimer=setTimeout(()=>hide('drawReveal'),3000);
+  revealTimer=setTimeout(closeRevealAndShowDiscard,3000);
  }else if(mode==='online'){
   actions.innerHTML='<p class="reveal-countdown">การ์ดที่จั่วได้ • เล่นต่อในอีก 3 วินาที</p>';
-  revealTimer=setTimeout(()=>hide('drawReveal'),3000);
+  revealTimer=setTimeout(closeRevealAndShowDiscard,3000);
  }else{
   actions.innerHTML=`<button class="primary" id="confirmReveal">กลับสู่โต๊ะ</button>`;
-  $('confirmReveal').addEventListener('click',()=>hide('drawReveal'));
+  $('confirmReveal').addEventListener('click',closeRevealAndShowDiscard);
  }
 }
 function showGhostChoicesOnline(card){
@@ -752,8 +760,8 @@ function init(){
       else {closeGameOptions();show('gameEscapeMenu');}
     } else closeGameOptions();
   });
-  $('escapeBackToGame')?.addEventListener('click',()=>hide('gameEscapeMenu'));
-  $('escapeLeaveRoom')?.addEventListener('click',()=>{hide('gameEscapeMenu');leaveGame();});
+  $('escapeBackToGame')?.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();hide('gameEscapeMenu');});
+  $('escapeLeaveRoom')?.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();leaveGame();});
   $('gameEscapeMenu')?.addEventListener('click',e=>{if(e.target===$('gameEscapeMenu'))hide('gameEscapeMenu');});
 
 

@@ -2326,10 +2326,14 @@ footer small{color:#8d8183;}
 /* v2.3.37: hard modal layer for ESC and drawer name over full-art cards */
 .game-escape-menu{z-index:2147483000!important;isolation:isolate!important;backdrop-filter:blur(8px)!important;background:rgba(4,2,3,.94)!important;pointer-events:auto!important}
 .game-escape-menu .game-escape-card{position:relative;z-index:1}
-body.escape-menu-open #gameScreen{pointer-events:none!important}
-body.escape-menu-open #gameScreen button,body.escape-menu-open #gameScreen [role=button]{pointer-events:none!important}
+body.escape-menu-open #gameScreen > :not(#gameEscapeMenu){pointer-events:none!important}
+body.escape-menu-open #gameEscapeMenu,body.escape-menu-open #gameEscapeMenu *{pointer-events:auto!important}
+body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen .game-layout{pointer-events:none!important}
 .reveal-drawer-badge{position:fixed;z-index:2147482000;left:50%;top:clamp(12px,4vh,38px);transform:translateX(-50%);max-width:min(92vw,520px);padding:10px 20px;border:1px solid #b83a43;border-radius:999px;background:linear-gradient(100deg,#3b1018f5,#16090df5);color:#fff0d7;font-size:clamp(16px,2.8vw,24px);font-weight:900;text-align:center;box-shadow:0 6px 26px #000d;text-shadow:0 2px 5px #000;pointer-events:none;white-space:normal}
 #drawReveal.hidden #revealDrawerBadge{display:none}
 
 /* v2.3.38: single drawer name only; card preview is inspectable during any turn. */
 #drawReveal #revealDrawerBadge{display:none!important}
+
+/* v2.3.39: remove gold side ornament rails from the gameplay view. */
+#gameScreen:not(.hidden) .thai-edge{display:none!important;background-image:none!important;opacity:0!important;visibility:hidden!important}
