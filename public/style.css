@@ -1908,3 +1908,19 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
  #gameScreen:not(.hidden) .players-ring .player-row.seat-4{left:57.0%!important;top:48.5%!important;transform:translate(-50%,-50%)!important}
  #gameScreen:not(.hidden) .players-ring .player-row.seat-5{left:68.1%!important;top:57.2%!important;transform:translate(-50%,-50%)!important}
 }
+
+/* v2.3.15 — chair centers calibrated against the exact screenshot.
+   Seat order: outer-left, inner-left, top-center, inner-right, outer-right.
+   Anchors are centered on the chair cushions, relative to the same 16:9 stage. */
+#gameScreen:not(.hidden) .players-ring .player-row.seat-1{left:16.0%!important;top:52.6%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+#gameScreen:not(.hidden) .players-ring .player-row.seat-2{left:22.2%!important;top:41.4%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+#gameScreen:not(.hidden) .players-ring .player-row.seat-3{left:49.0%!important;top:23.6%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+#gameScreen:not(.hidden) .players-ring .player-row.seat-4{left:75.2%!important;top:41.4%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+#gameScreen:not(.hidden) .players-ring .player-row.seat-5{left:78.4%!important;top:51.1%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .players-ring .player-row.seat-1{left:16.0%!important;top:52.6%!important}
+ #gameScreen:not(.hidden) .players-ring .player-row.seat-2{left:22.2%!important;top:41.4%!important}
+ #gameScreen:not(.hidden) .players-ring .player-row.seat-3{left:49.0%!important;top:23.6%!important}
+ #gameScreen:not(.hidden) .players-ring .player-row.seat-4{left:75.2%!important;top:41.4%!important}
+ #gameScreen:not(.hidden) .players-ring .player-row.seat-5{left:78.4%!important;top:51.1%!important}
+}

@@ -110,3 +110,6 @@ Syntax checked with Node.js; full live multiplayer gameplay still requires deplo
 - Added seven finished-art action cards using the provided full-card illustrations.
 - Action card artwork is shown as a single complete card in reveal and hand views.
 - Action card effects use the existing turn/target/protection game logic.
+
+## v2.3.15 — Seat centers recalibrated
+The five player markers are centered on the five chair cushions in the game background, with matching stage-relative anchors for desktop and mobile. See `PATCH-v2.3.15-SEAT-CENTERS-RECALIBRATED.txt`.

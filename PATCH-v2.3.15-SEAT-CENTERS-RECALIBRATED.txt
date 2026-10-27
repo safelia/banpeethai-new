@@ -1,0 +1,7 @@
+BanPeeThai v2.3.15 — Seat centers recalibrated
+
+- Recalibrated all five player badge centers against the actual game background and the user's latest screenshot.
+- Seat order: outer-left, inner-left, top-center, inner-right, outer-right.
+- Applied the same stage-relative anchors at desktop and mobile breakpoints so viewport resizing does not restore the previous incorrect positions.
+- Visual QA: overlaid proposed badge centers on the user's screenshot and checked all five centers against the chair cushions.
+- Static QA: JavaScript syntax and ZIP integrity checked before packaging.
