@@ -1,0 +1,10 @@
+บ้านผีไทย v2.3.22 — LOBBY SETUP FLOW
+
+- Replaced the single mixed setup dialog with a two-choice entry screen: เล่นกับบอท / เล่นออนไลน์กับเพื่อน.
+- Bot setup now has a player-name field, 2/3/4/5 player count buttons, Start Game, and Back.
+- Online setup has a player-name field, Create Room, room-code entry, Join Room, and Back.
+- After creating/joining a room, a separate room popup shows the room code, connected player names, copy-code action, Start Game (host only), and Back.
+- Back from a room emits leave-room to avoid leaving a stale lobby membership.
+- Preserved the existing game engine and multiplayer socket flow.
+
+Validation: JavaScript syntax check passed; ZIP integrity check performed. Live multiplayer/browser playtest was not available in this build environment.

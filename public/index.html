@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#211523">
-<title>บ้านผีไทย — Thai Spirit Card Game v2.3.21</title>
-<link rel="stylesheet" href="/style.css?v=2.3.19-mobile-bg-audio">
+<title>บ้านผีไทย — Thai Spirit Card Game v2.3.22</title>
+<link rel="stylesheet" href="/style.css?v=2.3.22-lobby-flow">
 </head>
 <body>
 <div class="ambient"></div>
@@ -49,7 +49,12 @@
 </section>
 <footer><span>⌂ บ้านผีไทย</span><small>สร้างด้วยความรักในตำนานพื้นบ้านไทย • เกมต้นฉบับแฟนตาซี</small></footer>
 </main>
-<div class="modal-backdrop hidden" id="setupModal"><div class="modal"><button class="close" data-close="setupModal">×</button><span class="eyebrow">เตรียมตัวก่อนเข้าบ้าน</span><h2>เริ่มการผจญภัย</h2><label>ชื่อผู้เล่น<input id="playerName" maxlength="18" value="นักสำรวจ"></label><label>รูปแบบการเล่น<select id="mode"><option value="bot">เล่นกับบอท</option><option value="online">เล่นออนไลน์กับเพื่อน</option></select></label><div id="botOptions"><label>จำนวนผู้เล่นรวม<select id="playerCount"><option value="2">2 คน</option><option value="3" selected>3 คน</option><option value="4">4 คน</option><option value="5">5 คน</option></select></label></div><div id="onlineOptions" class="hidden"><div class="online-choice"><button type="button" class="secondary full" id="createRoomBtn">🏮 สร้างห้องใหม่</button><p class="muted">หรือเข้าห้องที่เพื่อนสร้างไว้</p><label>รหัสห้อง<input id="joinRoomCode" maxlength="5" placeholder="เช่น A7K2Q" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" inputmode="text" enterkeyhint="go"></label><button type="button" class="secondary full" id="joinRoomBtn">เข้าร่วมห้อง</button></div><div id="roomLobby" class="hidden"><h3>รหัสห้องของคุณ: <strong id="createdRoomCode"></strong></h3><button type="button" class="secondary" id="copyRoomCode">คัดลอกรหัสห้อง</button><p id="lobbyPlayers">รอผู้เล่น...</p><button type="button" class="primary full" id="startOnlineGame">เริ่มเกม (เจ้าของห้อง)</button></div></div><button class="primary full" id="startGame">เข้าบ้านผีไทย →</button></div></div>
+<div class="modal-backdrop hidden" id="setupModal"><div class="modal setup-flow-modal"><button class="close" data-close="setupModal">×</button>
+ <section id="setupChoiceStep" class="setup-step"><span class="eyebrow">เตรียมตัวก่อนเข้าบ้าน</span><h2>เริ่มการผจญภัย</h2><p class="muted">เลือกวิธีเล่นก่อนตั้งค่าผู้เล่น</p><button type="button" class="primary full setup-choice-btn" id="chooseBotMode">🎴 เล่นกับบอท</button><button type="button" class="secondary full setup-choice-btn" id="chooseOnlineMode">🌐 เล่นออนไลน์กับเพื่อน</button></section>
+ <section id="setupBotStep" class="setup-step hidden"><button type="button" class="setup-back" data-setup-back="setupChoiceStep">← ย้อนกลับ</button><span class="eyebrow">เล่นคนเดียวกับวิญญาณจำลอง</span><h2>เล่นกับบอท</h2><label>ชื่อผู้เล่น<input id="playerName" maxlength="18" value="นักสำรวจ" placeholder="ตั้งชื่อของคุณ"></label><label>จำนวนผู้เล่น</label><div class="count-buttons" id="playerCountButtons"><button type="button" data-count="2">2</button><button type="button" data-count="3" class="selected">3</button><button type="button" data-count="4">4</button><button type="button" data-count="5">5</button></div><select id="playerCount" class="visually-hidden-select" aria-label="จำนวนผู้เล่น"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select><button type="button" class="primary full setup-submit" id="startGame">เริ่มเกม →</button></section>
+ <section id="setupOnlineStep" class="setup-step hidden"><button type="button" class="setup-back" data-setup-back="setupChoiceStep">← ย้อนกลับ</button><span class="eyebrow">เล่นกับเพื่อนผ่านอินเทอร์เน็ตหรือ Wi-Fi</span><h2>เล่นออนไลน์</h2><label>ชื่อผู้เล่น<input id="onlinePlayerName" maxlength="18" value="นักสำรวจ" placeholder="ตั้งชื่อของคุณ"></label><button type="button" class="primary full setup-submit" id="createRoomBtn">🏮 สร้างห้อง</button><div class="setup-divider"><span>หรือใส่โค้ดห้อง</span></div><label>โค้ดห้อง<input id="joinRoomCode" maxlength="5" placeholder="เช่น A7K2Q" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" inputmode="text" enterkeyhint="go"></label><button type="button" class="secondary full" id="joinRoomBtn">เข้าร่วมห้อง →</button></section>
+ <section id="roomLobby" class="setup-step hidden"><button type="button" class="setup-back" id="backFromRoom">← ย้อนกลับ</button><span class="eyebrow">ห้องพร้อมแล้ว</span><h2>รอเพื่อนเข้าร่วม</h2><div class="room-code-panel"><small>โค้ดห้องของคุณ</small><strong id="createdRoomCode"></strong><button type="button" class="secondary" id="copyRoomCode">คัดลอกรหัส</button></div><h3>ผู้เล่นในห้อง</h3><p id="lobbyPlayers">รอผู้เล่น...</p><button type="button" class="primary full setup-submit" id="startOnlineGame">เริ่มเกม</button><p class="muted" id="roomHostNote">เจ้าของห้องเป็นผู้เริ่มเกมได้ เมื่อมีผู้เล่นอย่างน้อย 2 คน</p></section>
+ </div></div>
 <div class="game-overlay hidden" id="gameScreen">
   <div class="thai-edge thai-edge-left" aria-hidden="true"></div>
   <div class="thai-edge thai-edge-right" aria-hidden="true"></div>
@@ -114,5 +119,5 @@
  </section>
 </div>
 <div class="toast" id="toast"></div>
-<script src="/socket.io/socket.io.js"></script><script src="/app.js?v=2.3.19-mobile-bg-audio"></script>
+<script src="/socket.io/socket.io.js"></script><script src="/app.js?v=2.3.22-lobby-flow"></script>
 </body></html>

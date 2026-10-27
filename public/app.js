@@ -110,14 +110,11 @@ function renderCatalog(){
  const shown=cards.filter(c=>(f==='all'||c.type===f)&&`${c.name} ${c.type} ${c.desc} ${c.effect}`.toLowerCase().includes(q));
  grid.innerHTML=shown.map(c=>renderCardTile(c)).join('') || '<p class="muted">ไม่พบการ์ดที่ค้นหา</p>';
 }
-function openSetup(){show('setupModal');$('playerName').value=currentPlayerName;$('profileName').textContent=currentPlayerName;}
+function showSetupStep(id){['setupChoiceStep','setupBotStep','setupOnlineStep','roomLobby'].forEach(x=>hide(x));show(id);}
+function openSetup(){show('setupModal');$('playerName').value=currentPlayerName;$('onlinePlayerName').value=currentPlayerName;$('profileName').textContent=currentPlayerName;showSetupStep('setupChoiceStep');}
 function closeSetup(){hide('setupModal');}
-function setMode(){
- mode=$('mode').value;
- if(mode==='online'){show('onlineOptions');hide('botOptions');hide('startGame');}
- else {hide('onlineOptions');show('botOptions');show('startGame');}
-}
-function getName(){return ($('playerName').value||'นักสำรวจ').trim().slice(0,18)||'นักสำรวจ';}
+function setMode(){ /* Mode is selected through the dedicated setup steps. */ }
+function getName(){const onlineStep=!$('setupOnlineStep')?.classList.contains('hidden')||!$('roomLobby')?.classList.contains('hidden');const field=onlineStep?$('onlinePlayerName'):$('playerName');return (field?.value||'นักสำรวจ').trim().slice(0,18)||'นักสำรวจ';}
 function connectSocket(){
  if(socket?.connected)return Promise.resolve(socket);
  if(!window.io){toast('โหลดระบบออนไลน์ไม่สำเร็จ กรุณารีเฟรชหน้า');return Promise.reject(new Error('socket.io missing'));}
@@ -135,16 +132,16 @@ function connectSocket(){
 }
 function onlineError(msg){toast(msg||'ทำรายการไม่สำเร็จ');}
 async function createRoom(){
- currentPlayerName=getName();$('profileName').textContent=currentPlayerName;
+ currentPlayerName=getName();$('playerName').value=currentPlayerName;$('onlinePlayerName').value=currentPlayerName;$('profileName').textContent=currentPlayerName;
  try{await connectSocket();socket.emit('create-room',{name:currentPlayerName},res=>{
   if(!res?.ok)return onlineError(res?.error);
-  onlineRoom=res.room;isHost=true;show('roomLobby');$('createdRoomCode').textContent=onlineRoom;
+  onlineRoom=res.room;isHost=true;showSetupStep('roomLobby');$('createdRoomCode').textContent=onlineRoom;
   $('roomTag').textContent=`ห้อง ${onlineRoom}`;$('lobbyPlayers').textContent='สร้างห้องแล้ว กำลังรอเพื่อนเข้าร่วม…';
-  $('startOnlineGame').disabled=false;toast(`สร้างห้อง ${onlineRoom} แล้ว ส่งรหัสให้เพื่อนได้เลย`);
+  $('startOnlineGame').disabled=true;toast(`สร้างห้อง ${onlineRoom} แล้ว ส่งรหัสให้เพื่อนได้เลย`);
  });}catch(e){onlineError('เชื่อมต่อไม่ได้ กรุณาลองใหม่อีกครั้ง');}
 }
 async function joinRoom(){
- currentPlayerName=getName();const code=($('joinRoomCode').value||'').replace(/\\s+/g,'').toUpperCase();
+ currentPlayerName=getName();$('playerName').value=currentPlayerName;$('onlinePlayerName').value=currentPlayerName;$('profileName').textContent=currentPlayerName;const code=($('joinRoomCode').value||'').replace(/\\s+/g,'').toUpperCase();
  if(code.length<4)return toast('กรอกรหัสห้องที่เพื่อนส่งมา');
  const btn=$('joinRoomBtn');if(btn){btn.disabled=true;btn.textContent='กำลังเชื่อมต่อ…';}
  try{
@@ -152,7 +149,7 @@ async function joinRoom(){
   socket.emit('join-room',{room:code,name:currentPlayerName},res=>{
    if(btn){btn.disabled=false;btn.textContent='เข้าร่วมห้อง';}
    if(!res?.ok)return onlineError(res?.error||'เข้าห้องไม่สำเร็จ');
-   onlineRoom=res.room;isHost=false;show('roomLobby');$('createdRoomCode').textContent=onlineRoom;
+   onlineRoom=res.room;isHost=false;showSetupStep('roomLobby');$('createdRoomCode').textContent=onlineRoom;
    $('lobbyPlayers').textContent='เข้าห้องสำเร็จ กำลังรอเจ้าของห้องเริ่มเกม';$('startOnlineGame').disabled=true;
    $('roomTag').textContent=`ห้อง ${onlineRoom}`;toast('เข้าห้องแล้ว รอเจ้าของห้องเริ่มเกม');
   });
@@ -737,8 +734,12 @@ function init(){
  });
 
  $('gameSettingsHotspot')?.addEventListener('click',()=>{const n=prompt('ชื่อผู้เล่น',currentPlayerName);if(n?.trim()){currentPlayerName=n.trim().slice(0,18);$('profileName').textContent=currentPlayerName;if($('gamePlayerName'))$('gamePlayerName').textContent=currentPlayerName;}});
- $('mode')?.addEventListener('change',setMode);
- $('startGame')?.addEventListener('click',()=>{if($('mode').value==='online'){toast('เลือกสร้างห้องหรือเข้าร่วมห้องด้านบนก่อน');return;}startBotGame();});
+ $('chooseBotMode')?.addEventListener('click',()=>{ $('playerName').value=currentPlayerName;showSetupStep('setupBotStep'); });
+ $('chooseOnlineMode')?.addEventListener('click',()=>{ $('onlinePlayerName').value=currentPlayerName;showSetupStep('setupOnlineStep'); });
+ document.querySelectorAll('[data-setup-back]').forEach(b=>b.addEventListener('click',()=>showSetupStep(b.dataset.setupBack)));
+ document.querySelectorAll('#playerCountButtons [data-count]').forEach(b=>b.addEventListener('click',()=>{ $('playerCount').value=b.dataset.count;document.querySelectorAll('#playerCountButtons [data-count]').forEach(x=>x.classList.toggle('selected',x===b)); }));
+ $('startGame')?.addEventListener('click',()=>startBotGame());
+ $('backFromRoom')?.addEventListener('click',()=>{if(onlineRoom&&socket?.connected)socket.emit('leave-room',{room:onlineRoom});onlineRoom='';isHost=false;showSetupStep('setupOnlineStep');});
  $('createRoomBtn')?.addEventListener('click',createRoom);$('joinRoomBtn')?.addEventListener('click',joinRoom);$('startOnlineGame')?.addEventListener('click',startOnline);
  $('copyRoomCode')?.addEventListener('click',()=>{const code=$('createdRoomCode').textContent;navigator.clipboard?.writeText(code).then(()=>toast('คัดลอกรหัสห้องแล้ว')).catch(()=>toast(`รหัสห้อง: ${code}`));});
  $('drawCard')?.addEventListener('click',draw);$('tableDeck')?.addEventListener('click',draw);$('escapeBtn')?.addEventListener('click',escape);
@@ -752,7 +753,7 @@ function init(){
  $('setupModal')?.addEventListener('click',e=>{if(e.target.id==='setupModal')closeSetup();});
  $('drawReveal')?.addEventListener('click',e=>{if(e.target.classList.contains('reveal-backdrop')){if(!localGame?.pending&&!onlineState?.pending)hide('drawReveal');}});
  if(window.io){socket=io({reconnection:true,reconnectionAttempts:8,reconnectionDelay:500,timeout:20000});bindSocket();}
- setMode();
+ showSetupStep('setupChoiceStep');
 }
 let handResizeQueued=false;
 window.addEventListener('resize',()=>{
