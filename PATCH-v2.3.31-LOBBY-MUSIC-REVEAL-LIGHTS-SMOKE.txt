@@ -1,0 +1,1 @@
+v2.3.31 updates: restored lobby music cache-busting; draw sound is triggered with the card reveal after 1 second; reveal title shows drawer name; action cards share helper/protection sound; glowing draw deck during player's turn and glowing end-turn button after draw; clearer drifting smoke overlays on lobby and game screen.

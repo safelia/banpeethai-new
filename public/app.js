@@ -11,12 +11,13 @@ let musicEnabled=false, ambientAudio=null, lobbyAudio=null, localEndTimer=null, 
 let pendingCardSoundTimer=null;
  let targetSelectionOpen=false, lastOmenRound=-1;
 const soundFiles={
- draw:'/assets/audio/draw-card.mp3?v=2.3.26',
- ghost:'/assets/audio/ghost-encounter.mp3?v=2.3.26',
- helper:'/assets/audio/helper-card.mp3?v=2.3.26',
- click:'/assets/audio/button-click.mp3?v=2.3.26',
- ambient:'/assets/audio/ambient-loop.mp3?v=2.3.29',
- lobby:'/assets/audio/lobby-music.mp3?v=2.3.29'
+ draw:'/assets/audio/draw-card.mp3?v=2.3.31',
+ ghost:'/assets/audio/ghost-encounter.mp3?v=2.3.31',
+ helper:'/assets/audio/helper-card.mp3?v=2.3.31',
+ click:'/assets/audio/button-click.mp3?v=2.3.31',
+ ambient:'/assets/audio/ambient-loop.mp3?v=2.3.31',
+ lobby:'/assets/audio/lobby-music.mp3?v=2.3.31',
+ scream:'/assets/audio/periodic-scream.mp3?v=2.3.31'
 };
 function playSoundFile(path,volume=0.8){
  if(!musicEnabled)return;
@@ -56,7 +57,7 @@ function playCardEventSound(card){
  if(!musicEnabled||!card)return;
  const isGhost=card.kind==='ghost'||card.type==='ผีอันตราย';
  if(isGhost){playSoundFile(soundFiles.ghost,.46);return;}
- if(['ตัวช่วย','ช่วยเหลือ','ป้องกัน','ลางบอกเหตุ'].includes(card.type))playSoundFile(soundFiles.helper,.43);
+ if(['ตัวช่วย','ช่วยเหลือ','ป้องกัน','ลางบอกเหตุ','แอ็คชั่น','แอ็กชัน','การ์ดแอ็คชั่น','การ์ดแอ็กชัน','Action'].includes(card.type)||card.kind==='action')playSoundFile(soundFiles.helper,.43);
 }
 function scheduleCardEventSound(card){
  if(pendingCardSoundTimer)clearTimeout(pendingCardSoundTimer);
@@ -240,7 +241,7 @@ function localDraw(p){
  if(localGame.over||localGame.pending||localGame.phase!=='draw'||localGame.players[localGame.turn].id!==p.id||!p.alive)return;
  if(localDrawTimer){clearTimeout(localDrawTimer);localDrawTimer=null;} localDrawTimerKey='';
  if(!localGame.deck.length){toast('กองจั่วหมดแล้ว');localNext();return;}
- const c=drawCardRespectingCatLimit(localGame.deck,p.hand);if(!c){toast('มีแต่การ์ดแมวในกองจั่ว รอใช้การ์ดแมวในมือก่อน');localGame.turnStartedAt=Date.now();syncLocalDrawTimer(localGame,true);return;}playDrawSound();scheduleCardEventSound(c);localGame.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
+ const c=drawCardRespectingCatLimit(localGame.deck,p.hand);if(!c){toast('มีแต่การ์ดแมวในกองจั่ว รอใช้การ์ดแมวในมือก่อน');localGame.turnStartedAt=Date.now();syncLocalDrawTimer(localGame,true);return;}localGame.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
  logLocal(`${p.name} จั่วได้ “${c.name}”`);
  if(c.instantDanger){
   localGame.discard.push(c);localHurt(p,`จั่วได้ ${c.name} ซึ่งเป็นผีอันตราย ป้องกันไม่ได้`);
@@ -411,7 +412,7 @@ function renderLocal(){
  const myTurn=g.turn===0&&!g.over&&!g.pending&&g.phase==='draw';
  const ownTurn=g.turn===0&&!g.over&&!g.pending;
  syncLocalDrawTimer(g,myTurn);syncLocalEndTimer(g,ownTurn&&g.phase==='afterdraw');
- $('drawCard').disabled=!myTurn;$('tableDeck').disabled=!myTurn;$('endTurn').disabled=!(ownTurn&&g.phase==='afterdraw');$('escapeBtn').disabled=!(g.turn===0&&!g.over&&!g.pending);
+ $('drawCard').disabled=!myTurn;$('tableDeck').disabled=!myTurn;$('endTurn').disabled=!(ownTurn&&g.phase==='afterdraw'); $('tableDeck').classList.toggle('turn-glow',myTurn);$('drawCard').classList.toggle('turn-glow',myTurn);$('endTurn').classList.toggle('endturn-glow',ownTurn&&g.phase==='afterdraw');$('escapeBtn').disabled=!(g.turn===0&&!g.over&&!g.pending);
  if(g.over){show('gameOver');$('resultTitle').textContent=g.winner==='human'?'คุณหนีออกมาได้!':g.winner?`${g.players.find(x=>x.id===g.winner)?.name||'ผู้เล่น'} ชนะ!`:'เกมจบแล้ว';$('resultText').textContent=g.logs[0]||'การผจญภัยสิ้นสุดลง';}
  else hide('gameOver');
 }
@@ -427,14 +428,14 @@ function renderOnline(){
  renderLogs(s.logs);
  if($('sidePlayersCount'))$('sidePlayersCount').textContent=`${(s.players||[]).filter(x=>x.alive!==false).length}/${(s.players||[]).length}`;if($('sideRoundCount'))$('sideRoundCount').textContent=String(s.round||1);if($('sideCurrentTurn'))$('sideCurrentTurn').textContent=s.over?'เกมจบ':(s.players[s.turn]?.name||'—');
  const canDraw=myTurn&&s.phase!=='afterdraw'&&!s.pending&&!s.over;
- $('drawCard').disabled=!canDraw;$('tableDeck').disabled=!canDraw;$('endTurn').disabled=!(myTurn&&s.phase==='afterdraw'&&!s.pending&&!s.over);$('escapeBtn').disabled=!(myTurn&&!s.pending&&!s.over);
- if(s.lastDraw&&s.lastDraw.token!==lastRevealToken){lastRevealToken=s.lastDraw.token;playDrawSound();scheduleCardEventSound({...s.lastDraw.card,kind:s.lastDraw.ghost?'ghost':s.lastDraw.card?.kind});showReveal(s.lastDraw,!!s.lastDraw.ghost);}
+ $('drawCard').disabled=!canDraw;$('tableDeck').disabled=!canDraw;$('endTurn').disabled=!(myTurn&&s.phase==='afterdraw'&&!s.pending&&!s.over); $('tableDeck').classList.toggle('turn-glow',canDraw);$('drawCard').classList.toggle('turn-glow',canDraw);$('endTurn').classList.toggle('endturn-glow',myTurn&&s.phase==='afterdraw'&&!s.pending&&!s.over);$('escapeBtn').disabled=!(myTurn&&!s.pending&&!s.over);
+ if(s.lastDraw&&s.lastDraw.token!==lastRevealToken){lastRevealToken=s.lastDraw.token;showReveal(s.lastDraw,!!s.lastDraw.ghost);}
  if(s.pending&&s.pending.playerId===socket?.id){showGhostChoicesOnline(s.pending.card);}
  if(s.over){show('gameOver');$('resultTitle').textContent=s.winner===socket?.id?'คุณหนีออกมาได้!':s.winner?`${s.players.find(p=>p.id===s.winner)?.name||'ผู้เล่น'} ชนะ!`:'เกมจบแล้ว';$('resultText').textContent=s.logs?.[0]||'การผจญภัยสิ้นสุดลง';}
  else hide('gameOver');
 }
 let revealTimer=null, revealDelayTimer=null; function showReveal(draw,isGhost){clearTimeout(revealDelayTimer);revealDelayTimer=setTimeout(()=>showRevealNow(draw,isGhost),1000);} function showRevealNow(draw,isGhost){
- const c=draw.card||byId('heart');clearTimeout(revealTimer);show('drawReveal');
+ const c=draw.card||byId('heart');clearTimeout(revealTimer);playDrawSound();scheduleCardEventSound({...c,kind:isGhost?'ghost':c.kind});show('drawReveal');
  const ownDraw=mode==='bot'?draw.playerId==='human':draw.playerId===socket?.id;
  $('revealTitle').textContent=`${draw.playerName||(ownDraw?'คุณ':'ผู้เล่น')} จั่วได้`;
  const reveal=$('drawReveal');
