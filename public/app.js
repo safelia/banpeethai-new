@@ -7,39 +7,35 @@ let localGame = null, toastTimer = null, lastRevealToken = '', currentPlayerName
 let localDrawTimer = null, localDrawTimerKey = '', countdownInterval = null;
 const byId = id => cards.find(c => c.id === id) || {id, name:id, type:'การ์ด', desc:'', effect:'', image:''};
 const playerKeyCount = p => p?.keyCountTotal ? (Number(p.keys)||0) : (Number(p?.storedKeys ?? p?.keys)||0) + (p?.hand||[]).filter(c=>c.id==='key').length;
-let musicEnabled=false, ambientAudio=null, localEndTimer=null, localEndTimerKey='';
+let musicEnabled=false, ambientAudio=null, lobbyAudio=null, localEndTimer=null, localEndTimerKey='';
 let pendingCardSoundTimer=null;
  let targetSelectionOpen=false, lastOmenRound=-1;
 const soundFiles={
- draw:'/assets/audio/draw-card.mp3?v=2.3.19',
- ghost:'/assets/audio/ghost-encounter.mp3?v=2.3.19',
- helper:'/assets/audio/helper-card.mp3?v=2.3.19',
- click:'/assets/audio/button-click.mp3?v=2.3.19',
- ambient:'/assets/audio/ambient-loop.mp3?v=2.3.19'
+ draw:'/assets/audio/draw-card.mp3?v=2.3.21',
+ ghost:'/assets/audio/ghost-encounter.mp3?v=2.3.21',
+ helper:'/assets/audio/helper-card.mp3?v=2.3.21',
+ click:'/assets/audio/button-click.mp3?v=2.3.21',
+ ambient:'/assets/audio/ambient-loop.mp3?v=2.3.21',
+ lobby:'/assets/audio/lobby-music.mp3?v=2.3.21'
 };
 function playSoundFile(path,volume=0.8){
  if(!musicEnabled)return;
  try{
-  const audio=new Audio(path);audio.preload='auto';audio.volume=volume;
+  const audio=new Audio(path);audio.preload='auto';audio.volume=Math.min(volume,0.52);
   const promise=audio.play();if(promise&&typeof promise.catch==='function')promise.catch(()=>{});
   audio.addEventListener('ended',()=>{audio.src='';},{once:true});
  }catch(_){/* Audio playback may be unavailable in a restricted browser. */}
 }
 function startAmbient(){
  musicEnabled=true;
- try{
-  if(!ambientAudio){ambientAudio=new Audio(soundFiles.ambient);ambientAudio.loop=true;ambientAudio.preload='auto';ambientAudio.volume=.075;}
-  if(!$('gameScreen')?.classList.contains('hidden')){
-   if(ambientAudio.paused){const promise=ambientAudio.play();if(promise&&typeof promise.catch==='function')promise.catch(()=>{});}
-  }else{ambientAudio.pause();ambientAudio.currentTime=0;}
- }catch(_){/* Audio playback may be unavailable in a restricted browser. */}
+ updateSoundForScreen();
  const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: เปิด';btn.setAttribute('aria-pressed','true');}
  const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: เปิด';gameBtn.setAttribute('aria-pressed','true');}
  syncGameMusicControls();
 }
 function stopAmbient(){
  musicEnabled=false;
- if(ambientAudio){ambientAudio.pause();ambientAudio.currentTime=0;}
+ for(const audio of [ambientAudio,lobbyAudio]){if(audio){audio.pause();audio.currentTime=0;}}
  const btn=$('soundToggle');if(btn){btn.textContent='♫ เสียง: ปิด';btn.setAttribute('aria-pressed','false');}
  const gameBtn=$('gameSoundToggle');if(gameBtn){gameBtn.textContent='♫ เสียง: ปิด';gameBtn.setAttribute('aria-pressed','false');}
  syncGameMusicControls();
@@ -51,13 +47,13 @@ function syncGameMusicControls(){
 }
 function openGameOptions(){const panel=$('gameOptionsPanel');if(!panel)return;syncGameMusicControls();panel.classList.remove('hidden');}
 function closeGameOptions(){$('gameOptionsPanel')?.classList.add('hidden');}
-function playDrawSound(){playSoundFile(soundFiles.draw,.82);}
-function playClickSound(){playSoundFile(soundFiles.click,.58);}
+function playDrawSound(){playSoundFile(soundFiles.draw,.42);}
+function playClickSound(){playSoundFile(soundFiles.click,.34);}
 function playCardEventSound(card){
  if(!musicEnabled||!card)return;
  const isGhost=card.kind==='ghost'||card.type==='ผีอันตราย';
- if(isGhost){playSoundFile(soundFiles.ghost,.9);return;}
- if(['ตัวช่วย','ช่วยเหลือ','ป้องกัน','ลางบอกเหตุ'].includes(card.type))playSoundFile(soundFiles.helper,.82);
+ if(isGhost){playSoundFile(soundFiles.ghost,.46);return;}
+ if(['ตัวช่วย','ช่วยเหลือ','ป้องกัน','ลางบอกเหตุ'].includes(card.type))playSoundFile(soundFiles.helper,.43);
 }
 function scheduleCardEventSound(card){
  if(pendingCardSoundTimer)clearTimeout(pendingCardSoundTimer);
@@ -65,11 +61,22 @@ function scheduleCardEventSound(card){
  pendingCardSoundTimer=setTimeout(()=>{pendingCardSoundTimer=null;playCardEventSound(card);},520);
 }
 function updateSoundForScreen(){
- // Ambient music belongs to gameplay only, never to the lobby or setup screen.
  const inGame=!!$('gameScreen')&&!$('gameScreen').classList.contains('hidden');
- if(!musicEnabled||!inGame){if(ambientAudio&&!ambientAudio.paused){ambientAudio.pause();if(!inGame)ambientAudio.currentTime=0;}return;}
- if(!ambientAudio){ambientAudio=new Audio(soundFiles.ambient);ambientAudio.loop=true;ambientAudio.preload='auto';ambientAudio.volume=.075;}
- if(ambientAudio.paused){const promise=ambientAudio.play();if(promise&&typeof promise.catch==='function')promise.catch(()=>{});}
+ if(!musicEnabled){
+  for(const audio of [ambientAudio,lobbyAudio])if(audio&&!audio.paused){audio.pause();audio.currentTime=0;}
+  return;
+ }
+ try{
+  if(inGame){
+   if(lobbyAudio&&!lobbyAudio.paused){lobbyAudio.pause();lobbyAudio.currentTime=0;}
+   if(!ambientAudio){ambientAudio=new Audio(soundFiles.ambient);ambientAudio.loop=true;ambientAudio.preload='auto';ambientAudio.volume=.035;}
+   if(ambientAudio.paused){const promise=ambientAudio.play();if(promise&&typeof promise.catch==='function')promise.catch(()=>{});}
+  }else{
+   if(ambientAudio&&!ambientAudio.paused){ambientAudio.pause();ambientAudio.currentTime=0;}
+   if(!lobbyAudio){lobbyAudio=new Audio(soundFiles.lobby);lobbyAudio.loop=true;lobbyAudio.preload='auto';lobbyAudio.volume=.035;}
+   if(lobbyAudio.paused){const promise=lobbyAudio.play();if(promise&&typeof promise.catch==='function')promise.catch(()=>{});}
+  }
+ }catch(_){/* Audio playback may be unavailable in a restricted browser. */}
 }
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

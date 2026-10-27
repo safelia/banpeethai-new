@@ -2144,3 +2144,10 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
   }
   #gameScreen:not(.hidden) #hand.hand > .hand-card:first-child {margin-left:0!important}
 }
+
+
+/* v2.3.21 — calibrate only the two left desktop player markers to the actual chair cushions. */
+@media (min-width:761px) {
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-1 {left:24.0%!important;top:51.0%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-2 {left:26.8%!important;top:37.0%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important}
+}

@@ -1,0 +1,7 @@
+บ้านผีไทย v2.3.21 — Patch notes
+
+1. Desktop left seat badges: recalibrated only seat-1 and seat-2 to the left-side chair cushions using the latest screenshot. Mobile coordinates are unchanged.
+2. Mobile zoom: viewport uses maximum-scale=1/user-scalable=no and the existing portrait game stage remains fixed to the viewport, avoiding browser pinch zoom from magnifying/misaligning the scene.
+3. Lobby music: added the user-supplied music file as public/assets/audio/lobby-music.mp3; it loops on lobby/setup screens at 3.5% volume, and stops when gameplay begins.
+4. Gameplay ambience: reduced to 3.5% volume. Draw, ghost, helper, and click effects have lower playback volume.
+5. Cache-busted audio and stylesheet references for v2.3.21.
