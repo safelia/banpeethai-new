@@ -52,8 +52,10 @@ function nextTurn(r){
  }
  if(!found){finish(r,null,'ไม่มีผู้เล่นเหลือรอด');return}
  if((g.direction||1)===1?g.turn===0:g.turn===g.players.length-1)g.round++;
- g.phase='draw';g.afterDrawStartedAt=null;g.turnStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;
- emitStates(r);scheduleTurnAutoDraw(r);
+ g.phase='transition';g.afterDrawStartedAt=null;g.turnStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;
+ const transitionToken=g.turnToken;
+ emitStates(r);
+ setTimeout(()=>{const current=r.game;if(!current||current!==g||g.over||g.turnToken!==transitionToken||g.phase!=='transition')return;g.phase='draw';g.turnStartedAt=Date.now();emitStates(r);scheduleTurnAutoDraw(r);},500);
 }
 function scheduleTurnAutoDraw(r){
  const g=r?.game;if(!g||g.over||g.pending)return;

@@ -7,17 +7,17 @@ let localGame = null, toastTimer = null, lastRevealToken = '', currentPlayerName
 let localDrawTimer = null, localDrawTimerKey = '', countdownInterval = null;
 const byId = id => cards.find(c => c.id === id) || {id, name:id, type:'การ์ด', desc:'', effect:'', image:''};
 const playerKeyCount = p => p?.keyCountTotal ? (Number(p.keys)||0) : (Number(p?.storedKeys ?? p?.keys)||0) + (p?.hand||[]).filter(c=>c.id==='key').length;
-let musicEnabled=false, ambientAudio=null, lobbyAudio=null, localEndTimer=null, localEndTimerKey='';
+let musicEnabled=false, ambientAudio=null, lobbyAudio=null, localEndTimer=null, localEndTimerKey='', screamLoopTimer=null;
 let pendingCardSoundTimer=null;
  let targetSelectionOpen=false, lastOmenRound=-1;
 const soundFiles={
- draw:'/assets/audio/draw-card.mp3?v=2.3.31',
- ghost:'/assets/audio/ghost-encounter.mp3?v=2.3.31',
- helper:'/assets/audio/helper-card.mp3?v=2.3.31',
- click:'/assets/audio/button-click.mp3?v=2.3.31',
- ambient:'/assets/audio/ambient-loop.mp3?v=2.3.31',
- lobby:'/assets/audio/lobby-music.mp3?v=2.3.31',
- scream:'/assets/audio/periodic-scream.mp3?v=2.3.31'
+ draw:'/assets/audio/draw-card.mp3?v=2.3.33',
+ ghost:'/assets/audio/ghost-encounter.mp3?v=2.3.33',
+ helper:'/assets/audio/helper-card.mp3?v=2.3.33',
+ click:'/assets/audio/button-click.mp3?v=2.3.33',
+ ambient:'/assets/audio/ambient-loop.mp3?v=2.3.33',
+ lobby:'/assets/audio/lobby-music.mp3?v=2.3.33',
+ scream:'/assets/audio/periodic-scream.mp3?v=2.3.33'
 };
 function playSoundFile(path,volume=0.8){
  if(!musicEnabled)return;
@@ -62,7 +62,7 @@ function playCardEventSound(card){
 function scheduleCardEventSound(card){
  if(pendingCardSoundTimer)clearTimeout(pendingCardSoundTimer);
  // The draw SFX is 0.432 s long; wait slightly longer so the reveal sound never overlaps it.
- pendingCardSoundTimer=setTimeout(()=>{pendingCardSoundTimer=null;playCardEventSound(card);},520);
+ pendingCardSoundTimer=setTimeout(()=>{pendingCardSoundTimer=null;playCardEventSound(card);},0);
 }
 function updateSoundForScreen(){
  const inGame=!!$('gameScreen')&&!$('gameScreen').classList.contains('hidden');
@@ -205,8 +205,8 @@ function localNext(){
  for(let i=0;i<n;i++){const dir=localGame.direction||1;localGame.turn=(localGame.turn+dir+n)%n;const p=localGame.players[localGame.turn];if(!p.alive)continue;if(p.skip){p.skip=false;logLocal(`${p.name} ถูกข้ามเทิร์น`);continue;}found=true;break;}
  if(!found){localFinish(null,'ไม่มีผู้เล่นเหลือรอด');return;}
  if((localGame.direction||1)===1?localGame.turn===0:localGame.turn===n-1)localGame.round++;
- localGame.phase='draw';localGame.turnStartedAt=Date.now();localDrawTimerKey='';renderLocal();
- if(localGame.players[localGame.turn].bot)setTimeout(botTurn,1000);
+ localGame.phase='transition';localGame.turnStartedAt=Date.now();localDrawTimerKey='';renderLocal();
+ const nextPlayerId=localGame.players[localGame.turn].id; setTimeout(()=>{if(!localGame||localGame.over||localGame.players[localGame.turn]?.id!==nextPlayerId||localGame.phase!=='transition')return;localGame.phase='draw';localGame.turnStartedAt=Date.now();localDrawTimerKey='';renderLocal();if(localGame.players[localGame.turn].bot)setTimeout(botTurn,1000);},500);
 }
 function localAutoEndAfterUse(g,p){
  if(!g||g.over||g.pending)return;
@@ -281,7 +281,7 @@ function botTurn(){
  if(playerKeyCount(p)>=3){localFinish(p,`${p.name} มีกุญแจครบ 3 ดอกแล้ว หนีออกจากบ้านผีไทยได้สำเร็จ!`);return;}
  if(p.skip){p.skip=false;logLocal(`${p.name} ถูกข้ามเทิร์น`);localNext();return;}
  if(!g.deck.length){localNext();return;}
- const c=drawCardRespectingCatLimit(g.deck,p.hand);if(!c){logLocal(`${p.name} ยังจั่วการ์ดแมวเพิ่มไม่ได้ เพราะมีแมวอยู่ในมือแล้ว`);localNext();return;}playDrawSound();scheduleCardEventSound(c);g.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
+ const c=drawCardRespectingCatLimit(g.deck,p.hand);if(!c){logLocal(`${p.name} ยังจั่วการ์ดแมวเพิ่มไม่ได้ เพราะมีแมวอยู่ในมือแล้ว`);localNext();return;}g.lastDraw={token:`${Date.now()}-${Math.random()}`,playerId:p.id,playerName:p.name,card:c,ghost:c.kind==='ghost'||c.type==='ผีอันตราย'};
  logLocal(`${p.name} จั่วได้ “${c.name}”`);
  if(c.instantDanger){
   g.discard.push(c);localHurt(p,`จั่วได้ ${c.name} ซึ่งเป็นผีอันตราย ป้องกันไม่ได้`);renderLocal();showReveal(g.lastDraw,true);
@@ -427,7 +427,7 @@ function renderOnline(){
  renderLastDrawPreview(s.lastDraw,Array.isArray(s.discard)?s.discard[s.discard.length-1]:s.discard);
  renderLogs(s.logs);
  if($('sidePlayersCount'))$('sidePlayersCount').textContent=`${(s.players||[]).filter(x=>x.alive!==false).length}/${(s.players||[]).length}`;if($('sideRoundCount'))$('sideRoundCount').textContent=String(s.round||1);if($('sideCurrentTurn'))$('sideCurrentTurn').textContent=s.over?'เกมจบ':(s.players[s.turn]?.name||'—');
- const canDraw=myTurn&&s.phase!=='afterdraw'&&!s.pending&&!s.over;
+ const canDraw=myTurn&&s.phase==='draw'&&!s.pending&&!s.over;
  $('drawCard').disabled=!canDraw;$('tableDeck').disabled=!canDraw;$('endTurn').disabled=!(myTurn&&s.phase==='afterdraw'&&!s.pending&&!s.over); $('tableDeck').classList.toggle('turn-glow',canDraw);$('drawCard').classList.toggle('turn-glow',canDraw);$('endTurn').classList.toggle('endturn-glow',myTurn&&s.phase==='afterdraw'&&!s.pending&&!s.over);$('escapeBtn').disabled=!(myTurn&&!s.pending&&!s.over);
  if(s.lastDraw&&s.lastDraw.token!==lastRevealToken){lastRevealToken=s.lastDraw.token;showReveal(s.lastDraw,!!s.lastDraw.ghost);}
  if(s.pending&&s.pending.playerId===socket?.id){showGhostChoicesOnline(s.pending.card);}
