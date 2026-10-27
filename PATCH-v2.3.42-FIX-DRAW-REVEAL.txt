@@ -1,0 +1,1 @@
+v2.3.42: Fixed missing revealPending declaration that caused a ReferenceError when drawing cards. Reset revealPending when the central card reveal overlay is hidden so the table-side discard preview can render again. Retains v2.3.41 gameplay and assets.

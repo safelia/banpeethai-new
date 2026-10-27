@@ -113,7 +113,7 @@ function toast(msg){ const el=$('toast'); if(!el)return; el.textContent=msg; el.
  }
 
 function show(id){$(id)?.classList.remove('hidden');if(id==='gameEscapeMenu'){document.body.classList.add('escape-menu-open');}}
-function hide(id){$(id)?.classList.add('hidden');if(id==='gameEscapeMenu'){document.body.classList.remove('escape-menu-open');}}
+function hide(id){$(id)?.classList.add('hidden');if(id==='drawReveal')revealPending=false;if(id==='gameEscapeMenu'){document.body.classList.remove('escape-menu-open');}}
 function imgUrl(c){return c?.image || '/assets/cards/card-01.jpg';}
 function renderCardTile(c){
  if(c?.fullArt) return `<article class="card card-parchment finished-ghost-card" title="${esc(c.name)}"><img class="finished-ghost-art" src="${esc(imgUrl(c))}" alt="${esc(c.name)} — ${esc(c.desc)}"></article>`;
@@ -485,7 +485,7 @@ function renderOnline(){
  if(s.over){show('gameOver');$('resultTitle').textContent=s.winner===socket?.id?'คุณหนีออกมาได้!':s.winner?`${s.players.find(p=>p.id===s.winner)?.name||'ผู้เล่น'} ชนะ!`:'เกมจบแล้ว';$('resultText').textContent=s.logs?.[0]||'การผจญภัยสิ้นสุดลง';}
  else hide('gameOver');
 }
-let revealTimer=null, revealDelayTimer=null;
+let revealTimer=null, revealDelayTimer=null, revealPending=false;
 function closeRevealAndShowDiscard(){
  hide('drawReveal');
  const g=currentState();
