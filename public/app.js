@@ -448,7 +448,10 @@ function renderOnline(){
 let revealTimer=null, revealDelayTimer=null; function showReveal(draw,isGhost){clearTimeout(revealDelayTimer);revealDelayTimer=setTimeout(()=>showRevealNow(draw,isGhost),1000);} function showRevealNow(draw,isGhost){
  const c=draw.card||byId('heart');clearTimeout(revealTimer);scheduleCardEventSound({...c,kind:isGhost?'ghost':c.kind});show('drawReveal');
  const ownDraw=mode==='bot'?draw.playerId==='human':draw.playerId===socket?.id;
- $('revealTitle').textContent=`${draw.playerName||(ownDraw?'คุณ':'ผู้เล่น')} จั่วได้`;
+ const playerFromState=(mode==='online'?(onlineState?.players||[]):(localGame?.players||[])).find(p=>p.id===draw.playerId);
+ const drawerName=draw.playerName||playerFromState?.name||(ownDraw?currentPlayerName:'ผู้เล่น');
+ $('revealTitle').textContent=`${drawerName} จั่วไพ่ได้`; 
+ $('revealTitle').setAttribute('aria-label',`ผู้จั่วไพ่: ${drawerName}`);
  const reveal=$('drawReveal');
  reveal.classList.toggle('finished-ghost-reveal',!!c.fullArt);
  reveal.classList.toggle('single-full-card-reveal',!!c.fullArt&&!isGhost);
@@ -648,7 +651,7 @@ function leaveGame(){
   toast('กำลังออกจากห้อง…');
   setTimeout(()=>{
    socket?.emit('leave-room',{room:leavingRoom});
-   hide('gameScreen');hide('gameOver');show('setupModal');
+   hide('gameScreen');hide('gameOver');hide('gameEscapeMenu');show('setupModal');
    localGame=null;onlineState=null;onlineRoom='';isHost=false;
    updateSoundForScreen();
   },250);
@@ -658,7 +661,7 @@ function leaveGame(){
   const p=localGame.players.find(x=>x.id==='human');
   if(p){p.alive=false;localFinish(null,`${p.name} ยอมแพ้และออกจากเกม`);}
  }
- hide('gameScreen');hide('drawReveal');hide('gameOver');show('setupModal');localGame=null;onlineState=null;onlineRoom='';isHost=false;updateSoundForScreen();
+ hide('gameScreen');hide('drawReveal');hide('gameOver');hide('gameEscapeMenu');show('setupModal');localGame=null;onlineState=null;onlineRoom='';isHost=false;updateSoundForScreen();
 }
 function enterOnlineGame(room){
  if($('gamePlayerName'))$('gamePlayerName').textContent=currentPlayerName;
@@ -731,7 +734,17 @@ function init(){
   $('closeGameOptions')?.addEventListener('click',closeGameOptions);
   $('doneGameOptions')?.addEventListener('click',closeGameOptions);
   $('gameOptionsPanel')?.addEventListener('click',e=>{if(e.target===$('gameOptionsPanel'))closeGameOptions();});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeGameOptions();});
+  document.addEventListener('keydown',e=>{
+    if(e.key!=='Escape')return;
+    if(!$('gameScreen')?.classList.contains('hidden')){
+      e.preventDefault();
+      if(!$('gameEscapeMenu')?.classList.contains('hidden')) hide('gameEscapeMenu');
+      else {closeGameOptions();show('gameEscapeMenu');}
+    } else closeGameOptions();
+  });
+  $('escapeBackToGame')?.addEventListener('click',()=>hide('gameEscapeMenu'));
+  $('escapeLeaveRoom')?.addEventListener('click',()=>{hide('gameEscapeMenu');leaveGame();});
+  $('gameEscapeMenu')?.addEventListener('click',e=>{if(e.target===$('gameEscapeMenu'))hide('gameEscapeMenu');});
 
 
  // v2.1.2: call game actions directly from independent hitboxes.

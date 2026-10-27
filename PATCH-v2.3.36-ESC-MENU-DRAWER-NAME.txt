@@ -1,0 +1,4 @@
+BanPeeThai v2.3.36 patch
+1. Pressing Escape while the game screen is open shows a pause menu with 'กลับไปหน้าเล่น' and 'ออกจากห้อง'.
+2. The central card reveal title now explicitly displays the drawer's name, with fallback lookup from the current game state when playerName is absent.
+3. The drawer name receives a high-contrast visible label style.

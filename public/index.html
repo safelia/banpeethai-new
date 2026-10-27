@@ -75,6 +75,16 @@
   <button type="button" class="reference-hotspot hotspot-endturn" id="refHotspotEndTurn" aria-label="จบรอบ"></button>
  </div>
 
+  <div class="game-escape-menu hidden" id="gameEscapeMenu" role="dialog" aria-modal="true" aria-labelledby="gameEscapeTitle">
+    <section class="game-escape-card">
+      <span class="game-escape-kicker">✦ บ้านผีไทย ✦</span>
+      <h2 id="gameEscapeTitle">หยุดพักเกมชั่วคราว</h2>
+      <p>ต้องการทำอะไรต่อ?</p>
+      <button type="button" class="primary" id="escapeBackToGame">กลับไปหน้าเล่น</button>
+      <button type="button" class="secondary" id="escapeLeaveRoom">ออกจากห้อง</button>
+    </section>
+  </div>
+
   <div class="thai-options-backdrop hidden" id="gameOptionsPanel" role="dialog" aria-modal="true" aria-labelledby="gameOptionsTitle">
     <section class="thai-options-card">
       <button class="thai-options-close" id="closeGameOptions" type="button" aria-label="ปิดเมนู">×</button>
