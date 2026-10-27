@@ -1,0 +1,10 @@
+BanPeeThai v2.3.17 — Mobile Portrait Artwork and Invisible Controls
+
+- Adds the user-provided 928x1664 mobile gameplay background as public/assets/haunted-thai-house-mobile-ui.png.
+- Adds a portrait-only CSS layout for screens <=760px; desktop/computer layout rules and existing desktop seat anchors are not changed.
+- Positions the five player markers over the five chairs in the supplied mobile image.
+- Aligns transparent touch hotspots with the artwork's menu, leave, draw, escape, and end-round controls.
+- Fits discard preview and hand cards inside the two card areas shown in the artwork.
+- Keeps gameplay state and multiplayer logic shared; the background/layout is presentation-only, so mobile and desktop players continue to use the same game state.
+
+Validation: JavaScript syntax and ZIP integrity checked after packaging. Browser gameplay testing is still recommended on an actual phone and desktop.
