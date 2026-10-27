@@ -57,17 +57,6 @@ function nextTurn(r){
  emitStates(r);
  setTimeout(()=>{const current=r.game;if(!current||current!==g||g.over||g.turnToken!==transitionToken||g.phase!=='transition')return;g.phase='draw';g.turnStartedAt=Date.now();emitStates(r);scheduleTurnAutoDraw(r);},500);
 }
-function scheduleTurnAutoEnd(r){
- const g=r?.game;if(!g||g.over||g.pending||g.phase!=='afterdraw')return;
- if(r.turnTimer){clearTimeout(r.turnTimer);r.turnTimer=null;}
- const token=g.turnToken, playerId=g.players[g.turn]?.id;
- r.turnTimer=setTimeout(()=>{
-  const current=r?.game;
-  if(!current||current!==g||g.over||g.pending||g.phase!=='afterdraw'||g.turnToken!==token||g.players[g.turn]?.id!==playerId)return;
-  log(g,`${g.players[g.turn]?.name||'ผู้เล่น'} หมดเวลา 25 วินาที ระบบจบรอบอัตโนมัติ`);
-  nextTurn(r);
- },25000);
-}
 function scheduleTurnAutoDraw(r){
  const g=r?.game;if(!g||g.over||g.pending)return;
  if(r.turnTimer){clearTimeout(r.turnTimer);r.turnTimer=null;}
@@ -143,7 +132,7 @@ function drawCard(r,p){
  log(g,`${p.name} จั่วได้ “${c.name}”`);
  if(c.instantDanger){
   g.discard.push(c);hurt(r,p,`จั่วได้ ${c.name} ซึ่งเป็นผีอันตราย ป้องกันไม่ได้`);
-  if(!g.over){g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoEnd(r);}else emitStates(r);return;
+  if(!g.over){g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);}else emitStates(r);return;
  }
  // น้ำมนต์ทำงานทันทีเมื่อจั่วได้และหัวใจยังไม่เต็ม: ใช้การ์ด ฟื้น 1 หัวใจ และเพิ่มการ์ดหัวใจเข้ามือ
  if(c.id==='holy-water' && !ghost && (p.hearts||0)<3){
@@ -151,7 +140,7 @@ function drawCard(r,p){
   p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-water-${Date.now()}`});
   g.discard.push(c);
   log(g,`${p.name} จั่วได้น้ำมนต์ ใช้อัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3 และรับการ์ดหัวใจเข้ามือ`);
-  g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoEnd(r);return;
+  g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);return;
  }
  // ดอกบัวนำโชคทำงานทันทีเมื่อจั่ว: ฟื้นหัวใจหากยังไม่เต็ม หรือเก็บไว้ป้องกันผีเมื่อหัวใจเต็ม
  if(c.id==='lucky-flower' && !ghost){
@@ -164,14 +153,14 @@ function drawCard(r,p){
    p.hand.push(c);
    log(g,`${p.name} หัวใจเต็ม จึงเก็บดอกบัวนำโชคไว้ป้องกันผี`);
   }
-  g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoEnd(r);return;
+  g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);return;
  }
- if(c.id==='kumarn'){p.skip=true;g.discard.push(c);log(g,`${p.name} จั่วได้กุมารชวนไปเล่น จึงอดเล่นรอบถัดไปทันที`);g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoEnd(r);return;}
+ if(c.id==='kumarn'){p.skip=true;g.discard.push(c);log(g,`${p.name} จั่วได้กุมารชวนไปเล่น จึงอดเล่นรอบถัดไปทันที`);g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);return;}
  if(ghost){g.pending={playerId:p.id,card:c};g.phase='resolve';g.turnToken=(g.turnToken||0)+1;}
  else {
   p.hand.push(c);
   if(keyCount(p)>=3){finish(r,p.id,`${p.name} มีกุญแจครบ 3 ดอกแล้ว หนีออกจากบ้านผีไทยได้สำเร็จ!`);return}
-  g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoEnd(r);return
+  g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);return
  }
  emitStates(r);
 }
