@@ -1,0 +1,5 @@
+BanPeeThai v2.3.38
+- Removed duplicate drawer-name badge; reveal title shows the drawer once.
+- Hand cards remain clickable for preview at any time; the Use button remains disabled when unavailable.
+- Preview closes automatically when the player's own draw turn begins.
+- Online room creation/join requires a non-empty player name.

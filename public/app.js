@@ -8,7 +8,7 @@ let localDrawTimer = null, localDrawTimerKey = '', countdownInterval = null;
 const byId = id => cards.find(c => c.id === id) || {id, name:id, type:'การ์ด', desc:'', effect:'', image:''};
 const playerKeyCount = p => p?.keyCountTotal ? (Number(p.keys)||0) : (Number(p?.storedKeys ?? p?.keys)||0) + (p?.hand||[]).filter(c=>c.id==='key').length;
 let musicEnabled=false, ambientAudio=null, lobbyAudio=null, screamAudio=null, localEndTimer=null, localEndTimerKey='', screamLoopTimer=null;
-let pendingCardSoundTimer=null;
+let pendingCardSoundTimer=null, lastPreviewTurnToken='';
  let targetSelectionOpen=false, lastOmenRound=-1;
 const soundFiles={
  draw:'/assets/audio/draw-card.mp3?v=2.3.33',
@@ -147,7 +147,8 @@ function connectSocket(){
 }
 function onlineError(msg){toast(msg||'ทำรายการไม่สำเร็จ');}
 async function createRoom(){
- currentPlayerName=getName();$('playerName').value=currentPlayerName;$('onlinePlayerName').value=currentPlayerName;$('profileName').textContent=currentPlayerName;
+ const enteredName=($('onlinePlayerName')?.value||'').trim();if(!enteredName){toast('กรุณาตั้งชื่อก่อนสร้างห้อง');$('onlinePlayerName')?.focus();return;}
+ currentPlayerName=enteredName.slice(0,18);$('playerName').value=currentPlayerName;$('onlinePlayerName').value=currentPlayerName;$('profileName').textContent=currentPlayerName;
  try{await connectSocket();socket.emit('create-room',{name:currentPlayerName},res=>{
   if(!res?.ok)return onlineError(res?.error);
   onlineRoom=res.room;isHost=true;showSetupStep('roomLobby');$('createdRoomCode').textContent=onlineRoom;
@@ -156,7 +157,8 @@ async function createRoom(){
  });}catch(e){onlineError('เชื่อมต่อไม่ได้ กรุณาลองใหม่อีกครั้ง');}
 }
 async function joinRoom(){
- currentPlayerName=getName();$('playerName').value=currentPlayerName;$('onlinePlayerName').value=currentPlayerName;$('profileName').textContent=currentPlayerName;const code=($('joinRoomCode').value||'').replace(/\\s+/g,'').toUpperCase();
+ const enteredName=($('onlinePlayerName')?.value||'').trim();if(!enteredName){toast('กรุณาตั้งชื่อก่อนเข้าห้อง');$('onlinePlayerName')?.focus();return;}
+ currentPlayerName=enteredName.slice(0,18);$('playerName').value=currentPlayerName;$('onlinePlayerName').value=currentPlayerName;$('profileName').textContent=currentPlayerName;const code=($('joinRoomCode').value||'').replace(/\\s+/g,'').toUpperCase();
  if(code.length<4)return toast('กรอกรหัสห้องที่เพื่อนส่งมา');
  const btn=$('joinRoomBtn');if(btn){btn.disabled=true;btn.textContent='กำลังเชื่อมต่อ…';}
  try{
@@ -350,7 +352,7 @@ function renderHand(hand,canPlay){
  el.style.setProperty('--hand-overlap',`${overlap}px`);
  el.style.setProperty('--hand-overlap-negative',`${-overlap}px`);
  el.style.setProperty('--hand-gap','0px');
- el.innerHTML=hand.map((c,i)=>`<button class="hand-card ${c.id==='heart'?'heart-card':''} ${c.fullArt?'hand-full-art-card':''}" data-hand-index="${i}" style="--hand-index:${i};--hand-card-width:${cardWidth}px;--card-overlap:${overlap}px;flex:0 0 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px;margin-left:${i===0?0:-overlap}px;z-index:${i+1}" ${!canPlayCard(c)?'disabled':''} title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
+ el.innerHTML=hand.map((c,i)=>`<button class="hand-card ${c.id==='heart'?'heart-card':''} ${c.fullArt?'hand-full-art-card':''}" data-hand-index="${i}" style="--hand-index:${i};--hand-card-width:${cardWidth}px;--card-overlap:${overlap}px;flex:0 0 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px;margin-left:${i===0?0:-overlap}px;z-index:${i+1}" title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
    ${c.fullArt?`<img class="hand-full-art" src="${esc(imgUrl(c))}" alt="${esc(c.name)}">`:`<span class="hand-art" style="background-image:url('${esc(imgUrl(c))}')"></span>
    <span class="hand-card-title">${esc(c.name||'การ์ด')}</span>
    <span class="hand-card-type">${esc(c.type||'การ์ด')}</span>
@@ -411,8 +413,14 @@ function renderLastDrawPreview(lastDraw,fallback){
  const who=lastDraw?.playerName?`${lastDraw.playerName} • `:'';
  target.innerHTML=`<img class="discard-preview" src="${esc(imgUrl(card))}" alt="${esc((who+card.name)||'ไพ่ล่าสุดที่จั่ว')}" draggable="false"><small>ไพ่ล่าสุดที่จั่ว</small>`;
 }
+function maybeClosePreviewOnTurnStart(turnId,phase,isMine){
+ const token=`${mode}:${turnId}:${phase}`;
+ if(isMine&&phase==='draw'&&lastPreviewTurnToken!==token){const preview=$('cardPreviewModal');if(preview)preview.remove();}
+ lastPreviewTurnToken=token;
+}
 function renderLocal(){
  const g=localGame;if(!g)return;const p=g.players.find(x=>x.id==='human');if(!p)return;
+ maybeClosePreviewOnTurnStart(g.players[g.turn]?.id,g.phase,g.turn===0&&!g.over&&!g.pending);
  renderPlayers(g,true);renderHand(p.hand,g.turn===0&&!g.over&&!g.pending&&g.phase==='afterdraw');
  $('deckCount').textContent=`เหลือ ${g.deck.length} ใบ`;$('tableDeckCount').textContent=`${g.deck.length} ใบ`;if($('sideDeckCount'))$('sideDeckCount').textContent=`${g.deck.length} ใบ`;$('roundCount').textContent=g.round;updateNightOmen(g.round);
  $('turnBanner').textContent=g.over?'เกมจบแล้ว':g.pending?(g.pending.playerId==='human'?'ผีปรากฏตัว! เลือกว่าจะป้องกันหรือไม่':`${g.players.find(x=>x.id===g.pending.playerId)?.name||'ผู้เล่น'} กำลังเจอผี`):g.turn===0?'ถึงตาคุณแล้ว — จั่วการ์ด 1 ใบ':`ถึงตา ${g.players[g.turn].name}`;
@@ -429,6 +437,7 @@ function renderLocal(){
 }
 function renderOnline(){
  const s=onlineState;if(!s)return;
+ const current=s.players?.[s.turn];maybeClosePreviewOnTurnStart(current?.id,s.phase,current?.id===socket?.id&&!s.over&&!s.pending);
  renderPlayers(s,false);const me=s.players.find(p=>p.id===socket?.id);renderHand(me?.hand||[],s.players[s.turn]?.id===socket?.id&&s.phase==='afterdraw'&&!s.over&&!s.pending);
  const surrenderBtn=$('leaveGame');if(surrenderBtn){const living=(s.players||[]).filter(p=>p.alive!==false).length;surrenderBtn.disabled=!!(mode==='online'&&living<=2);surrenderBtn.title=living<=2?'ออนไลน์ต้องมีผู้เล่นที่ยังอยู่มากกว่า 2 คนจึงยอมแพ้ได้':'ยอมแพ้และออกจากเกม';}
  $('deckCount').textContent=`เหลือ ${s.deckCount} ใบ`;$('tableDeckCount').textContent=`${s.deckCount} ใบ`;if($('sideDeckCount'))$('sideDeckCount').textContent=`${s.deckCount} ใบ`;$('roundCount').textContent=s.round||1;updateNightOmen(s.round||1);
@@ -453,7 +462,7 @@ let revealTimer=null, revealDelayTimer=null; function showReveal(draw,isGhost){c
  $('revealTitle').textContent=`${drawerName} จั่วไพ่ได้`; 
  $('revealTitle').setAttribute('aria-label',`ผู้จั่วไพ่: ${drawerName}`);
  const reveal=$('drawReveal');
- let drawerBadge=$('revealDrawerBadge');if(!drawerBadge){drawerBadge=document.createElement('div');drawerBadge.id='revealDrawerBadge';drawerBadge.className='reveal-drawer-badge';reveal.appendChild(drawerBadge);}drawerBadge.textContent=`🃏 ${drawerName} จั่วได้`;
+ const drawerBadge=$('revealDrawerBadge');if(drawerBadge)drawerBadge.remove();
  reveal.classList.toggle('finished-ghost-reveal',!!c.fullArt);
  reveal.classList.toggle('single-full-card-reveal',!!c.fullArt&&!isGhost);
  reveal.classList.toggle('instant-danger-reveal',!!c.instantDanger);
