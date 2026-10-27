@@ -1,0 +1,7 @@
+BanPeeThai v2.3.23 — RED THAI HORROR LOBBY
+
+- Restyled the lobby landing page and setup modal in black, blood red, and ash gray.
+- Removed the pink/sweet lobby button palette in favor of dark crimson buttons and distressed Thai-horror styling.
+- Added the user-provided haunted Thai-house logo to the lobby brand and hero.
+- Scoped CSS changes to lobby/setup UI; gameplay table, player-seat coordinates, card hand, and game HUD were intentionally left unchanged.
+- Version query strings updated to avoid stale browser CSS/JS cache.

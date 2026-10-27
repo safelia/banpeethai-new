@@ -2171,3 +2171,83 @@ main { display:block!important; min-height:calc(100vh - 76px)!important; overflo
 #lobbyPlayers{padding:12px;border-radius:12px;background:#ffffff08;color:#f7d7b5;line-height:1.9;overflow-wrap:anywhere;}
 #startOnlineGame:disabled{opacity:.45;filter:grayscale(.3);}
 @media(max-width:520px){.setup-flow-modal{padding:25px 20px!important;}.room-code-panel strong{font-size:24px;letter-spacing:3px;}}
+
+
+/* v2.3.23 — dark Thai-horror red/black/ash-gray theme for the lobby only.
+   The in-game table, player positions, cards, and game HUD are intentionally untouched. */
+:root{--lobby-black:#090708;--lobby-red:#8d1018;--lobby-red-bright:#c51d27;--lobby-ash:#b8b0b0;--lobby-line:#632027;}
+body{background:#090708;color:#d9d1d1;}
+body:before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 50% 20%,#3b080c 0%,#16090b 45%,#070607 100%);}
+.topbar{background:#090708e8;border-bottom-color:#8d10183b;}
+.brand{color:#e7e0e0;}
+.brand-mark{width:54px;height:54px;border-color:#782028;border-radius:50%;background:#100b0c;overflow:hidden;box-shadow:0 0 22px #9c111b24;}
+.brand-mark img{width:100%;height:100%;object-fit:contain;mix-blend-mode:screen;filter:grayscale(1) contrast(1.35) brightness(1.25);}
+.brand b{color:#eee7e7;text-shadow:0 0 18px #8d101833;}
+.brand small,.profile small{color:#9b8e90;}
+.topbar nav button,.profile button{color:#d6cece;}
+.topbar nav button:hover{border-color:#7f2028;background:#b20e1910;}
+.profile{background:#130b0c;border-color:#69202770;}
+.profile>span{filter:grayscale(1);}
+.hero{margin-top:22px;}
+.hero-copy,.quick-panel{border-color:#7120298c;border-radius:18px;box-shadow:0 20px 70px #000c,0 0 28px #8d10181a;}
+.hero-copy{background:linear-gradient(90deg,#090708f7 0%,#10090bf0 52%,#17090bbd 100%),url('/assets/haunted-thai-house.webp') center/cover;}
+.hero-copy:after{content:"ยันต์ • เงา • วิญญาณ";right:28px;bottom:22px;color:#8e343b73;font-family:Pridi,serif;font-size:14px;letter-spacing:4px;}
+.eyebrow{color:#c24b52;letter-spacing:1.5px;text-shadow:0 0 12px #a10f1a24;}
+.logo-drawing{width:118px;height:118px;margin-top:6px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;}
+.logo-drawing img{width:100%;height:100%;object-fit:contain;mix-blend-mode:screen;filter:grayscale(1) contrast(1.4) brightness(1.25);}
+.hero h1{color:#e5dddd;text-shadow:0 2px 0 #3e0b10,0 0 28px #a20e1c55;font-size:clamp(42px,5vw,68px);}
+.english{color:#82797b;letter-spacing:4px;}
+.lead{color:#c5bcbc;}
+.chips span{border-color:#702129;background:#0b0809d9;color:#bdb3b4;border-radius:4px;}
+.primary{background:linear-gradient(135deg,#b51a24,#680a12);border:1px solid #e04a51;color:#fff0ef;box-shadow:0 4px 0 #3b080c,0 10px 25px #9b0c1c36;}
+.primary:hover{filter:brightness(1.18);box-shadow:0 4px 0 #3b080c,0 0 24px #d20e2738;}
+.primary.big{border-radius:5px;letter-spacing:.4px;}
+.secondary{background:#100b0c;color:#d2c8c8;border-color:#642027;border-radius:5px;}
+.secondary:hover{background:#211012;border-color:#a62a32;}
+.quick-panel{background:linear-gradient(145deg,#1b1012,#090708 75%);color:#ddd4d4;}
+.quick-panel h2{color:#e6dddd;}
+.quick-panel p{color:#b4a8aa;}
+.panel-label{color:#b73a43;}
+.objective{background:#0c0809;border-color:#5d1c24;color:#ded4d4;}
+.objective small{color:#a89b9c;}
+.quick-panel .secondary{background:#130a0c;color:#ddd2d2;border:1px solid #74212a;}
+.feature-strip>div{background:linear-gradient(145deg,#1a1012,#0c090a);border-color:#60202780;border-radius:8px;box-shadow:0 12px 28px #0007;}
+.feature-strip span{background:#6d101a30;filter:grayscale(.6);}
+.feature-strip b{color:#ded5d5;}
+.feature-strip small{color:#9f9294;}
+.section h2{color:#e5dddd;}
+.section h2 span{color:#b82b35;}
+.section-heading p{color:#a89c9e;}
+.card-tools input,.card-tools select{background:#100b0c;color:#ded5d5;border-color:#632027;}
+.card-tools input:focus,.modal input:focus{border-color:#b92b35;}
+.card{background:linear-gradient(145deg,#241315,#0b0809);border-color:#7e2b31;border-radius:8px;}
+.card-art{filter:saturate(.82);}
+.card-type{background:#6c151e;color:#f3dddd;}
+.card h3{color:#e0d7d7;}
+.card p{color:#b0a3a4;}
+.card .effect{color:#d49a9d;}
+.rules-section{background:linear-gradient(145deg,#1a1012,#0b0809);border-color:#60202780;border-radius:12px;}
+.rules-grid article{background:#0d090a;border-color:#552027;border-radius:8px;}
+.rules-grid article>span,.rules-grid h3{color:#c43a43;}
+.rules-grid p{color:#b0a4a5;}
+.note{background:#54101724;border-color:#72222a;color:#c6b7b8;}
+footer{border-top-color:#632027;color:#c6b0b1;}
+footer small{color:#8d8183;}
+.modal-backdrop{background:#030203ed;backdrop-filter:blur(12px);}
+.setup-flow-modal{background:radial-gradient(ellipse at top,#291013,#0b0809 70%);border:1px solid #85232c;border-radius:12px;box-shadow:0 25px 90px #000,0 0 32px #8e101c24;}
+.modal h2{color:#e5dddd;text-shadow:0 0 20px #9b101c30;}
+.modal label{color:#c4b6b7;}
+.modal input,.modal select{background:#080607;color:#e1d8d8;border-color:#612029;border-radius:5px;}
+.close{color:#d4c8c8;}
+.setup-back{background:#100a0b;color:#d2c7c7;border-color:#632027;border-radius:4px;}
+.count-buttons button{background:#100a0b;color:#d9cece;border-color:#632027;border-radius:5px;}
+.count-buttons button.selected{background:linear-gradient(135deg,#b51a24,#680a12);border-color:#d84b52;color:#fff;box-shadow:0 0 0 2px #a8202a33;}
+.setup-divider{color:#9f9092;}
+.setup-divider:before,.setup-divider:after{background:#652028;}
+.room-code-panel{background:#080607;border-color:#6e2028;border-radius:8px;}
+.room-code-panel small{color:#a99b9c;}
+.room-code-panel strong{color:#e4dada;}
+#lobbyPlayers{background:#100a0b;color:#d7caca;}
+#startOnlineGame:disabled{opacity:.45;}
+/* Keep the redesigned mood on lobby and setup UI only; gameplay styling stays on its prior palette. */
+@media(max-width:760px){.topbar{background:#090708f0;}.hero{margin-top:12px;}.hero-copy{background:linear-gradient(180deg,#090708e8,#10090bf5),url('/assets/haunted-thai-house-mobile.jpg') center/cover;}.logo-drawing{width:94px;height:94px;}.hero-copy:after{font-size:10px;letter-spacing:2px;right:14px;}.feature-strip>div{padding:12px;}}
