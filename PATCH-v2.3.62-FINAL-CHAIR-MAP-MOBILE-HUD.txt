@@ -1,0 +1,7 @@
+BanPeeThai v2.3.62
+- Replaced static player index seat assignment with count-aware maps: 2 players [1,5], 3 [1,2,5], 4 [1,2,4,5], 5 [1,2,3,4,5].
+- Added final desktop chair coordinates based on the landscape artwork.
+- Added final portrait coordinates based on the mobile artwork.
+- Enlarged the mobile discard preview to fill the table card slot.
+- Made the lobby sound toggle and profile controls responsive and non-overlapping on phones.
+- Bumped stylesheet cache key and package version to 2.3.62.

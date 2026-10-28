@@ -2832,3 +2832,50 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
     min-width:78px!important;max-width:clamp(78px,23vw,118px)!important;margin-left:0!important;
   }
 }
+
+
+/* v2.3.62 — final seat map based on the actual desktop and portrait scene artwork.
+   The JS seat maps keep the human in seat-1 and use only chairs that exist for 2–4 players. */
+#gameScreen:not(.hidden) .players-ring{overflow:visible!important;}
+#gameScreen:not(.hidden) .players-ring .player-row{transform:translate(-50%,-50%)!important;}
+@media (min-width:761px){
+  /* Desktop background: left outer, left inner, head chair, right inner, right outer. */
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-1{left:20.2%!important;top:46.5%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-2{left:34.0%!important;top:33.5%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-3{left:50.0%!important;top:28.0%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-4{left:68.5%!important;top:33.5%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-5{left:82.5%!important;top:46.5%!important;right:auto!important;bottom:auto!important;}
+}
+@media (max-width:760px) and (orientation:portrait){
+  /* Phone background: anchor medallion centers to the centers of the five illustrated cushions. */
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-1{left:9.5%!important;top:52.5%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-2{left:9.5%!important;top:36.5%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-3{left:50%!important;top:27.5%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-4{left:90.5%!important;top:36.5%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-5{left:90.5%!important;top:52.5%!important;right:auto!important;bottom:auto!important;}
+  /* Keep the left-table card visually filling its outlined slot instead of shrinking to its portrait ratio. */
+  #gameScreen:not(.hidden) #discardTop.discard-pile{left:20.1%!important;top:44.1%!important;width:17.2%!important;height:10.2%!important;}
+  #gameScreen:not(.hidden) #discardTop .discard-preview{display:block!important;width:100%!important;height:100%!important;object-fit:fill!important;object-position:center!important;}
+  /* Hearts stay inside the hand panel's header, away from the card count and edges. */
+  #gameScreen:not(.hidden) .hand-zone .hand-heading-title #handLifeCount{right:13%!important;top:50%!important;gap:clamp(2px,.7vw,5px)!important;}
+}
+/* Lobby header controls must remain distinct and tappable on narrow screens. */
+@media(max-width:760px){
+  .topbar{height:auto!important;min-height:60px!important;padding:8px 10px!important;gap:8px!important;flex-wrap:wrap!important;align-items:center!important;}
+  .topbar nav{display:none!important;}
+  .topbar .brand{gap:7px!important;min-width:0!important;flex:1 1 auto!important;}
+  .topbar .brand-mark{width:34px!important;height:34px!important;flex:0 0 34px!important;border-radius:10px!important;font-size:20px!important;}
+  .topbar .brand b{font-size:clamp(17px,4.5vw,21px)!important;white-space:nowrap!important;}
+  .topbar .brand small{display:none!important;}
+  .topbar .sound-toggle{position:static!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 auto!important;width:auto!important;min-width:92px!important;max-width:116px!important;height:38px!important;padding:0 9px!important;margin:0!important;border:1px solid #c99b5e88!important;border-radius:10px!important;background:#160d0df0!important;color:#ffe6bc!important;font-size:11px!important;line-height:1.1!important;white-space:nowrap!important;opacity:1!important;transform:none!important;}
+  .topbar .profile{flex:0 0 auto!important;gap:5px!important;padding:4px 6px!important;border-radius:10px!important;max-width:92px!important;}
+  .topbar .profile>span{font-size:17px!important;}
+  .topbar .profile>div{display:none!important;}
+  .topbar .profile button{padding:3px!important;font-size:14px!important;}
+}
+@media(max-width:390px){
+  .topbar{padding:7px 8px!important;gap:6px!important;}
+  .topbar .brand-mark{width:30px!important;height:30px!important;flex-basis:30px!important;}
+  .topbar .sound-toggle{min-width:84px!important;max-width:96px!important;height:34px!important;padding:0 6px!important;font-size:10px!important;}
+  .topbar .profile{max-width:42px!important;}
+}

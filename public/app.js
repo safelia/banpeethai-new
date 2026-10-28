@@ -334,7 +334,12 @@ function renderPlayers(state, local=false){
   const hearts=Math.max(0,Number(p.hearts)||0);
   const keys=playerKeyCount(p);
   const heartIcons=Array.from({length:3},(_,i)=>`<img class="life-heart ${i<hearts?'life-heart-alive':'life-heart-lost'}" src="/assets/ui/${i<hearts?'heart-alive':'heart-lost'}.webp" alt="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" title="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" draggable="false">`).join('');
-  return `<div class="player-row seat-${index+1} ${isTurn?'active-player':''} ${isMyTurn?'my-turn':''} ${p.alive===false?'dead-player':''}" style="--seat-index:${index}"><div class="player-avatar">${p.avatar?`<img src="${esc(p.avatar)}" alt="" draggable="false" loading="eager">`:p.id==='human'?'🧑':p.bot?'👻':'🧑‍🚀'}</div><div class="player-meta"><b>${esc(p.name)} ${p.id==='human'||(!local&&p.id===socket?.id)?'(คุณ)':''}</b><small>🗝️ ${keys}/3 กุญแจ ${p.alive===false?'• ออกจากเกม':''}</small><span class="hearts" role="img" aria-label="หัวใจ ${hearts} จาก 3 ดวง">${heartIcons}</span></div>${isTurn?'<span class="seat-turn">◀ ถึงตา</span>':''}</div>`;
+  const count=players.length;
+  // Fill visible chair positions from the user's seat outward. This avoids assigning
+  // seat-3/seat-4 to the wrong side when a room has only 2, 3, or 4 players.
+  const seatMaps={2:[1,5],3:[1,2,5],4:[1,2,4,5],5:[1,2,3,4,5]};
+  const seat=(seatMaps[count]||seatMaps[5])[index];
+  return `<div class="player-row seat-${seat} player-count-${count} ${isTurn?'active-player':''} ${isMyTurn?'my-turn':''} ${p.alive===false?'dead-player':''}" style="--seat-index:${index}"><div class="player-avatar">${p.avatar?`<img src="${esc(p.avatar)}" alt="" draggable="false" loading="eager">`:p.id==='human'?'🧑':p.bot?'👻':'🧑‍🚀'}</div><div class="player-meta"><b>${esc(p.name)} ${p.id==='human'||(!local&&p.id===socket?.id)?'(คุณ)':''}</b><small>🗝️ ${keys}/3 กุญแจ ${p.alive===false?'• ออกจากเกม':''}</small><span class="hearts" role="img" aria-label="หัวใจ ${hearts} จาก 3 ดวง">${heartIcons}</span></div>${isTurn?'<span class="seat-turn">◀ ถึงตา</span>':''}</div>`;
  }).join('');
 }
 function renderHand(hand,canPlay){
