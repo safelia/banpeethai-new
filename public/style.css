@@ -2501,3 +2501,25 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
  #gameScreen .hand-zone .hand-heading-title #handLifeCount{top:calc(50% + 7px)!important;right:clamp(46px,11vw,68px)!important;gap:3px!important;height:42px!important;}
  #gameScreen .hand-zone .hand-heading-title #handLifeCount .hand-life-heart{width:36px!important;height:36px!important;}
 }
+
+
+/* v2.3.49 — Fan the hand with progressive overlap; never require horizontal scrolling. */
+#gameScreen:not(.hidden) #hand.hand{
+  display:flex!important; flex-flow:row nowrap!important; justify-content:flex-start!important;
+  align-items:stretch!important; gap:0!important; overflow:hidden!important;
+  overflow-x:hidden!important; white-space:nowrap!important; scroll-behavior:auto!important;
+}
+#gameScreen:not(.hidden) #hand .hand-card{
+  flex:0 0 var(--hand-card-width,110px)!important;
+  width:var(--hand-card-width,110px)!important; min-width:0!important;
+  max-width:var(--hand-card-width,110px)!important; margin-right:0!important;
+  position:relative!important; transform:none!important;
+}
+#gameScreen:not(.hidden) #hand .hand-card + .hand-card{
+  margin-left:calc(-1 * var(--hand-overlap,0px))!important;
+}
+
+
+/* v2.3.50: move the life-heart row farther down so it clears the top border. */
+#gameScreen .hand-zone .hand-heading-title #handLifeCount{top:calc(50% + 20px)!important;}
+@media(max-width:700px){#gameScreen .hand-zone .hand-heading-title #handLifeCount{top:calc(50% + 17px)!important;}}

@@ -1,0 +1,6 @@
+BanPeeThai v2.3.49
+
+- Hand cards now stack progressively with negative overlap as the hand grows.
+- The hand remains clipped to its container and does not use horizontal scrolling.
+- The center draw/reveal UI continues to use the single shared #drawReveal modal, avoiding multiple independent reveal panels.
+- Existing card play and life-heart state logic preserved.
