@@ -1,0 +1,8 @@
+BanPeeThai v2.3.56 — Centered Medallion + Random Player Art
+
+- Vertically center the avatar, player name, key count and hearts inside each circular player medallion.
+- Remove legacy avatar pseudo-ornaments that could overlap the supplied artwork.
+- Add nine supplied transparent PNG explorer illustrations as player avatars.
+- Shuffle avatars per new game and assign unique images to players in that game.
+- Include avatar paths in online game state so every connected client sees the same avatar for each player.
+- Preserve the red luminous local-turn highlight and subdued gold frames for other players.

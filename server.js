@@ -13,6 +13,7 @@ const cardById=id=>cards.find(c=>c.id===id);
 const clone=x=>JSON.parse(JSON.stringify(x));
 function roomCode(){let c;do{c=Math.random().toString(36).slice(2,7).toUpperCase()}while(rooms.has(c));return c}
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const PLAYER_AVATARS=['01_map.png','02_lantern.png','03_light_moth.png','04_peeking.png','05_compass.png','06_scared.png','07_drinking.png','08_sleeping.png','09_scroll.png'].map(name=>`/assets/player-avatars/${name}`);
 function log(g,s){g.logs.unshift(s);g.logs=g.logs.slice(0,24)}
 function alive(g){return g.players.filter(p=>p.alive)}
 function keyCount(p){return (p.keys||0)+(p.hand||[]).filter(c=>c.id==='key').length}
@@ -36,7 +37,7 @@ function requestPlayerState(r,socket){
 }
 function privateState(r,p){
  const g=r.game;if(!g)return null;
- return {room:r.code,host:r.host,players:g.players.map(x=>({id:x.id,name:x.name,hearts:x.hearts,keys:keyCount(x),keyCountTotal:true,storedKeys:x.keys||0,alive:x.alive,handCount:x.hand.length,hand:x.id===p.id?x.hand:undefined})),turn:g.turn,round:g.round,deckCount:g.deck.length,discard:g.discard.slice(-1)[0]||null,logs:g.logs,over:g.over,winner:g.winner,pending:g.pending?{playerId:g.pending.playerId,card:g.pending.card}:null,pendingChoice:g.pendingChoice?.playerId===p.id?{type:g.pendingChoice.type}:null,lastDraw:g.lastDraw,phase:g.phase||'draw',turnStartedAt:g.turnStartedAt||Date.now(),afterDrawStartedAt:g.afterDrawStartedAt||null};
+ return {room:r.code,host:r.host,players:g.players.map(x=>({id:x.id,name:x.name,avatar:x.avatar,hearts:x.hearts,keys:keyCount(x),keyCountTotal:true,storedKeys:x.keys||0,alive:x.alive,handCount:x.hand.length,hand:x.id===p.id?x.hand:undefined})),turn:g.turn,round:g.round,deckCount:g.deck.length,discard:g.discard.slice(-1)[0]||null,logs:g.logs,over:g.over,winner:g.winner,pending:g.pending?{playerId:g.pending.playerId,card:g.pending.card}:null,pendingChoice:g.pendingChoice?.playerId===p.id?{type:g.pendingChoice.type}:null,lastDraw:g.lastDraw,phase:g.phase||'draw',turnStartedAt:g.turnStartedAt||Date.now(),afterDrawStartedAt:g.afterDrawStartedAt||null};
 }
 function emitStates(r){for(const p of r.players){const s=io.sockets.sockets.get(p.id);if(s)s.emit('online-state',privateState(r,p))}}
 function nextTurn(r){
@@ -107,7 +108,8 @@ function makeDeck(){
  return shuffle(d);
 }
 function startGame(r){
- const g={players:r.players.map(p=>({id:p.id,name:p.name,hearts:3,keys:0,shields:0,hand:[],alive:true,skip:false})),deck:makeDeck(),discard:[],turn:0,round:1,logs:['ทุกคนเริ่มด้วยหัวใจ 3 ใบเท่านั้น','ถึงตาคุณแล้วต้องจั่ว 1 ใบ เว้นแต่ใช้การ์ดข้ามการจั่ว'],over:false,winner:null,pending:null,lastDraw:null,phase:'draw',turnStartedAt:Date.now(),afterDrawStartedAt:null,turnToken:1};
+ const avatarPool=shuffle([...PLAYER_AVATARS]);
+ const g={players:r.players.map((p,i)=>({id:p.id,name:p.name,avatar:avatarPool[i%avatarPool.length],hearts:3,keys:0,shields:0,hand:[],alive:true,skip:false})),deck:makeDeck(),discard:[],turn:0,round:1,logs:['ทุกคนเริ่มด้วยหัวใจ 3 ใบเท่านั้น','ถึงตาคุณแล้วต้องจั่ว 1 ใบ เว้นแต่ใช้การ์ดข้ามการจั่ว'],over:false,winner:null,pending:null,lastDraw:null,phase:'draw',turnStartedAt:Date.now(),afterDrawStartedAt:null,turnToken:1};
  r.game=g;r.started=true;log(g,'เจ้าของห้องเริ่มการผจญภัยแล้ว');
  // Tell every connected client in the Socket.IO room to leave the lobby, then send each player their private state.
  emitRoom(r);io.to(r.code).emit('game-started',{room:r.code});emitStates(r);scheduleTurnAutoDraw(r);

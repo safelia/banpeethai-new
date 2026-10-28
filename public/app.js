@@ -7,6 +7,8 @@ let localGame = null, toastTimer = null, lastRevealToken = '', lastRenderedRevea
 let localDrawTimer = null, localDrawTimerKey = '', countdownInterval = null;
 const byId = id => cards.find(c => c.id === id) || {id, name:id, type:'การ์ด', desc:'', effect:'', image:''};
 const playerKeyCount = p => p?.keyCountTotal ? (Number(p.keys)||0) : (Number(p?.storedKeys ?? p?.keys)||0) + (p?.hand||[]).filter(c=>c.id==='key').length;
+const PLAYER_AVATARS=['01_map.png','02_lantern.png','03_light_moth.png','04_peeking.png','05_compass.png','06_scared.png','07_drinking.png','08_sleeping.png','09_scroll.png'].map(name=>`/assets/player-avatars/${name}`);
+function randomPlayerAvatars(count){const pool=[...PLAYER_AVATARS];for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}return Array.from({length:count},(_,i)=>pool[i%pool.length]);}
 let musicEnabled=false, ambientAudio=null, lobbyAudio=null, screamAudio=null, localEndTimer=null, localEndTimerKey='', screamLoopTimer=null;
 let pendingCardSoundTimer=null, lastPreviewTurnToken='';
  let targetSelectionOpen=false, lastOmenRound=-1;
@@ -190,10 +192,11 @@ function startBotGame(){
  const usedNames=new Set([currentPlayerName.toLocaleLowerCase('th-TH')]);
  const botBaseNames=['น้องบัว','คุณข้าวปั้น','แม่มะลิ','เจ้าตูบ'];
  const uniqueBotName=(base,index)=>{let candidate=base,n=2;while(usedNames.has(candidate.toLocaleLowerCase('th-TH'))){candidate=`${base} ${n++}`;}usedNames.add(candidate.toLocaleLowerCase('th-TH'));return candidate;};
- const bots=Array.from({length:count-1},(_,i)=>({id:`bot-${i+1}`,name:uniqueBotName(botBaseNames[i%botBaseNames.length],i),hearts:3,keys:0,alive:true,hand:[],bot:true,skip:false}));
+ const avatars=randomPlayerAvatars(count);
+ const bots=Array.from({length:count-1},(_,i)=>({id:`bot-${i+1}`,name:uniqueBotName(botBaseNames[i%botBaseNames.length],i),avatar:avatars[i+1],hearts:3,keys:0,alive:true,hand:[],bot:true,skip:false}));
  const deck=[];cards.forEach(c=>{for(let i=0;i<(Number(c.copies)||0);i++){deck.push({...c,uid:`${c.id}-${Math.random().toString(36).slice(2,9)}`});}});
  for(let i=deck.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}
- localGame={players:[{id:'human',name:currentPlayerName,hearts:3,keys:0,alive:true,hand:[],bot:false,skip:false},...bots],deck,discard:[],turn:0,round:1,logs:['ทุกคนเริ่มด้วยหัวใจ 3 ดวง','ถึงตาคุณแล้ว ต้องจั่วการ์ด 1 ใบ'],over:false,winner:null,pending:null,phase:'draw',direction:1,lastDraw:null,turnStartedAt:Date.now()};
+ localGame={players:[{id:'human',name:currentPlayerName,avatar:avatars[0],hearts:3,keys:0,alive:true,hand:[],bot:false,skip:false},...bots],deck,discard:[],turn:0,round:1,logs:['ทุกคนเริ่มด้วยหัวใจ 3 ดวง','ถึงตาคุณแล้ว ต้องจั่วการ์ด 1 ใบ'],over:false,winner:null,pending:null,phase:'draw',direction:1,lastDraw:null,turnStartedAt:Date.now()};
  mode='bot';onlineRoom='';onlineState=null;closeSetup();show('gameScreen');hide('gameOver');updateSoundForScreen();$('roomTag').textContent='โหมดบอท';renderLocal();toast('เกมเริ่มแล้ว! คุณมีหัวใจ 3 ใบ');
 }
 let tableAnnouncementTimer=null;
@@ -331,7 +334,7 @@ function renderPlayers(state, local=false){
   const hearts=Math.max(0,Number(p.hearts)||0);
   const keys=playerKeyCount(p);
   const heartIcons=Array.from({length:3},(_,i)=>`<img class="life-heart ${i<hearts?'life-heart-alive':'life-heart-lost'}" src="/assets/ui/${i<hearts?'heart-alive':'heart-lost'}.webp" alt="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" title="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" draggable="false">`).join('');
-  return `<div class="player-row seat-${index+1} ${isTurn?'active-player':''} ${isMyTurn?'my-turn':''} ${p.alive===false?'dead-player':''}" style="--seat-index:${index}"><div class="player-avatar">${p.id==='human'?'🧑':p.bot?'👻':'🧑‍🚀'}</div><div class="player-meta"><b>${esc(p.name)} ${p.id==='human'?'(คุณ)':''}</b><small>🗝️ ${keys}/3 กุญแจ ${p.alive===false?'• ออกจากเกม':''}</small><span class="hearts" role="img" aria-label="หัวใจ ${hearts} จาก 3 ดวง">${heartIcons}</span></div>${isTurn?'<span class="seat-turn">◀ ถึงตา</span>':''}</div>`;
+  return `<div class="player-row seat-${index+1} ${isTurn?'active-player':''} ${isMyTurn?'my-turn':''} ${p.alive===false?'dead-player':''}" style="--seat-index:${index}"><div class="player-avatar">${p.avatar?`<img src="${esc(p.avatar)}" alt="" draggable="false" loading="eager">`:p.id==='human'?'🧑':p.bot?'👻':'🧑‍🚀'}</div><div class="player-meta"><b>${esc(p.name)} ${p.id==='human'||(!local&&p.id===socket?.id)?'(คุณ)':''}</b><small>🗝️ ${keys}/3 กุญแจ ${p.alive===false?'• ออกจากเกม':''}</small><span class="hearts" role="img" aria-label="หัวใจ ${hearts} จาก 3 ดวง">${heartIcons}</span></div>${isTurn?'<span class="seat-turn">◀ ถึงตา</span>':''}</div>`;
  }).join('');
 }
 function renderHand(hand,canPlay){
