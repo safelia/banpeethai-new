@@ -2410,3 +2410,12 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
   #gameScreen:not(.hidden) .hand-zone #handLifeCount .hand-life-heart,
   #gameScreen .hand-zone #handLifeCount .hand-life-heart{width:14px!important;height:14px!important;}
 }
+
+
+/* v2.3.45: remove the "ไพ่ในมือ" label; place clear life-heart icons directly after the card emblem. */
+#gameScreen .hand-zone .hand-heading-title{display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:clamp(10px,1vw,16px)!important;min-width:0!important;max-width:calc(100% - 58px)!important;overflow:visible!important;}
+#gameScreen .hand-zone .hand-heading-title .hand-heading-card-icon{display:block!important;visibility:visible!important;opacity:1!important;font-size:clamp(25px,2vw,32px)!important;line-height:1!important;margin:0!important;padding:0!important;flex:0 0 auto!important;white-space:nowrap!important;}
+#gameScreen .hand-zone #handLifeCount{display:inline-flex!important;align-items:center!important;justify-content:flex-start!important;gap:clamp(4px,.45vw,7px)!important;height:clamp(36px,3vw,44px)!important;min-width:max-content!important;width:auto!important;flex:0 0 auto!important;margin:0!important;padding:0!important;overflow:visible!important;}
+#gameScreen .hand-zone #handLifeCount .hand-life-heart{display:block!important;visibility:visible!important;opacity:1!important;width:clamp(30px,2.7vw,40px)!important;height:clamp(30px,2.7vw,40px)!important;object-fit:contain!important;flex:0 0 auto!important;margin:0!important;padding:0!important;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))!important;}
+#gameScreen .hand-zone #handLifeCount .hand-life-heart.is-lost{opacity:.9!important;}
+@media(max-width:700px){#gameScreen .hand-zone .hand-heading-title{gap:8px!important;max-width:calc(100% - 48px)!important;}#gameScreen .hand-zone .hand-heading-title .hand-heading-card-icon{font-size:24px!important;}#gameScreen .hand-zone #handLifeCount{height:32px!important;gap:3px!important;}#gameScreen .hand-zone #handLifeCount .hand-life-heart{width:27px!important;height:27px!important;}}

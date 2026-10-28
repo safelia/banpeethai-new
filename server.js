@@ -77,7 +77,7 @@ function finish(r,winnerId,message){
  const g=r.game;if(!g)return;if(r.turnTimer)clearTimeout(r.turnTimer);g.over=true;g.winner=winnerId;g.pending=null;log(g,message||'จบเกมแล้ว');emitStates(r);
 }
 function eliminate(r,p){
- const g=r.game;p.alive=false;p.hand=p.hand.filter(c=>c.id!=='heart');
+ const g=r.game;p.alive=false;
  log(g,`${p.name} หัวใจหมดแล้ว แพ้ออกจากเกม`);
  const living=alive(g);
  if(living.length<=1){finish(r,living[0]?.id||null,living.length?`${living[0].name} เป็นผู้รอดชีวิตคนสุดท้าย!`:'ผู้เล่นทุกคนแพ้');return;}
@@ -88,16 +88,15 @@ function eliminate(r,p){
  }
 }
 function hurt(r,p,reason){
- const i=p.hand.findIndex(c=>c.id==='heart');if(i>=0)p.hand.splice(i,1);
  p.hearts=Math.max(0,p.hearts-1);log(r.game,`${p.name} ${reason||'ถูกผีหลอก'} เสียหัวใจ 1 ดวง (เหลือ ${p.hearts})`);
  if(p.hearts===0)eliminate(r,p);
 }
 function makeDeck(){
- const d=[];for(const c of cards){if(c.copies>0&&c.id!=='heart'){for(let i=0;i<c.copies;i++)d.push({...clone(c),uid:`${c.id}-${Math.random().toString(36).slice(2,9)}`})}}
+ const d=[];for(const c of cards){if(c.copies>0){for(let i=0;i<c.copies;i++)d.push({...clone(c),uid:`${c.id}-${Math.random().toString(36).slice(2,9)}`})}}
  return shuffle(d);
 }
 function startGame(r){
- const g={players:r.players.map(p=>({id:p.id,name:p.name,hearts:3,keys:0,shields:0,hand:[1,2,3].map(n=>({...clone(cardById('heart')),uid:`heart-${p.id}-${n}`})),alive:true,skip:false})),deck:makeDeck(),discard:[],turn:0,round:1,logs:['ทุกคนเริ่มด้วยหัวใจ 3 ใบเท่านั้น','ถึงตาคุณแล้วต้องจั่ว 1 ใบ เว้นแต่ใช้การ์ดข้ามการจั่ว'],over:false,winner:null,pending:null,lastDraw:null,phase:'draw',turnStartedAt:Date.now(),afterDrawStartedAt:null,turnToken:1};
+ const g={players:r.players.map(p=>({id:p.id,name:p.name,hearts:3,keys:0,shields:0,hand:[],alive:true,skip:false})),deck:makeDeck(),discard:[],turn:0,round:1,logs:['ทุกคนเริ่มด้วยหัวใจ 3 ใบเท่านั้น','ถึงตาคุณแล้วต้องจั่ว 1 ใบ เว้นแต่ใช้การ์ดข้ามการจั่ว'],over:false,winner:null,pending:null,lastDraw:null,phase:'draw',turnStartedAt:Date.now(),afterDrawStartedAt:null,turnToken:1};
  r.game=g;r.started=true;log(g,'เจ้าของห้องเริ่มการผจญภัยแล้ว');
  // Tell every connected client in the Socket.IO room to leave the lobby, then send each player their private state.
  emitRoom(r);io.to(r.code).emit('game-started',{room:r.code});emitStates(r);scheduleTurnAutoDraw(r);
@@ -134,21 +133,21 @@ function drawCard(r,p){
   g.discard.push(c);hurt(r,p,`จั่วได้ ${c.name} ซึ่งเป็นผีอันตราย ป้องกันไม่ได้`);
   if(!g.over){g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);}else emitStates(r);return;
  }
- // น้ำมนต์ทำงานทันทีเมื่อจั่วได้และหัวใจยังไม่เต็ม: ใช้การ์ด ฟื้น 1 หัวใจ และเพิ่มการ์ดหัวใจเข้ามือ
+ // น้ำมนต์ทำงานทันทีเมื่อจั่วได้และหัวใจยังไม่เต็ม: ใช้การ์ด ฟื้น 1 หัวใจ 
  if(c.id==='holy-water' && !ghost && (p.hearts||0)<3){
   p.hearts=Math.min(3,(p.hearts||0)+1);
-  p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-water-${Date.now()}`});
+  
   g.discard.push(c);
-  log(g,`${p.name} จั่วได้น้ำมนต์ ใช้อัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3 และรับการ์ดหัวใจเข้ามือ`);
+  log(g,`${p.name} จั่วได้น้ำมนต์ ใช้อัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3 และ`);
   g.phase='afterdraw';g.afterDrawStartedAt=Date.now();g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);return;
  }
  // ดอกบัวนำโชคทำงานทันทีเมื่อจั่ว: ฟื้นหัวใจหากยังไม่เต็ม หรือเก็บไว้ป้องกันผีเมื่อหัวใจเต็ม
  if(c.id==='lucky-flower' && !ghost){
   if((p.hearts||0)<3){
    p.hearts=Math.min(3,(p.hearts||0)+1);
-   p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-lotus-${Date.now()}`});
+   
    g.discard.push(c);
-   log(g,`${p.name} จั่วได้ดอกบัวนำโชค ฟื้นหัวใจ 1 ดวงและเก็บหัวใจเข้ามือทันที`);
+   log(g,`${p.name} จั่วได้ดอกบัวนำโชค ฟื้นหัวใจ 1 ดวง`);
   }else{
    p.hand.push(c);
    log(g,`${p.name} หัวใจเต็ม จึงเก็บดอกบัวนำโชคไว้ป้องกันผี`);
@@ -214,7 +213,7 @@ io.on('connection',socket=>{
   const phase=g.phase||'draw';if(phase!=='afterdraw'&&!(phase==='draw'&&['gecko','owl','skip-next'].includes(p.hand[index]?.id)))return;
   const c=p.hand[index];if(!c)return;
   if(phase==='afterdraw'&&c.id==='skip-next'){socket.emit('game-error','การ์ดข้ามการจั่วใช้ได้ก่อนจั่วเท่านั้น');return;}
-  if(['heart','protection','lucky-flower'].includes(c.id)){socket.emit('game-error',c.id==='heart'?'หัวใจเป็นพลังชีวิต ไม่สามารถใช้เล่นได้':c.id==='lucky-flower'?'ดอกบัวนำโชคทำงานอัตโนมัติเมื่อจั่ว หรือเก็บไว้ป้องกันผีเมื่อหัวใจเต็ม':'เก็บเครื่องรางไว้ใช้ตอนเจอผี');return}
+  if(['protection','lucky-flower'].includes(c.id)){socket.emit('game-error',c.id==='lucky-flower'?'ดอกบัวนำโชคทำงานอัตโนมัติเมื่อจั่ว หรือเก็บไว้ป้องกันผีเมื่อหัวใจเต็ม':'เก็บเครื่องรางไว้ใช้ตอนเจอผี');return}
   const otherPlayers=()=>g.players.filter(x=>x.alive&&x.id!==p.id);
   const target=()=>g.players.find(x=>x.id===targetId&&x.alive&&x.id!==p.id);
   if(['skip','ban','cat','eye','ghost-visit','ghost-disguise','friend-holy-water'].includes(c.id)&&!targetId){socket.emit('game-error','เลือกผู้เล่นเป้าหมายก่อนใช้การ์ด');return}
@@ -239,9 +238,9 @@ io.on('connection',socket=>{
   }else if(c.id==='key'){
    p.keys=(p.keys||0)+1;log(g,`${p.name} ใช้กุญแจ ได้กุญแจสะสม ${keyCount(p)}/3`);
   }else if(c.id==='holy-water'){
-   if((p.hearts||0)<3){p.hearts=Math.min(3,p.hearts+1);p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-water-${Date.now()}`});log(g,`${p.name} ใช้ ${c.name} ฟื้นหัวใจเป็น ${p.hearts}/3 และเพิ่มการ์ดหัวใจเข้ามือ`)}else{p.shields=(p.shields||0)+1;log(g,`${p.name} หัวใจเต็ม จึงเปลี่ยนน้ำมนต์เป็นเครื่องรางป้องกัน 1 ครั้ง`)}
+   if((p.hearts||0)<3){p.hearts=Math.min(3,p.hearts+1);log(g,`${p.name} ใช้ ${c.name} ฟื้นหัวใจเป็น ${p.hearts}/3 `)}else{p.shields=(p.shields||0)+1;log(g,`${p.name} หัวใจเต็ม จึงเปลี่ยนน้ำมนต์เป็นเครื่องรางป้องกัน 1 ครั้ง`)}
   }else if(c.id==='friend-holy-water'){
-   const t=target();if(t&&(t.hearts||0)<3){t.hearts=Math.min(3,(t.hearts||0)+1);t.hand.push({...clone(cardById('heart')),uid:`heart-${t.id}-friend-water-${Date.now()}`});log(g,`${p.name} พรมน้ำมนต์ให้ ${t.name} ฟื้นหัวใจเป็น ${t.hearts}/3 และเพิ่มการ์ดหัวใจเข้ามือ`);effect(`${t.name} ได้รับหัวใจเพิ่ม 1 ดวง (${t.hearts}/3)`,cardById('heart'));}else{log(g,`${t?.name||'เพื่อน'} มีหัวใจเต็มแล้ว น้ำมนต์จึงไม่เพิ่มหัวใจ`);effect('ผู้เล่นเป้าหมายมีหัวใจเต็มแล้ว');}
+   const t=target();if(t&&(t.hearts||0)<3){t.hearts=Math.min(3,(t.hearts||0)+1);log(g,`${p.name} พรมน้ำมนต์ให้ ${t.name} ฟื้นหัวใจเป็น ${t.hearts}/3 `);effect(`${t.name} ได้รับหัวใจเพิ่ม 1 ดวง (${t.hearts}/3)`);}else{log(g,`${t?.name||'เพื่อน'} มีหัวใจเต็มแล้ว น้ำมนต์จึงไม่เพิ่มหัวใจ`);effect('ผู้เล่นเป้าหมายมีหัวใจเต็มแล้ว');}
   }else if(['blessed-rice'].includes(c.id)){
    p.shields=(p.shields||0)+1;log(g,`${p.name} เตรียม ${c.name} เป็นเครื่องรางป้องกันผี 1 ครั้ง (มี ${p.shields} ชั้น)`);
   }else if(c.id==='reverse'){
@@ -274,7 +273,7 @@ io.on('connection',socket=>{
    if(t?.hand?.length){g.pendingChoice={playerId:p.id,type:'eye',targetPlayerId:t.id,targetName:t.name,cards:t.hand.map(x=>({...x}))};g.turnToken=(g.turnToken||0)+1;if(r.turnTimer)clearTimeout(r.turnTimer);emitStates(r);socket.emit('card-effect',{kind:'omen-choice',choiceType:'eye',message:`เลือกการ์ด 1 ใบจากมือ ${t.name} เพื่อขโมย`,cards:g.pendingChoice.cards});return;}
    else {log(g,`${t?.name||'ผู้เล่น'} ไม่มีไพ่ในมือให้เลือก`);effect(`${t?.name||'ผู้เล่น'} ไม่มีไพ่ในมือให้เลือก`)}
   }else if(c.id==='lantern'){
-   if(!g.deck.length&&g.discard.length)g.deck=shuffle(g.discard.splice(0));const extra=g.deck.pop();if(extra){const ghost=extra.kind==='ghost'||extra.type==='ผีอันตราย';g.lastDraw={token:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,playerId:p.id,playerName:p.name,card:extra,ghost};log(g,`${p.name} ใช้ ${c.name} จั่วเพิ่มได้ “${extra.name}”`);if(extra.instantDanger){g.discard.push(extra);hurt(r,p,`จั่วเพิ่มได้ ${extra.name} ซึ่งเป็นผีอันตราย ป้องกันไม่ได้`);if(!g.over){g.phase='afterdraw';g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);}else emitStates(r);socket.emit('card-effect',{kind:'reveal',message:'โคมลอยนำทางเปิดเจอผีอันตราย!',card:extra,token:g.lastDraw.token});return;}if(ghost){g.pending={playerId:p.id,card:extra};g.phase='resolve';g.turnToken=(g.turnToken||0)+1;emitStates(r);socket.emit('card-effect',{kind:'reveal',message:'โคมลอยนำทางทำให้จั่วเพิ่ม แต่พบผี!',card:extra,token:g.lastDraw.token});return;}if(extra.id==='holy-water'&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-lantern-water-${Date.now()}`});g.discard.push(extra);log(g,`${p.name} ใช้โคมลอยจั่วได้น้ำมนต์ ใช้อัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`);effect(`น้ำมนต์ทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,cardById('heart'));}else if(extra.id==='lucky-flower'&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-lantern-flower-${Date.now()}`});g.discard.push(extra);log(g,`${p.name} ใช้โคมลอยจั่วได้ดอกบัว ฟื้นหัวใจเป็น ${p.hearts}/3`);effect(`ดอกบัวทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,cardById('heart'));}else{p.hand.push(extra);effect(`โคมลอยนำทาง: จั่วเพิ่มและเก็บ “${extra.name}” เข้ามือ`,extra)}}else{log(g,`${p.name} ใช้ ${c.name} แต่กองจั่วว่าง`)}
+   if(!g.deck.length&&g.discard.length)g.deck=shuffle(g.discard.splice(0));const extra=g.deck.pop();if(extra){const ghost=extra.kind==='ghost'||extra.type==='ผีอันตราย';g.lastDraw={token:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`,playerId:p.id,playerName:p.name,card:extra,ghost};log(g,`${p.name} ใช้ ${c.name} จั่วเพิ่มได้ “${extra.name}”`);if(extra.instantDanger){g.discard.push(extra);hurt(r,p,`จั่วเพิ่มได้ ${extra.name} ซึ่งเป็นผีอันตราย ป้องกันไม่ได้`);if(!g.over){g.phase='afterdraw';g.turnToken=(g.turnToken||0)+1;emitStates(r);scheduleTurnAutoDraw(r);}else emitStates(r);socket.emit('card-effect',{kind:'reveal',message:'โคมลอยนำทางเปิดเจอผีอันตราย!',card:extra,token:g.lastDraw.token});return;}if(ghost){g.pending={playerId:p.id,card:extra};g.phase='resolve';g.turnToken=(g.turnToken||0)+1;emitStates(r);socket.emit('card-effect',{kind:'reveal',message:'โคมลอยนำทางทำให้จั่วเพิ่ม แต่พบผี!',card:extra,token:g.lastDraw.token});return;}if(extra.id==='holy-water'&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);g.discard.push(extra);log(g,`${p.name} ใช้โคมลอยจั่วได้น้ำมนต์ ใช้อัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`);effect(`น้ำมนต์ทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,cardById('heart'));}else if(extra.id==='lucky-flower'&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);g.discard.push(extra);log(g,`${p.name} ใช้โคมลอยจั่วได้ดอกบัว ฟื้นหัวใจเป็น ${p.hearts}/3`);effect(`ดอกบัวทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,cardById('heart'));}else{p.hand.push(extra);effect(`โคมลอยนำทาง: จั่วเพิ่มและเก็บ “${extra.name}” เข้ามือ`,extra)}}else{log(g,`${p.name} ใช้ ${c.name} แต่กองจั่วว่าง`)}
   }else{
    log(g,`${p.name} ใช้ ${c.name}`);effect(`ใช้ ${c.name} แล้ว`)
   }
@@ -298,7 +297,7 @@ io.on('connection',socket=>{
     g.pending={playerId:p.id,card:chosen};g.phase='resolve';g.turnToken=(g.turnToken||0)+1;
     log(g,`${p.name} เลือก “${chosen.name}” จากจิ้งจกทัก แต่พบผี!`);
     emitStates(r);socket.emit('card-effect',{kind:'reveal',message:'จิ้งจกทักเลือกได้ไพ่ผี!',card:chosen,token:`${Date.now()}-${Math.random().toString(36).slice(2,8)}`});return;
-   }else if(['holy-water','lucky-flower'].includes(chosen.id)&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-gecko-${Date.now()}`});g.discard.push(chosen);log(g,`${p.name} เลือกได้ ${chosen.name} จากจิ้งจกทัก ใช้อัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`);socket.emit('card-effect',{kind:'show-card',message:`${chosen.name} ทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,card:chosen});}else{p.hand.push(chosen);log(g,`${p.name} ใช้จิ้งจกทักและเก็บ “${chosen.name}” เข้ามือ`);socket.emit('card-effect',{kind:'show-card',message:`จิ้งจกทัก: เก็บ “${chosen.name}” เข้ามือ`,card:chosen});}
+   }else if(['holy-water','lucky-flower'].includes(chosen.id)&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);g.discard.push(chosen);log(g,`${p.name} เลือกได้ ${chosen.name} จากจิ้งจกทัก ใช้อัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`);socket.emit('card-effect',{kind:'show-card',message:`${chosen.name} ทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,card:chosen});}else{p.hand.push(chosen);log(g,`${p.name} ใช้จิ้งจกทักและเก็บ “${chosen.name}” เข้ามือ`);socket.emit('card-effect',{kind:'show-card',message:`จิ้งจกทัก: เก็บ “${chosen.name}” เข้ามือ`,card:chosen});}
   }else if(choice.type==='eye'){
    const chosen=choice.cards[Number(index)],targetPlayer=g.players.find(x=>x.id===choice.targetPlayerId);
    const at=targetPlayer?.hand?.findIndex(x=>x.uid&&x.uid===chosen?.uid) ?? -1;
@@ -306,7 +305,7 @@ io.on('connection',socket=>{
    else log(g,'การ์ดที่เลือกไม่อยู่ในมือผู้เล่นแล้ว');
   }else if(choice.type==='owl'){
    const top=choice.cards[0];
-   if(keep&&top&&g.deck.length&&g.deck[g.deck.length-1].uid===top.uid){const got=g.deck.pop();if(['holy-water','lucky-flower'].includes(got.id)&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);p.hand.push({...clone(cardById('heart')),uid:`heart-${p.id}-owl-${Date.now()}`});g.discard.push(got);log(g,`${p.name} ใช้เสียงนกเลือกได้ ${got.name} ใช้อัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`);socket.emit('card-effect',{kind:'show-card',message:`${got.name} ทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,card:got});}else{p.hand.push(got);log(g,`${p.name} ใช้เสียงนกและเก็บ “${got.name}” เข้ามือ`);socket.emit('card-effect',{kind:'show-card',message:`เสียงนก: เก็บ “${got.name}” เข้ามือ`,card:got});}}
+   if(keep&&top&&g.deck.length&&g.deck[g.deck.length-1].uid===top.uid){const got=g.deck.pop();if(['holy-water','lucky-flower'].includes(got.id)&&(p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);g.discard.push(got);log(g,`${p.name} ใช้เสียงนกเลือกได้ ${got.name} ใช้อัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`);socket.emit('card-effect',{kind:'show-card',message:`${got.name} ทำงานอัตโนมัติ ฟื้นหัวใจเป็น ${p.hearts}/3`,card:got});}else{p.hand.push(got);log(g,`${p.name} ใช้เสียงนกและเก็บ “${got.name}” เข้ามือ`);socket.emit('card-effect',{kind:'show-card',message:`เสียงนก: เก็บ “${got.name}” เข้ามือ`,card:got});}}
    else log(g,`${p.name} ใช้เสียงนกแล้วเลือกไม่เก็บไพ่บนสุด`);
   }
   if(keyCount(p)>=3){finish(r,p.id,`${p.name} มีกุญแจครบ 3 ดอกแล้ว หนีออกจากบ้านผีไทยได้สำเร็จ!`);return;}
@@ -325,7 +324,7 @@ io.on('connection',socket=>{
   if(active<=2){socket.emit('game-error','โหมดออนไลน์ต้องมีผู้เล่นที่ยังอยู่มากกว่า 2 คน จึงจะยอมแพ้ได้');return;}
   if(g.pending?.playerId===p.id){g.discard.push(g.pending.card);g.pending=null;}
   p.alive=false;
-  p.hand=p.hand.filter(c=>c.id!=='heart');
+  
   log(g,`${p.name} ยอมแพ้และออกจากเกม`);
   if(g.players[g.turn]?.id===p.id&&!g.over)nextTurn(r);
   else if(alive(g).length<=1)finish(r,alive(g)[0]?.id||null,alive(g).length?`${alive(g)[0].name} เป็นผู้รอดชีวิตคนสุดท้าย!`:'ทุกคนยอมแพ้หรือแพ้หมดแล้ว');
