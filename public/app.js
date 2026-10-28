@@ -354,18 +354,21 @@ function renderHand(hand,canPlay){
  const hearts=Math.max(0,Math.min(3,Number(player?.hearts)||0));
  const lifeEl=$('handLifeCount');
  if(lifeEl){lifeEl.innerHTML=Array.from({length:3},(_,i)=>`<img class="hand-life-heart ${i<hearts?'is-alive':'is-lost'}" src="/assets/ui/${i<hearts?'heart-alive':'heart-lost'}.webp" alt="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" draggable="false" onerror="this.style.display='none'">`).join('');lifeEl.title=`หัวใจ ${hearts} จาก 3 ดวง`;lifeEl.setAttribute('aria-label',`หัวใจ ${hearts} จาก 3 ดวง`);}
- const available=Math.max(1,el.clientWidth||el.parentElement?.clientWidth||960);
- const handHeight=Math.max(120,el.clientHeight||el.parentElement?.clientHeight||220);
- // Fan/stack the hand: keep cards readable and progressively overlap them as the hand grows.
- // Never make the hand horizontally scroll; size the cards and overlap to fit the available width.
+ // Measure the actual visible frame, not #hand itself (which may retain a stale
+ // width after mobile orientation changes or browser zoom).
+ const frame=el.closest('.hand-content-layout')||el.parentElement;
+ const frameStyle=frame?getComputedStyle(frame):null;
+ const available=Math.max(1,Math.floor((frame?.clientWidth||el.clientWidth||960)
+   -(frameStyle?parseFloat(frameStyle.paddingLeft||0)+parseFloat(frameStyle.paddingRight||0):0)));
+ const handHeight=Math.max(120,el.clientHeight||frame?.clientHeight||220);
+ // Fit the whole fan to the frame. Card width may shrink on very narrow phones;
+ // all cards overlap progressively and the last card's right edge cannot exceed available.
  const isCompactHand=window.matchMedia('(max-width: 760px)').matches;
- // Mobile: compute the exposed slice from the actual hand-panel width so the final card
- // never crosses the frame, even with a large hand or a narrow phone viewport.
  const cardWidth=count?(isCompactHand
-   ?Math.min(available,Math.max(52,Math.min(118,Math.floor(available*0.42))))
-   :Math.max(76,Math.min(138,Math.floor(available/Math.max(1,1+Math.max(0,count-1)*0.32))))):138;
- const exposedStep=count>1?Math.max(1,Math.min(cardWidth,(available-cardWidth)/(count-1))):cardWidth;
- const overlap=count>1?Math.max(0,Math.ceil(cardWidth-exposedStep)):0;
+   ?Math.min(available,Math.max(1,Math.min(118,Math.floor(available*0.42))))
+   :Math.min(138,Math.max(1,Math.floor(available/Math.max(1,1+Math.max(0,count-1)*0.32))))):Math.min(138,available);
+ const exposedStep=count>1?Math.max(0,Math.min(cardWidth,Math.floor((available-cardWidth)/(count-1)))):cardWidth;
+ const overlap=count>1?Math.max(0,cardWidth-exposedStep):0;
  const gap=0;
  const sideCount=$('sideHandCount');if(sideCount)sideCount.textContent=`${count} ใบ`;
  el.style.setProperty('--hand-count',String(count));

@@ -3018,3 +3018,45 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
   #gameScreen:not(.hidden) #hand.hand{display:flex!important;flex-flow:row nowrap!important;justify-content:flex-start!important;align-items:stretch!important;gap:0!important;padding:0!important;margin:0!important;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;overflow:hidden!important;}
   #gameScreen:not(.hidden) #hand.hand>.hand-card{flex-shrink:0!important;min-width:0!important;box-sizing:border-box!important;margin-right:0!important;}
 }
+
+
+/* v2.3.66 — desktop chair centers retargeted from the user's latest screenshot.
+   Keep the ring on the scene coordinate plane; mobile chair map is deliberately untouched. */
+@media (min-width:761px) and (orientation:landscape){
+  #gameScreen:not(.hidden) > .game-layout.ritual-layout{
+    width:var(--stage-w)!important;height:var(--stage-h)!important;
+    left:50%!important;top:50%!important;transform:translate(-50%,-50%)!important;
+    transform-origin:center center!important;zoom:1!important;
+  }
+  #gameScreen:not(.hidden) .ritual-scene{
+    position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+    transform:none!important;translate:none!important;scale:none!important;zoom:1!important;
+  }
+  #gameScreen:not(.hidden) .ritual-scene > .players-ring{
+    position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+    margin:0!important;transform:none!important;transform-origin:top left!important;
+    zoom:1!important;overflow:visible!important;
+  }
+  /* Seat centers: near-left, far-left, head chair, far-right, near-right. */
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-1{left:27.5%!important;top:52.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-2{left:27.5%!important;top:37.0%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-3{left:53.8%!important;top:27.0%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-4{left:78.0%!important;top:37.0%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-5{left:82.0%!important;top:52.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+}
+/* Mobile: the frame owns clipping; make each rendered card's total occupied width fit. */
+@media(max-width:760px){
+  #gameScreen:not(.hidden) .hand-zone,
+  #gameScreen:not(.hidden) .hand-content-layout{
+    min-width:0!important;width:100%!important;max-width:100%!important;
+    box-sizing:border-box!important;overflow:hidden!important;
+  }
+  #gameScreen:not(.hidden) #hand.hand{
+    display:flex!important;flex-flow:row nowrap!important;justify-content:flex-start!important;
+    gap:0!important;padding:0!important;margin:0!important;width:100%!important;
+    min-width:0!important;max-width:100%!important;box-sizing:border-box!important;overflow:hidden!important;
+  }
+  #gameScreen:not(.hidden) #hand.hand>.hand-card{
+    min-width:0!important;box-sizing:border-box!important;margin-right:0!important;
+  }
+}

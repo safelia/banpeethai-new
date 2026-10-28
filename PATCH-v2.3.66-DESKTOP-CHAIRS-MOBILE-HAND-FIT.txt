@@ -1,0 +1,13 @@
+BanPeeThai v2.3.66 — Desktop seat anchors + mobile hand frame fit
+
+Changes:
+- Updated desktop-only seat anchors using the latest supplied screenshot as visual reference.
+- Kept portrait/mobile player seat coordinates unchanged.
+- Kept the desktop player ring on the scene coordinate plane with no independent transform/zoom.
+- Mobile hand card sizing now measures the actual hand-content frame (minus padding) rather than the hand element's own potentially stale width.
+- Card overlap is calculated so occupied width never exceeds the measured frame; narrow frames can shrink card width instead of overflowing.
+- Existing game rules, turn glow, card assets, and server logic retained.
+
+QA limits:
+- Static syntax, archive integrity, asset/data checks, and deterministic hand-layout geometry simulation were run.
+- Actual browser screenshot alignment and physical browser zoom tests were not run; pixel-perfect chair alignment is not certified.
