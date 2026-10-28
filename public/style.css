@@ -2337,3 +2337,31 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
 
 /* v2.3.39: remove gold side ornament rails from the gameplay view. */
 #gameScreen:not(.hidden) .thai-edge{display:none!important;background-image:none!important;opacity:0!important;visibility:hidden!important}
+
+
+/* v2.3.42: ornate heart-life indicators; remain inside each player's panel */
+#gameScreen .players-ring .player-row .player-meta .hearts{
+  display:flex!important; align-items:center!important; justify-content:flex-start!important;
+  gap:clamp(2px,.25vw,5px)!important; width:100%!important; min-width:0!important;
+  height:clamp(20px,2vw,30px)!important; margin-top:3px!important; overflow:visible!important;
+  white-space:normal!important; line-height:1!important; letter-spacing:0!important;
+}
+#gameScreen .players-ring .player-row .player-meta .hearts .life-heart{
+  display:block!important; flex:0 0 auto!important; width:clamp(17px,1.7vw,25px)!important;
+  height:clamp(17px,1.7vw,25px)!important; object-fit:contain!important; max-width:none!important;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.7)); pointer-events:none; user-select:none;
+}
+#gameScreen .players-ring .player-row .player-meta .hearts .life-heart-lost{opacity:.9;}
+@media(max-width:700px){
+ #gameScreen .players-ring .player-row .player-meta .hearts{height:18px!important;gap:1px!important;margin-top:2px!important;}
+ #gameScreen .players-ring .player-row .player-meta .hearts .life-heart{width:15px!important;height:15px!important;}
+}
+
+
+/* v2.3.43: compact life hearts beside the hand title; heart cards stay out of the hand display. */
+#gameScreen .hand-heading-title{display:flex;align-items:center;gap:clamp(5px,.7vw,10px);min-width:0;}
+#gameScreen .hand-heading-title h3{margin:0!important;white-space:nowrap;}
+#gameScreen .hand-life-count{display:inline-flex;align-items:center;justify-content:flex-start;gap:clamp(1px,.18vw,3px);height:clamp(17px,1.6vw,23px);min-width:0;flex:0 0 auto;}
+#gameScreen .hand-life-heart{display:block;width:clamp(14px,1.35vw,20px);height:clamp(14px,1.35vw,20px);object-fit:contain;filter:drop-shadow(0 1px 2px rgba(0,0,0,.65));pointer-events:none;user-select:none;}
+#gameScreen .hand-life-heart.is-lost{opacity:.92;}
+@media(max-width:700px){#gameScreen .hand-heading-title{gap:5px;}#gameScreen .hand-life-count{height:16px;gap:1px;}#gameScreen .hand-life-heart{width:14px;height:14px;}#gameScreen .hand-heading-title h3{font-size:clamp(12px,3.1vw,16px)!important;}}

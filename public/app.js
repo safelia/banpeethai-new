@@ -330,18 +330,23 @@ function renderPlayers(state, local=false){
   const isTurn=players[state.turn]?.id===p.id;
   const hearts=Math.max(0,Number(p.hearts)||0);
   const keys=playerKeyCount(p);
-  return `<div class="player-row seat-${index+1} ${isTurn?'active-player':''} ${p.alive===false?'dead-player':''}" style="--seat-index:${index}"><div class="player-avatar">${p.id==='human'?'🧑':p.bot?'👻':'🧑‍🚀'}</div><div class="player-meta"><b>${esc(p.name)} ${p.id==='human'?'(คุณ)':''}</b><small>🗝️ ${keys}/3 กุญแจ ${p.alive===false?'• ออกจากเกม':''}</small><span class="hearts">${'❤️'.repeat(hearts)}${'🖤'.repeat(3-hearts)}</span></div>${isTurn?'<span class="seat-turn">◀ ถึงตา</span>':''}</div>`;
+  const heartIcons=Array.from({length:3},(_,i)=>`<img class="life-heart ${i<hearts?'life-heart-alive':'life-heart-lost'}" src="/assets/ui/${i<hearts?'heart-alive':'heart-lost'}.webp" alt="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" title="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" draggable="false">`).join('');
+  return `<div class="player-row seat-${index+1} ${isTurn?'active-player':''} ${p.alive===false?'dead-player':''}" style="--seat-index:${index}"><div class="player-avatar">${p.id==='human'?'🧑':p.bot?'👻':'🧑‍🚀'}</div><div class="player-meta"><b>${esc(p.name)} ${p.id==='human'?'(คุณ)':''}</b><small>🗝️ ${keys}/3 กุญแจ ${p.alive===false?'• ออกจากเกม':''}</small><span class="hearts" role="img" aria-label="หัวใจ ${hearts} จาก 3 ดวง">${heartIcons}</span></div>${isTurn?'<span class="seat-turn">◀ ถึงตา</span>':''}</div>`;
  }).join('');
 }
 function renderHand(hand,canPlay){
  const el=$('hand');if(!el)return;
  const phase=mode==='online'?(onlineState?.phase||'draw'):(localGame?.phase||'draw');
  const canPlayCard=c=>(canPlay&&c.id!=='skip-next') || (phase==='draw'&&['skip-next','gecko','owl'].includes(c.id));
- const count=hand.length;
+ // Life hearts remain in game state for the existing damage rules, but are no longer rendered as cards in the hand.
+ const visibleHand=(hand||[]).map((card,index)=>({card,index})).filter(item=>item.card.id!=='heart');
+ const count=visibleHand.length;
  $('handCount').textContent=`${count} ใบ`;
+ const player=mode==='online'?(onlineState?.players||[]).find(p=>p.id===socket?.id):(localGame?.players||[]).find(p=>p.id==='human');
+ const hearts=Math.max(0,Math.min(3,Number(player?.hearts)||0));
+ const lifeEl=$('handLifeCount');
+ if(lifeEl){lifeEl.innerHTML=Array.from({length:3},(_,i)=>`<img class="hand-life-heart ${i<hearts?'is-alive':'is-lost'}" src="/assets/ui/${i<hearts?'heart-alive':'heart-lost'}.webp" alt="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" draggable="false">`).join('');lifeEl.title=`หัวใจ ${hearts} จาก 3 ดวง`;lifeEl.setAttribute('aria-label',`หัวใจ ${hearts} จาก 3 ดวง`);}
  const available=Math.max(1,el.clientWidth||el.parentElement?.clientWidth||960);
- // Keep card artwork at a readable, stable size. Cards overlap horizontally when
- // the hand grows instead of being squeezed or pushed outside the frame.
  const handHeight=Math.max(120,el.clientHeight||el.parentElement?.clientHeight||220);
  const cardWidth=count?Math.max(92,Math.min(142,Math.round((handHeight-8)*2/3))):142;
  const stride=count>1?Math.min(cardWidth,Math.max(28,(available-cardWidth)/(count-1))):cardWidth;
@@ -352,7 +357,7 @@ function renderHand(hand,canPlay){
  el.style.setProperty('--hand-overlap',`${overlap}px`);
  el.style.setProperty('--hand-overlap-negative',`${-overlap}px`);
  el.style.setProperty('--hand-gap','0px');
- el.innerHTML=hand.map((c,i)=>`<button class="hand-card ${c.id==='heart'?'heart-card':''} ${c.fullArt?'hand-full-art-card':''}" data-hand-index="${i}" style="--hand-index:${i};--hand-card-width:${cardWidth}px;--card-overlap:${overlap}px;flex:0 0 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px;margin-left:${i===0?0:-overlap}px;z-index:${i+1}" title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
+ el.innerHTML=visibleHand.map(({card:c,index:i},visualIndex)=>`<button class="hand-card ${c.fullArt?'hand-full-art-card':''}" data-hand-index="${i}" style="--hand-index:${visualIndex};--hand-card-width:${cardWidth}px;--card-overlap:${overlap}px;flex:0 0 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px;margin-left:${visualIndex===0?0:-overlap}px;z-index:${visualIndex+1}" title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
    ${c.fullArt?`<img class="hand-full-art" src="${esc(imgUrl(c))}" alt="${esc(c.name)}">`:`<span class="hand-art" style="background-image:url('${esc(imgUrl(c))}')"></span>
    <span class="hand-card-title">${esc(c.name||'การ์ด')}</span>
    <span class="hand-card-type">${esc(c.type||'การ์ด')}</span>
