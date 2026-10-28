@@ -1,0 +1,8 @@
+BanPeeThai v2.3.57 — Online lobby avatar consistency + active turn glow
+
+- Assign a unique random avatar to each player when they create/join an online room.
+- Include avatar path in public room updates and retain that exact avatar when the game state is created.
+- Render the same portrait image in the online waiting room and in-game player medallion.
+- Increase in-game portrait size slightly (30px desktop, 24px mobile) while preserving medallion bounds.
+- Make the current player's gold medallion ring brighter with a restrained pulse; supports prefers-reduced-motion.
+- Update cache-busting version strings and package version to 2.3.57.

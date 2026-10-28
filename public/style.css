@@ -2718,3 +2718,15 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
  #gameScreen:not(.hidden) .players-ring .player-row .player-meta small{font-size:clamp(6px,1.25vw,7px)!important;}
  #gameScreen:not(.hidden) .players-ring .player-row .hearts .life-heart{width:clamp(8px,1.8vw,11px)!important;height:clamp(8px,1.8vw,11px)!important;}
 }
+
+
+/* v2.3.57 — lobby avatars match in-game portraits; clearer active-turn gold ring and slightly larger portraits */
+#setupModal .room-avatar{display:grid!important;place-items:center!important;overflow:hidden!important;}
+#setupModal .room-avatar img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;position:relative!important;z-index:4!important;filter:drop-shadow(0 1px 2px #000b)!important;}
+#setupModal .room-player-slot.is-filled .room-avatar:before,#setupModal .room-player-slot.is-filled .room-avatar:after,#setupModal .room-player-slot.is-filled .room-avatar span,#setupModal .room-player-slot.is-filled .room-avatar i{display:none!important;}
+#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{width:30px!important;height:30px!important;min-width:30px!important;min-height:30px!important;overflow:hidden!important;}
+#gameScreen:not(.hidden) .players-ring .player-row .player-avatar img{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;border-radius:50%!important;}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player{border-color:#fff2b0!important;box-shadow:0 0 0 3px #ffdf86b8,0 0 10px 3px #ffc34cbb,0 0 24px 7px #ffb52e88,inset 0 0 0 2px #ffe7a1!important;filter:brightness(1.12)!important;animation:activeTurnGoldPulse 1.8s ease-in-out infinite!important;}
+@keyframes activeTurnGoldPulse{0%,100%{box-shadow:0 0 0 3px #ffdf867a,0 0 10px 2px #ffc34c99,0 0 20px 5px #ffb52e66,inset 0 0 0 2px #ffe7a1}50%{box-shadow:0 0 0 4px #fff0b4c9,0 0 15px 5px #ffd46aee,0 0 28px 9px #ffb52eb8,inset 0 0 0 2px #fff1ba}}
+@media(max-width:760px){#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{width:24px!important;height:24px!important;min-width:24px!important;min-height:24px!important;}}
+@media(prefers-reduced-motion:reduce){#gameScreen:not(.hidden) .players-ring .player-row.active-player{animation:none!important;}}

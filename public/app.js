@@ -750,7 +750,8 @@ function renderRoomPlayers(players=[],hostId=null){
   const name=esc(player.name||'ผู้เล่น');
   const isHost=hostId&&player.id===hostId;
   const seed=[...String(player.id||player.name||i)].reduce((a,c)=>a+c.charCodeAt(0),0)%5;
-  return `<div class="room-player-slot is-filled"><div class="room-avatar avatar-tone-${seed}" aria-hidden="true"><span></span><i></i></div><div class="room-player-name" title="${name}">${name}</div>${isHost?'<div class="room-host-label">เจ้าของห้อง</div>':''}</div>`;
+  const avatar=String(player.avatar||'');
+  return `<div class="room-player-slot is-filled"><div class="room-avatar avatar-tone-${seed}" aria-hidden="true">${avatar?`<img src="${esc(avatar)}" alt="" draggable="false" loading="eager">`:'<span></span><i></i>'}</div><div class="room-player-name" title="${name}">${name}</div>${isHost?'<div class="room-host-label">เจ้าของห้อง</div>':''}</div>`;
  }).join('');
 }
 

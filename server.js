@@ -25,7 +25,8 @@ function uniquePlayerName(proposed,players,excludeId=null){
  return `ผู้เล่น-${Math.random().toString(36).slice(2,6)}`;
 }
 
-function publicRoom(r){return {room:r.code,host:r.host,started:r.started,players:r.players.map(p=>({id:p.id,name:p.name,hearts:p.hearts||3,keys:keyCount(p),alive:p.alive!==false,connected:true}))}}
+function chooseRoomAvatar(players=[]){const used=new Set(players.map(p=>p.avatar).filter(Boolean));const available=PLAYER_AVATARS.filter(a=>!used.has(a));return shuffle(available.length?available:[...PLAYER_AVATARS])[0]}
+function publicRoom(r){return {room:r.code,host:r.host,started:r.started,players:r.players.map(p=>({id:p.id,name:p.name,avatar:p.avatar,hearts:p.hearts||3,keys:keyCount(p),alive:p.alive!==false,connected:true}))}}
 function emitRoom(r){io.to(r.code).emit('room-update',publicRoom(r))}
 function requestPlayerState(r,socket){
  if(!r||!r.started||!r.game)return false;
@@ -109,7 +110,7 @@ function makeDeck(){
 }
 function startGame(r){
  const avatarPool=shuffle([...PLAYER_AVATARS]);
- const g={players:r.players.map((p,i)=>({id:p.id,name:p.name,avatar:avatarPool[i%avatarPool.length],hearts:3,keys:0,shields:0,hand:[],alive:true,skip:false})),deck:makeDeck(),discard:[],turn:0,round:1,logs:['ทุกคนเริ่มด้วยหัวใจ 3 ใบเท่านั้น','ถึงตาคุณแล้วต้องจั่ว 1 ใบ เว้นแต่ใช้การ์ดข้ามการจั่ว'],over:false,winner:null,pending:null,lastDraw:null,phase:'draw',turnStartedAt:Date.now(),afterDrawStartedAt:null,turnToken:1};
+ const g={players:r.players.map((p,i)=>({id:p.id,name:p.name,avatar:p.avatar||avatarPool[i%avatarPool.length],hearts:3,keys:0,shields:0,hand:[],alive:true,skip:false})),deck:makeDeck(),discard:[],turn:0,round:1,logs:['ทุกคนเริ่มด้วยหัวใจ 3 ใบเท่านั้น','ถึงตาคุณแล้วต้องจั่ว 1 ใบ เว้นแต่ใช้การ์ดข้ามการจั่ว'],over:false,winner:null,pending:null,lastDraw:null,phase:'draw',turnStartedAt:Date.now(),afterDrawStartedAt:null,turnToken:1};
  r.game=g;r.started=true;log(g,'เจ้าของห้องเริ่มการผจญภัยแล้ว');
  // Tell every connected client in the Socket.IO room to leave the lobby, then send each player their private state.
  emitRoom(r);io.to(r.code).emit('game-started',{room:r.code});emitStates(r);scheduleTurnAutoDraw(r);
@@ -178,7 +179,7 @@ function drawCard(r,p){
 }
 io.on('connection',socket=>{
  socket.on('create-room',({name}={},cb=()=>{})=>{
-  const code=roomCode(),player={id:socket.id,name:uniquePlayerName(name,[]),hearts:3,keys:0,alive:true};
+  const code=roomCode(),player={id:socket.id,name:uniquePlayerName(name,[]),avatar:chooseRoomAvatar(),hearts:3,keys:0,alive:true};
   const r={code,host:socket.id,players:[player],started:false,game:null,turnTimer:null};rooms.set(code,r);socket.join(code);cb({ok:true,room:code,players:publicRoom(r).players});emitRoom(r);
  });
  socket.on('join-room',({room,name}={},cb=()=>{})=>{
@@ -187,7 +188,7 @@ io.on('connection',socket=>{
   if(r.started)return cb({ok:false,error:'เกมเริ่มแล้ว ไม่สามารถเข้าร่วมกลางเกมได้'});
   if(r.players.length>=5)return cb({ok:false,error:'ห้องเต็มแล้ว (สูงสุด 5 คน)'});
   if(r.players.some(p=>p.id===socket.id))return cb({ok:true,room:code});
-  r.players.push({id:socket.id,name:uniquePlayerName(name,r.players),hearts:3,keys:0,alive:true});socket.join(code);cb({ok:true,room:code});emitRoom(r);
+  r.players.push({id:socket.id,name:uniquePlayerName(name,r.players),avatar:chooseRoomAvatar(r.players),hearts:3,keys:0,alive:true});socket.join(code);cb({ok:true,room:code});emitRoom(r);
  });
  socket.on('request-online-state',({room}={},cb=()=>{})=>{
   const r=rooms.get(String(room||'').toUpperCase());
