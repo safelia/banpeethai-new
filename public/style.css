@@ -2419,3 +2419,17 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
 #gameScreen .hand-zone #handLifeCount .hand-life-heart{display:block!important;visibility:visible!important;opacity:1!important;width:clamp(30px,2.7vw,40px)!important;height:clamp(30px,2.7vw,40px)!important;object-fit:contain!important;flex:0 0 auto!important;margin:0!important;padding:0!important;filter:drop-shadow(0 1px 3px rgba(0,0,0,.8))!important;}
 #gameScreen .hand-zone #handLifeCount .hand-life-heart.is-lost{opacity:.9!important;}
 @media(max-width:700px){#gameScreen .hand-zone .hand-heading-title{gap:8px!important;max-width:calc(100% - 48px)!important;}#gameScreen .hand-zone .hand-heading-title .hand-heading-card-icon{font-size:24px!important;}#gameScreen .hand-zone #handLifeCount{height:32px!important;gap:3px!important;}#gameScreen .hand-zone #handLifeCount .hand-life-heart{width:27px!important;height:27px!important;}}
+
+
+/* v2.3.46: place larger life hearts on the RIGHT side of the hand panel; remove the card icon and hand title. */
+#gameScreen .hand-zone .hand-heading{position:relative!important;min-height:44px!important;}
+#gameScreen .hand-zone .hand-heading-title{display:block!important;position:static!important;max-width:none!important;width:100%!important;overflow:visible!important;}
+#gameScreen .hand-zone .hand-heading-title .hand-heading-card-icon{display:none!important;visibility:hidden!important;width:0!important;height:0!important;margin:0!important;padding:0!important;}
+#gameScreen .hand-zone .hand-heading-title #handLifeCount{position:absolute!important;right:clamp(54px,6vw,92px)!important;top:50%!important;transform:translateY(-50%)!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:clamp(3px,.45vw,6px)!important;width:auto!important;min-width:0!important;height:clamp(30px,2.7vw,36px)!important;max-width:none!important;overflow:visible!important;z-index:5!important;}
+#gameScreen .hand-zone .hand-heading-title #handLifeCount .hand-life-heart{display:block!important;width:clamp(28px,2.5vw,33px)!important;height:clamp(28px,2.5vw,33px)!important;max-width:none!important;object-fit:contain!important;flex:0 0 auto!important;filter:drop-shadow(0 2px 3px rgba(0,0,0,.85))!important;}
+#gameScreen .hand-zone .hand-heading-title #handLifeCount .hand-life-heart.is-lost{opacity:.95!important;}
+@media(max-width:700px){
+ #gameScreen .hand-zone .hand-heading{min-height:32px!important;}
+ #gameScreen .hand-zone .hand-heading-title #handLifeCount{right:clamp(42px,10vw,60px)!important;gap:2px!important;height:22px!important;}
+ #gameScreen .hand-zone .hand-heading-title #handLifeCount .hand-life-heart{width:21px!important;height:21px!important;}
+}
