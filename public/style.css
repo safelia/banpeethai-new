@@ -3060,3 +3060,42 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
     min-width:0!important;box-sizing:border-box!important;margin-right:0!important;
   }
 }
+
+
+/* v2.3.67 — final desktop chair anchors and mobile reference scene/control alignment.
+   Desktop anchors follow the visible seat cushions in game-layout-reference.webp.
+   Portrait background uses the user's supplied scene reference as a cache-busted asset. */
+@media (min-width:761px) and (orientation:landscape){
+  #gameScreen:not(.hidden) .players-ring{overflow:visible!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row{transform:translate(-50%,-50%)!important;}
+  /* seat-1 near-left, seat-2 far-left, seat-3 head chair, seat-4 far-right, seat-5 near-right */
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-1{left:24.5%!important;top:51.5%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-2{left:24.5%!important;top:39.5%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-3{left:50%!important;top:22.5%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-4{left:76%!important;top:39.5%!important;right:auto!important;bottom:auto!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-5{left:76%!important;top:51.5%!important;right:auto!important;bottom:auto!important;}
+}
+@media (max-width:760px) and (orientation:portrait){
+  /* The supplied portrait artwork is the single scene background; all controls remain real hit areas. */
+  #gameScreen:not(.hidden){
+    background-color:#090505!important;
+    background-image:url('/assets/haunted-thai-house-mobile-ui-v2.png?v=2.3.67')!important;
+    background-repeat:no-repeat!important;background-position:center center!important;background-size:100% 100%!important;
+  }
+  #gameScreen:not(.hidden)::before,#gameScreen:not(.hidden)::after{content:none!important;display:none!important;background:none!important;background-image:none!important;}
+  #gameScreen:not(.hidden) > .reference-hotspot-layer{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;z-index:2147483000!important;pointer-events:none!important;}
+  #gameScreen:not(.hidden) > .reference-hotspot-layer > .reference-hotspot{opacity:0!important;visibility:visible!important;pointer-events:auto!important;transform:none!important;}
+  /* Match tap targets to the actual menu, exit, deck, escape marker and end-round button in the portrait art. */
+  #gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-menu{left:2.4%!important;top:1.2%!important;width:10.2%!important;height:4.2%!important;}
+  #gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-leave{left:74.5%!important;top:1.2%!important;width:23%!important;height:4.2%!important;}
+  #gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-draw{left:39.8%!important;top:41.8%!important;width:20.4%!important;height:14.3%!important;}
+  #gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-escape{left:64.5%!important;top:44.1%!important;width:18.5%!important;height:11.1%!important;}
+  #gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-endturn{left:34.5%!important;top:58.1%!important;width:31.2%!important;height:5.3%!important;}
+  /* No speaker graphic exists in the supplied mobile scene; don't leave a hidden tap target over the logo. */
+  #gameScreen:not(.hidden) > .reference-hotspot-layer > .hotspot-sound{pointer-events:none!important;}
+  /* Keep hand cards clipped to the illustrated hand frame. */
+  #gameScreen:not(.hidden) .hand-zone{left:3%!important;right:3%!important;width:94%!important;max-width:94%!important;overflow:hidden!important;box-sizing:border-box!important;}
+  #gameScreen:not(.hidden) .hand-content-layout{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important;box-sizing:border-box!important;}
+  #gameScreen:not(.hidden) #hand.hand{width:100%!important;max-width:100%!important;min-width:0!important;display:flex!important;flex-flow:row nowrap!important;gap:0!important;overflow-x:auto!important;overflow-y:hidden!important;box-sizing:border-box!important;}
+  #gameScreen:not(.hidden) #hand.hand>.hand-card{flex-shrink:0!important;min-width:0!important;box-sizing:border-box!important;}
+}

@@ -1,0 +1,6 @@
+v2.3.67 fixes
+- Re-anchored all five desktop player badges to the visible chair cushions in the desktop reference scene.
+- Uses the user-supplied portrait scene as a cache-busted mobile background asset.
+- Repositioned mobile tap targets for menu, leave, draw, escape, and end-round to match visible artwork.
+- Disabled the invisible mobile sound hit area because the supplied scene has no visible sound button; sound remains accessible from the menu.
+- Kept mobile hand content clipped within its frame.
