@@ -3,7 +3,7 @@
 const $ = id => document.getElementById(id);
 const cards = [];
 let socket = null, mode = 'bot', onlineRoom = '', isHost = false, onlineState = null;
-let localGame = null, toastTimer = null, lastRevealToken = '', currentPlayerName = 'นักสำรวจ';
+let localGame = null, toastTimer = null, lastRevealToken = '', lastRenderedRevealToken = '', currentPlayerName = 'นักสำรวจ';
 let localDrawTimer = null, localDrawTimerKey = '', countdownInterval = null;
 const byId = id => cards.find(c => c.id === id) || {id, name:id, type:'การ์ด', desc:'', effect:'', image:''};
 const playerKeyCount = p => p?.keyCountTotal ? (Number(p.keys)||0) : (Number(p?.storedKeys ?? p?.keys)||0) + (p?.hand||[]).filter(c=>c.id==='key').length;
@@ -347,16 +347,16 @@ function renderHand(hand,canPlay){
  if(lifeEl){lifeEl.innerHTML=Array.from({length:3},(_,i)=>`<img class="hand-life-heart ${i<hearts?'is-alive':'is-lost'}" src="/assets/ui/${i<hearts?'heart-alive':'heart-lost'}.webp" alt="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" draggable="false" onerror="this.style.display='none'">`).join('');lifeEl.title=`หัวใจ ${hearts} จาก 3 ดวง`;lifeEl.setAttribute('aria-label',`หัวใจ ${hearts} จาก 3 ดวง`);}
  const available=Math.max(1,el.clientWidth||el.parentElement?.clientWidth||960);
  const handHeight=Math.max(120,el.clientHeight||el.parentElement?.clientHeight||220);
- const cardWidth=count?Math.max(92,Math.min(142,Math.round((handHeight-8)*2/3))):142;
- const stride=count>1?Math.min(cardWidth,Math.max(28,(available-cardWidth)/(count-1))):cardWidth;
- const overlap=count>1?Math.max(0,Math.round(cardWidth-stride)):0;
+ const gap=7;
+ const cardWidth=count?Math.max(58,Math.min(145,Math.floor((available-gap*Math.max(0,count-1))/count))):142;
+ const overlap=0;
  const sideCount=$('sideHandCount');if(sideCount)sideCount.textContent=`${count} ใบ`;
  el.style.setProperty('--hand-count',String(count));
  el.style.setProperty('--hand-card-width',`${cardWidth}px`);
  el.style.setProperty('--hand-overlap',`${overlap}px`);
  el.style.setProperty('--hand-overlap-negative',`${-overlap}px`);
- el.style.setProperty('--hand-gap','0px');
- el.innerHTML=visibleHand.map(({card:c,index:i},visualIndex)=>`<button class="hand-card ${c.fullArt?'hand-full-art-card':''}" data-hand-index="${i}" style="--hand-index:${visualIndex};--hand-card-width:${cardWidth}px;--card-overlap:${overlap}px;flex:0 0 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px;margin-left:${visualIndex===0?0:-overlap}px;z-index:${visualIndex+1}" title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
+ el.style.setProperty('--hand-gap','7px');
+ el.innerHTML=visibleHand.map(({card:c,index:i},visualIndex)=>`<button class="hand-card ${c.fullArt?'hand-full-art-card':''}" data-hand-index="${i}" style="--hand-index:${visualIndex};--hand-card-width:${cardWidth}px;--card-overlap:${overlap}px;flex:0 0 ${cardWidth}px;width:${cardWidth}px;max-width:${cardWidth}px;margin-left:0;z-index:${visualIndex+1}" title="${esc(c.desc||c.name)}" aria-label="${esc(c.name)}: ${esc(c.effect||c.desc||'')}">
    ${c.fullArt?`<img class="hand-full-art" src="${esc(imgUrl(c))}" alt="${esc(c.name)}">`:`<span class="hand-art" style="background-image:url('${esc(imgUrl(c))}')"></span>
    <span class="hand-card-title">${esc(c.name||'การ์ด')}</span>
    <span class="hand-card-type">${esc(c.type||'การ์ด')}</span>
@@ -466,7 +466,8 @@ function closeRevealAndShowDiscard(){
  const g=currentState();
  if(g){renderLastDrawPreview(g.lastDraw,Array.isArray(g.discard)?g.discard[g.discard.length-1]:g.discard);}
 }
- function showReveal(draw,isGhost){clearTimeout(revealDelayTimer);revealDelayTimer=setTimeout(()=>showRevealNow(draw,isGhost),1000);} function showRevealNow(draw,isGhost){
+ function showReveal(draw,isGhost){if(draw?.token&&draw.token===lastRenderedRevealToken)return;clearTimeout(revealDelayTimer);revealDelayTimer=setTimeout(()=>showRevealNow(draw,isGhost),250);} function showRevealNow(draw,isGhost){
+ if(draw?.token&&draw.token===lastRenderedRevealToken)return; if(draw?.token)lastRenderedRevealToken=draw.token;
  const c=draw.card||cards[0];clearTimeout(revealTimer);scheduleCardEventSound({...c,kind:isGhost?'ghost':c.kind});show('drawReveal');
  const ownDraw=mode==='bot'?draw.playerId==='human':draw.playerId===socket?.id;
  const playerFromState=(mode==='online'?(onlineState?.players||[]):(localGame?.players||[])).find(p=>p.id===draw.playerId);
@@ -482,13 +483,13 @@ function closeRevealAndShowDiscard(){
  if(c.fullArt){art.innerHTML=`<img class="reveal-full-card-art" src="${esc(imgUrl(c))}" alt="${esc(c.name||'การ์ดผีไทย')}" draggable="false">`;art.style.backgroundImage='none';}
  else{art.innerHTML='';art.style.backgroundImage=`url('${imgUrl(c)}')`;}
  $('revealType').textContent=c.type||'การ์ด';$('revealName').textContent=c.name||'การ์ดปริศนา';$('revealDesc').textContent=c.desc||'';$('revealEffect').textContent=c.effect||'';
+ if(c.fullArt){$('revealType').textContent='';$('revealName').textContent='';$('revealDesc').textContent='';$('revealEffect').textContent='';}
  const actions=$('revealActions');actions.innerHTML='';
  if(c.instantDanger){
   // Finished dangerous-ghost artwork already contains its title and rules: show only that single card.
   clearTimeout(revealTimer);revealTimer=setTimeout(closeRevealAndShowDiscard,4500);return;
  }
  if(c.fullArt && !isGhost){
-  $('revealType').textContent='';$('revealName').textContent='';$('revealDesc').textContent='';$('revealEffect').textContent='';
   clearTimeout(revealTimer);revealTimer=setTimeout(closeRevealAndShowDiscard,4000);return;
  }
  if(isGhost && ownDraw){
@@ -814,7 +815,7 @@ function init(){
 
  $('cardSearch')?.addEventListener('input',renderCatalog);$('cardFilter')?.addEventListener('change',renderCatalog);
  $('setupModal')?.addEventListener('click',e=>{if(e.target.id==='setupModal')closeSetup();});
- $('drawReveal')?.addEventListener('click',e=>{if(e.target.classList.contains('reveal-backdrop')){if(!localGame?.pending&&!onlineState?.pending)hide('drawReveal');}});
+ $('drawReveal')?.addEventListener('click',e=>{if(!e.target.closest('.reveal-card-shell')){if(!localGame?.pending&&!onlineState?.pending){clearTimeout(revealTimer);clearTimeout(revealDelayTimer);hide('drawReveal');closeRevealAndShowDiscard();}}});
  if(window.io){socket=io({reconnection:true,reconnectionAttempts:8,reconnectionDelay:500,timeout:20000});bindSocket();}
  showSetupStep('setupChoiceStep');
 }

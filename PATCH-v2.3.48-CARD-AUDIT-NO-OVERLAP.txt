@@ -1,0 +1,8 @@
+v2.3.48
+- Corrected finished artwork mappings so card title/art matches its card ID: student ghost, river ghost, krasue, nang tani, pob, widow spider, ban, next-player skip, and kumarn.
+- Corrected friend holy-water effect text to match actual behavior (heals one heart; no heart card is added to hand).
+- Reveal uses the full-art card as the source of truth for name and ability, avoiding conflicting duplicate metadata.
+- Deduplicated reveal overlays by draw token.
+- Clicking blank space outside a non-pending reveal closes it.
+- Hand cards no longer overlap; they fit the available width and scroll horizontally when necessary.
+- Removed the playing-card icon from the hand header; lowered and enlarged life hearts.

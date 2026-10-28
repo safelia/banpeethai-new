@@ -8,7 +8,7 @@
     "copies": 6,
     "desc": "สาวนักศึกษาที่ปรากฏตัวในคืนฝนตก",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-student.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-pob.webp",
     "kind": "ghost",
     "fullArt": true
   },
@@ -21,7 +21,7 @@
     "copies": 5,
     "desc": "วิญญาณหญิงสาวที่ปรากฏตัวกลางสายน้ำยามค่ำคืน",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-phraya.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-student.webp",
     "kind": "ghost",
     "fullArt": true
   },
@@ -34,7 +34,7 @@
     "copies": 3,
     "desc": "แสงวูบวาบลอยผ่านหน้าต่างในคืนเดือนมืด",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-krasue.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-phraya.webp",
     "kind": "ghost",
     "fullArt": true
   },
@@ -47,7 +47,7 @@
     "copies": 3,
     "desc": "หญิงสาวลึกลับที่ซ่อนตัวอยู่ใต้ต้นกล้วย",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-nang-tani.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-krasue.webp",
     "kind": "ghost",
     "fullArt": true
   },
@@ -60,7 +60,7 @@
     "copies": 3,
     "desc": "หญิงผมหยุ่งผู้เดินเร่ร่อนยามค่ำคืน",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-pob.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-widow-spider.webp",
     "kind": "ghost",
     "fullArt": true
   },
@@ -137,8 +137,8 @@
     "icon": "💧",
     "color": "cyan",
     "copies": 4,
-    "desc": "เลือกเพื่อน 1 คนที่หัวใจยังไม่เต็ม เพื่อเพิ่มหัวใจให้เพื่อน",
-    "effect": "เพิ่มหัวใจให้เพื่อน 1 ดวง (สูงสุด 3 ดวง) และเพิ่มการ์ดหัวใจเข้ามือเพื่อน",
+    "desc": "เลือกเพื่อน 1 คนที่หัวใจยังไม่เต็ม เพื่อฟื้นหัวใจให้ 1 ดวง",
+    "effect": "เพิ่มหัวใจให้เพื่อน 1 ดวง (สูงสุด 3 ดวง)",
     "image": "/assets/cards/finished-special/friend-holy-water.webp",
     "fullArt": true
   },
@@ -163,7 +163,7 @@
     "copies": 3,
     "desc": "แมงมุมแม่ม่ายเฝ้าห้องใต้หลังคา",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-widow-spider.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-nang-tani.webp",
     "kind": "ghost",
     "fullArt": true
   },
@@ -258,8 +258,8 @@
     "icon": "⏭️",
     "color": "red",
     "copies": 4,
-    "desc": "เลือกผู้เล่นที่จะอดเล่นในรอบถัดไป",
-    "effect": "เลือกผู้เล่น 1 คนให้ข้ามเทิร์นถัดไป",
+    "desc": "เลือกผู้เล่น 1 คนให้ข้ามรอบถัดไป",
+    "effect": "ผู้เล่นที่เลือกจะข้ามรอบถัดไป",
     "image": "/assets/cards/finished-actions/skip.webp",
     "fullArt": true
   },
@@ -270,9 +270,9 @@
     "icon": "🚫",
     "color": "red",
     "copies": 3,
-    "desc": "หยุดเพื่อนคนหนึ่งไม่ให้เล่นในรอบถัดไป",
-    "effect": "เลือกผู้เล่น 1 คนให้ไม่ได้เล่นในรอบถัดไป",
-    "image": "/assets/cards/finished-actions/ban.webp",
+    "desc": "หยุดผู้เล่นที่เลือกไม่ให้เล่นในรอบถัดไป",
+    "effect": "ผู้เล่นที่เลือกจะอดเล่นในรอบถัดไป",
+    "image": "/assets/cards/finished-actions/kumarn.webp",
     "fullArt": true
   },
   {
@@ -294,9 +294,9 @@
     "icon": "➡️",
     "color": "red",
     "copies": 3,
-    "desc": "เสียงแก้วแตกดังมาก เพื่อนตกใจสุดๆ",
-    "effect": "ผู้เล่นคนถัดไปจะไม่ได้เล่นในรอบต่อไป",
-    "image": "/assets/cards/finished-actions/vase.webp",
+    "desc": "ผู้เล่นคนถัดไปจะไม่ได้เล่นในรอบต่อไป",
+    "effect": "ข้ามเทิร์นผู้เล่นคนถัดไป 1 รอบ",
+    "image": "/assets/cards/finished-actions/ban.webp",
     "fullArt": true
   },
   {
@@ -330,9 +330,9 @@
     "icon": "👶",
     "color": "red",
     "copies": 3,
-    "desc": "หนูเหงาไปเล่นด้วยกันสิ",
+    "desc": "กุมารมาชวนให้ไปเล่นด้วยกัน",
     "effect": "เมื่อจั่วได้ จะอดเล่นรอบถัดไปทันที",
-    "image": "/assets/cards/finished-actions/kumarn.webp",
+    "image": "/assets/cards/finished-actions/vase.webp",
     "fullArt": true
   }
 ]

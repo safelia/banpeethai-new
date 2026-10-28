@@ -2472,3 +2472,32 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
     width:32px!important; height:32px!important;
   }
 }
+
+
+/* v2.3.48: card artwork/name audit, non-overlapping hand, and lowered larger hearts. */
+#gameScreen .hand-zone .hand-heading-title #handLifeCount{
+  top:calc(50% + 10px)!important;
+  right:clamp(66px,7.5vw,112px)!important;
+  gap:clamp(5px,.6vw,9px)!important;
+  height:clamp(54px,4.5vw,62px)!important;
+  z-index:8!important;
+}
+#gameScreen .hand-zone .hand-heading-title #handLifeCount .hand-life-heart{
+  width:clamp(50px,4.2vw,60px)!important;
+  height:clamp(50px,4.2vw,60px)!important;
+}
+#gameScreen #hand.hand,
+#gameScreen:not(.hidden) #hand.hand{
+  display:flex!important;flex-flow:row nowrap!important;gap:7px!important;
+  overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:thin!important;
+}
+#gameScreen #hand .hand-card,
+#gameScreen:not(.hidden) #hand.hand>.hand-card{
+  margin-left:0!important;flex:0 0 var(--hand-card-width,120px)!important;
+  width:var(--hand-card-width,120px)!important;max-width:var(--hand-card-width,120px)!important;
+  min-width:58px!important;transform:none!important;
+}
+@media(max-width:700px){
+ #gameScreen .hand-zone .hand-heading-title #handLifeCount{top:calc(50% + 7px)!important;right:clamp(46px,11vw,68px)!important;gap:3px!important;height:42px!important;}
+ #gameScreen .hand-zone .hand-heading-title #handLifeCount .hand-life-heart{width:36px!important;height:36px!important;}
+}
