@@ -1,0 +1,1 @@
+v2.3.59: Active opponent seat glows gold when it is their turn; local player seat glows red when it is the local player's turn. CSS-only turn highlight override.

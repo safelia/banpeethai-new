@@ -2732,9 +2732,38 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
 @media(prefers-reduced-motion:reduce){#gameScreen:not(.hidden) .players-ring .player-row.active-player{animation:none!important;}}
 
 
-/* v2.3.58 — align right-side player medallions to the visible chair positions */
-#gameScreen:not(.hidden) .players-ring .seat-3{left:84%!important;top:46%!important;right:auto!important;bottom:auto!important;}
-#gameScreen:not(.hidden) .players-ring .seat-5{left:88%!important;top:64%!important;right:auto!important;bottom:auto!important;}
-#gameScreen:not(.hidden) .players-ring.count-2 .seat-2{left:84%!important;top:46%!important;}
-#gameScreen:not(.hidden) .players-ring.count-3 .seat-3{left:84%!important;top:46%!important;}
-#gameScreen:not(.hidden) .players-ring.count-4 .seat-3{left:84%!important;top:46%!important;}
+/* v2.3.60 — align right-side player medallion centers to the visible chair centers.
+   Coordinates are centers because .player-row uses translate(-50%, -50%). */
+#gameScreen:not(.hidden) .players-ring .seat-3{left:84%!important;top:59.7%!important;right:auto!important;bottom:auto!important;}
+#gameScreen:not(.hidden) .players-ring .seat-5{left:88.5%!important;top:77.5%!important;right:auto!important;bottom:auto!important;}
+#gameScreen:not(.hidden) .players-ring.count-2 .seat-2{left:84%!important;top:59.7%!important;right:auto!important;bottom:auto!important;}
+#gameScreen:not(.hidden) .players-ring.count-3 .seat-3{left:84%!important;top:59.7%!important;right:auto!important;bottom:auto!important;}
+#gameScreen:not(.hidden) .players-ring.count-4 .seat-3{left:84%!important;top:59.7%!important;right:auto!important;bottom:auto!important;}
+
+
+/* v2.3.59 — active opponent glows gold; local player's own turn glows red. */
+#gameScreen:not(.hidden) .players-ring .player-row.active-player:not(.my-turn){
+  border:2px solid #ffd36e!important;
+  border-color:#ffd36e!important;
+  background:radial-gradient(ellipse at 50% 35%,#49351b 0%,#24170d 66%,#100a07 100%)!important;
+  box-shadow:0 0 0 2px #ffca5a99,0 0 0 5px #ffc04d66,0 0 17px 7px #ffbf43cc,0 0 34px 12px #ffb52b77,inset 0 0 0 2px #fff0b0,inset 0 0 18px #ffc24a55,0 6px 16px #000b!important;
+  animation:banpee-opponent-gold-medallion 1.35s ease-in-out infinite alternate!important;
+  z-index:79!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player:not(.my-turn)::before{
+  color:#fff3c8!important;border-color:#ffd36e!important;
+  background:radial-gradient(circle,#9b6a1b,#34200c 75%)!important;
+  box-shadow:0 0 0 2px #ffcf66aa,0 0 13px 5px #ffb52acc,0 0 22px #ffcf6b!important;
+  text-shadow:0 0 7px #fff!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player:not(.my-turn)::after{
+  color:#ffd36e!important;text-shadow:0 0 8px #ffbf43,0 1px 3px #000!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player:not(.my-turn) .player-avatar{
+  border-color:#ffd36e!important;
+  box-shadow:0 0 0 2px #ffc34c77,0 0 12px #ffbd35cc,inset 0 0 0 2px #4b300b!important;
+}
+@keyframes banpee-opponent-gold-medallion{
+  from{box-shadow:0 0 0 2px #ffca5a66,0 0 0 4px #ffc04d44,0 0 12px 4px #ffbf4388,inset 0 0 0 2px #fff0b0,inset 0 0 14px #ffc24a33,0 6px 16px #000b}
+  to{box-shadow:0 0 0 3px #ffca5acc,0 0 0 6px #ffc04d77,0 0 23px 9px #ffbf43dd,0 0 36px 13px #ffb52b88,inset 0 0 0 2px #fff4c9,inset 0 0 20px #ffc24a66,0 6px 16px #000b}
+}

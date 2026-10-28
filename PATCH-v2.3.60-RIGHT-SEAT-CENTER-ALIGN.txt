@@ -1,0 +1,10 @@
+BanPeeThai v2.3.60 — Right Seat Center Alignment
+
+- Repositioned right-side player medallion seat-3 to left 84%, top 59.7%.
+- Repositioned right-side player medallion seat-5 to left 88.5%, top 77.5%.
+- Updated seat-count overrides so the right-side position stays consistent for 2–4 player layouts where seat-3 is used.
+- Coordinates target the center of the chair medallions; player-row already uses translate(-50%, -50%).
+- No gameplay logic changed.
+
+QA performed: CSS rule presence, JavaScript syntax checks, archive integrity and archive entry count.
+Not verified: live browser visual alignment across all screen sizes.
