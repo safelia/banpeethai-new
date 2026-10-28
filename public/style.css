@@ -2433,3 +2433,42 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
  #gameScreen .hand-zone .hand-heading-title #handLifeCount{right:clamp(42px,10vw,60px)!important;gap:2px!important;height:22px!important;}
  #gameScreen .hand-zone .hand-heading-title #handLifeCount .hand-life-heart{width:21px!important;height:21px!important;}
 }
+
+
+/* v2.3.47: definitive hand HUD cleanup — hide the card emblem and enlarge life hearts by ~50%. */
+#gameScreen .hand-zone .hand-heading-title .hand-heading-card-icon,
+#gameScreen .hand-zone .hand-heading-title h3,
+#gameScreen .hand-zone .hand-heading-title [aria-label="ไพ่ในมือ"]{
+  display:none!important; visibility:hidden!important; opacity:0!important;
+  width:0!important; height:0!important; margin:0!important; padding:0!important;
+  position:absolute!important; left:-9999px!important; pointer-events:none!important;
+}
+#gameScreen .hand-zone .hand-heading-title{
+  display:block!important; position:static!important; width:100%!important;
+  min-width:0!important; max-width:none!important; overflow:visible!important;
+}
+#gameScreen .hand-zone .hand-heading-title #handLifeCount{
+  position:absolute!important; right:clamp(66px,7.5vw,112px)!important;
+  top:50%!important; transform:translateY(-50%)!important;
+  display:flex!important; align-items:center!important; justify-content:flex-end!important;
+  gap:clamp(4px,.55vw,8px)!important; width:auto!important; min-width:0!important;
+  height:clamp(44px,3.9vw,54px)!important; max-width:none!important;
+  overflow:visible!important; z-index:6!important;
+}
+#gameScreen .hand-zone .hand-heading-title #handLifeCount .hand-life-heart{
+  display:block!important; visibility:visible!important; opacity:1!important;
+  width:clamp(42px,3.75vw,50px)!important;
+  height:clamp(42px,3.75vw,50px)!important; max-width:none!important;
+  object-fit:contain!important; flex:0 0 auto!important; margin:0!important; padding:0!important;
+  filter:drop-shadow(0 2px 5px rgba(0,0,0,.9))!important;
+}
+#gameScreen .hand-zone .hand-heading-title #handLifeCount .hand-life-heart.is-lost{opacity:.98!important;}
+@media(max-width:700px){
+  #gameScreen .hand-zone .hand-heading{min-height:44px!important;}
+  #gameScreen .hand-zone .hand-heading-title #handLifeCount{
+    right:clamp(46px,11vw,68px)!important; gap:3px!important; height:38px!important;
+  }
+  #gameScreen .hand-zone .hand-heading-title #handLifeCount .hand-life-heart{
+    width:32px!important; height:32px!important;
+  }
+}
