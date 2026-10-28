@@ -1,0 +1,7 @@
+BanPeeThai v2.3.61 — responsive alignment repair
+- Replaced the incorrect right-side hard-coded anchors from v2.3.60 with explicit desktop and phone-portrait anchors.
+- Right-side player badges now use separate responsive coordinates for the upper-right and lower-right chairs.
+- Kept player hearts centered inside the badges and normalized mobile heart sizing.
+- Mobile hand panel now uses the available viewport width, life hearts are anchored within the panel heading, and cards are centered with consistent spacing.
+- package.json version updated to 2.3.61.
+QA scope: syntax/ZIP validation only; real-browser visual verification is still required to confirm exact chair alignment on target devices.

@@ -2767,3 +2767,68 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
   from{box-shadow:0 0 0 2px #ffca5a66,0 0 0 4px #ffc04d44,0 0 12px 4px #ffbf4388,inset 0 0 0 2px #fff0b0,inset 0 0 14px #ffc24a33,0 6px 16px #000b}
   to{box-shadow:0 0 0 3px #ffca5acc,0 0 0 6px #ffc04d77,0 0 23px 9px #ffbf43dd,0 0 36px 13px #ffb52b88,inset 0 0 0 2px #fff4c9,inset 0 0 20px #ffc24a66,0 6px 16px #000b}
 }
+
+/* v2.3.61 — authoritative responsive chair anchors and mobile hand/life HUD repair.
+   Earlier patches used conflicting coordinates; this final block intentionally wins. */
+#gameScreen:not(.hidden) .players-ring{overflow:visible!important;}
+#gameScreen:not(.hidden) .players-ring .player-row{transform:translate(-50%,-50%)!important;}
+/* Desktop/tablet: align right badges to the perspective chairs, not to the table edge. */
+@media (min-width:761px){
+  #gameScreen:not(.hidden) .players-ring .seat-3,
+  #gameScreen:not(.hidden) .players-ring.count-2 .seat-2,
+  #gameScreen:not(.hidden) .players-ring.count-3 .seat-3,
+  #gameScreen:not(.hidden) .players-ring.count-4 .seat-3{
+    left:79.3%!important;top:37.1%!important;right:auto!important;bottom:auto!important;
+  }
+  #gameScreen:not(.hidden) .players-ring .seat-5{
+    left:90%!important;top:58%!important;right:auto!important;bottom:auto!important;
+  }
+}
+/* Phone portrait: anchor to the visible right-hand chair cushions in the tall scene. */
+@media (max-width:760px){
+  #gameScreen:not(.hidden) .players-ring .seat-3,
+  #gameScreen:not(.hidden) .players-ring.count-2 .seat-2,
+  #gameScreen:not(.hidden) .players-ring.count-3 .seat-3,
+  #gameScreen:not(.hidden) .players-ring.count-4 .seat-3{
+    left:90.5%!important;top:41%!important;right:auto!important;bottom:auto!important;
+  }
+  #gameScreen:not(.hidden) .players-ring .seat-5{
+    left:90.5%!important;top:49%!important;right:auto!important;bottom:auto!important;
+  }
+  /* Keep the right-side medallions inside the viewport and readable. */
+  #gameScreen:not(.hidden) .players-ring .player-row{
+    width:clamp(66px,10.2vw,82px)!important;height:clamp(66px,10.2vw,82px)!important;
+    min-width:clamp(66px,10.2vw,82px)!important;min-height:clamp(66px,10.2vw,82px)!important;
+    padding:5px 3px 4px!important;gap:1px!important;
+  }
+  #gameScreen:not(.hidden) .players-ring .player-row .player-avatar{width:25px!important;height:25px!important;min-width:25px!important;min-height:25px!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row .player-meta b{font-size:clamp(7px,1.65vw,9px)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row .player-meta small{font-size:clamp(6px,1.35vw,8px)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row .hearts{display:flex!important;justify-content:center!important;align-items:center!important;gap:1px!important;width:100%!important;margin-top:2px!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row .hearts .life-heart{width:10px!important;height:10px!important;flex:0 0 10px!important;}
+  /* Mobile hand panel uses the available width; cards stay centered and do not drift left. */
+  #gameScreen:not(.hidden) .hand-zone{
+    left:3%!important;right:3%!important;top:68.2%!important;bottom:auto!important;
+    width:94%!important;height:28.5%!important;max-width:none!important;max-height:none!important;
+    box-sizing:border-box!important;overflow:hidden!important;
+  }
+  #gameScreen:not(.hidden) .hand-heading{flex:0 0 20%!important;height:20%!important;padding:0 3%!important;}
+  #gameScreen:not(.hidden) .hand-heading-title{position:static!important;width:100%!important;max-width:none!important;}
+  #gameScreen:not(.hidden) .hand-zone .hand-heading-title #handLifeCount{
+    position:absolute!important;left:auto!important;right:12%!important;top:50%!important;
+    transform:translateY(-50%)!important;display:flex!important;align-items:center!important;
+    justify-content:flex-end!important;gap:clamp(2px,.7vw,5px)!important;height:32px!important;
+  }
+  #gameScreen:not(.hidden) .hand-zone .hand-heading-title #handLifeCount .hand-life-heart{
+    width:clamp(22px,4.3vw,30px)!important;height:clamp(22px,4.3vw,30px)!important;flex:0 0 auto!important;
+  }
+  #gameScreen:not(.hidden) .hand-content-layout{flex:1 1 80%!important;height:80%!important;padding:0 3% 2%!important;}
+  #gameScreen:not(.hidden) #hand.hand{
+    justify-content:center!important;align-items:stretch!important;gap:clamp(8px,2vw,16px)!important;
+    overflow-x:auto!important;overflow-y:hidden!important;padding:0 1%!important;
+  }
+  #gameScreen:not(.hidden) #hand.hand>.hand-card{
+    flex:0 0 clamp(78px,23vw,118px)!important;width:clamp(78px,23vw,118px)!important;
+    min-width:78px!important;max-width:clamp(78px,23vw,118px)!important;margin-left:0!important;
+  }
+}
