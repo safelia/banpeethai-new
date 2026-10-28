@@ -574,7 +574,7 @@ function previewHandCard(index){
  const hand=mode==='online'?(onlineState?.players||[]).find(p=>p.id===socket?.id)?.hand:(localGame?.players||[]).find(p=>p.id==='human')?.hand;
  const c=hand?.[index];if(!c)return;
  const phase=mode==='online'?(onlineState?.phase||'draw'):(localGame?.phase||'draw');
- const canPlay=(phase==='draw'?['skip-next','gecko','owl'].includes(c.id):phase==='afterdraw'&&!['protection','lucky-flower','key','skip-next'].includes(c.id));
+ const canPlay=(phase==='draw'?['skip-next','gecko','owl'].includes(c.id):phase==='afterdraw'&&!['protection','blessed-rice','lucky-flower','holy-water','key','skip-next'].includes(c.id));
  const old=document.getElementById('cardPreviewModal');if(old)old.remove();
  const modal=document.createElement('div');modal.id='cardPreviewModal';modal.className='card-preview-backdrop';
  modal.innerHTML=`<section class="card-preview-dialog" role="dialog" aria-modal="true" aria-label="ตรวจสอบการ์ด">
@@ -613,7 +613,7 @@ async function playHandCard(index){
   if(onlineState?.phase==='afterdraw'&&c.id==='skip-next')return toast('การ์ดข้ามการจั่วใช้ได้ก่อนจั่วเท่านั้น');
   if(onlineState?.phase==='draw'&&!['gecko','owl'].includes(c.id))return toast('ก่อนจั่วใช้ได้เฉพาะจิ้งจกทักหรือเสียงนก');
   if(onlineState?.phase!=='afterdraw'&&onlineState?.phase!=='draw')return toast('ยังใช้การ์ดไม่ได้ในจังหวะนี้');
-  if(['protection','lucky-flower','key'].includes(c.id))return toast(c.id==='lucky-flower'?'ดอกบัวนำโชคทำงานอัตโนมัติเมื่อจั่ว หรือเก็บไว้ป้องกันผีเมื่อหัวใจเต็ม':c.id==='key'?'กุญแจนับจากการ์ดในมืออัตโนมัติ ไม่ต้องกดใช้ — เมื่อครบ 3 ดอกให้กดหนีออกจากบ้าน':'เก็บเครื่องรางไว้ใช้ตอนเจอผี');
+  if(['protection','blessed-rice','lucky-flower','holy-water','key'].includes(c.id))return toast(c.id==='key'?'กุญแจนับจากการ์ดในมืออัตโนมัติ ไม่ต้องกดใช้ — เมื่อครบ 3 ดอกให้กดหนีออกจากบ้าน':'การ์ดป้องกันใช้ได้เฉพาะตอนจั่วได้ไพ่ผีและมีข้อความถามว่าจะใช้หรือไม่');
   const others=(onlineState?.players||[]).filter(p=>p.id!==socket.id&&p.alive);
   let targetId;
   if(['skip','ban','ghost-visit','ghost-disguise'].includes(c.id)){const t=await chooseTarget(others);if(!t)return toast('ยกเลิกการใช้การ์ด');targetId=t.id;}
@@ -627,7 +627,7 @@ async function playHandCard(index){
  if(g.phase==='draw'&&c.id==='skip-next'){p.hand.splice(index,1);g.discard.push(c);logLocal(`${p.name} ใช้การ์ดข้ามการจั่ว`);localNext();return;}
  if(g.phase==='draw'&&!['gecko','owl'].includes(c.id))return toast('ก่อนจั่วใช้ได้เฉพาะจิ้งจกทักหรือเสียงนก');
  if(g.phase!=='afterdraw'&&g.phase!=='draw')return toast('ยังใช้การ์ดไม่ได้ในจังหวะนี้');
- if(['protection','lucky-flower','key'].includes(c.id))return toast(c.id==='lucky-flower'?'ดอกบัวนำโชคทำงานอัตโนมัติเมื่อจั่ว หรือเก็บไว้ป้องกันผีเมื่อหัวใจเต็ม':c.id==='key'?'กุญแจนับจากการ์ดในมืออัตโนมัติ ไม่ต้องกดใช้ — เมื่อครบ 3 ดอกให้กดหนีออกจากบ้าน':'เก็บเครื่องรางไว้ใช้เมื่อเจอผี');
+ if(['protection','blessed-rice','lucky-flower','holy-water','key'].includes(c.id))return toast(c.id==='key'?'กุญแจนับจากการ์ดในมืออัตโนมัติ ไม่ต้องกดใช้ — เมื่อครบ 3 ดอกให้กดหนีออกจากบ้าน':'การ์ดป้องกันใช้ได้เฉพาะตอนจั่วได้ไพ่ผีและมีข้อความถามว่าจะใช้หรือไม่');
  const others=g.players.filter(x=>x.alive&&x.id!==p.id);let t=null;
  if(['skip','ban','ghost-visit','ghost-disguise'].includes(c.id))t=await chooseTarget(others);
  if(c.id==='friend-holy-water')t=await chooseTarget(others,x=>(Number(x.hearts)||0)<3);

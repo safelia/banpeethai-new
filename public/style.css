@@ -2730,3 +2730,11 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
 @keyframes activeTurnGoldPulse{0%,100%{box-shadow:0 0 0 3px #ffdf867a,0 0 10px 2px #ffc34c99,0 0 20px 5px #ffb52e66,inset 0 0 0 2px #ffe7a1}50%{box-shadow:0 0 0 4px #fff0b4c9,0 0 15px 5px #ffd46aee,0 0 28px 9px #ffb52eb8,inset 0 0 0 2px #fff1ba}}
 @media(max-width:760px){#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{width:24px!important;height:24px!important;min-width:24px!important;min-height:24px!important;}}
 @media(prefers-reduced-motion:reduce){#gameScreen:not(.hidden) .players-ring .player-row.active-player{animation:none!important;}}
+
+
+/* v2.3.58 — align right-side player medallions to the visible chair positions */
+#gameScreen:not(.hidden) .players-ring .seat-3{left:84%!important;top:46%!important;right:auto!important;bottom:auto!important;}
+#gameScreen:not(.hidden) .players-ring .seat-5{left:88%!important;top:64%!important;right:auto!important;bottom:auto!important;}
+#gameScreen:not(.hidden) .players-ring.count-2 .seat-2{left:84%!important;top:46%!important;}
+#gameScreen:not(.hidden) .players-ring.count-3 .seat-3{left:84%!important;top:46%!important;}
+#gameScreen:not(.hidden) .players-ring.count-4 .seat-3{left:84%!important;top:46%!important;}

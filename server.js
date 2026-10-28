@@ -227,7 +227,7 @@ io.on('connection',socket=>{
   const phase=g.phase||'draw';if(phase!=='afterdraw'&&!(phase==='draw'&&['gecko','owl','skip-next'].includes(p.hand[index]?.id)))return;
   const c=p.hand[index];if(!c)return;
   if(phase==='afterdraw'&&c.id==='skip-next'){socket.emit('game-error','การ์ดข้ามการจั่วใช้ได้ก่อนจั่วเท่านั้น');return;}
-  if(['protection','lucky-flower'].includes(c.id)){socket.emit('game-error',c.id==='lucky-flower'?'ดอกบัวนำโชคทำงานอัตโนมัติเมื่อจั่ว หรือเก็บไว้ป้องกันผีเมื่อหัวใจเต็ม':'เก็บเครื่องรางไว้ใช้ตอนเจอผี');return}
+  if(['protection','blessed-rice','lucky-flower','holy-water'].includes(c.id)){socket.emit('game-error','การ์ดป้องกันใช้ได้เฉพาะตอนจั่วได้ไพ่ผีและมีข้อความถามว่าจะใช้หรือไม่');return}
   const otherPlayers=()=>g.players.filter(x=>x.alive&&x.id!==p.id);
   const target=()=>g.players.find(x=>x.id===targetId&&x.alive&&x.id!==p.id);
   if(['skip','ban','cat','eye','ghost-visit','ghost-disguise','friend-holy-water'].includes(c.id)&&!targetId){socket.emit('game-error','เลือกผู้เล่นเป้าหมายก่อนใช้การ์ด');return}
