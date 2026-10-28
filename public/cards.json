@@ -1,17 +1,5 @@
 [
   {
-    "id": "heart",
-    "name": "หัวใจ",
-    "type": "หัวใจ",
-    "icon": "❤️",
-    "color": "rose",
-    "copies": 0,
-    "desc": "การ์ดหัวใจแสดงพลังชีวิตของผู้เล่น",
-    "effect": "หัวใจหมด 0 ดวง จะออกจากเกมทันที การ์ดนี้ใช้เล่นไม่ได้",
-    "image": "/assets/cards/finished-special/heart-card.webp",
-    "fullArt": true
-  },
-  {
     "id": "hungry-ghost",
     "name": "ผีนักศึกษาสาว",
     "type": "ผีไทย",

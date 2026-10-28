@@ -345,7 +345,7 @@ function renderHand(hand,canPlay){
  const player=mode==='online'?(onlineState?.players||[]).find(p=>p.id===socket?.id):(localGame?.players||[]).find(p=>p.id==='human');
  const hearts=Math.max(0,Math.min(3,Number(player?.hearts)||0));
  const lifeEl=$('handLifeCount');
- if(lifeEl){lifeEl.innerHTML=Array.from({length:3},(_,i)=>`<img class="hand-life-heart ${i<hearts?'is-alive':'is-lost'}" src="/assets/ui/${i<hearts?'heart-alive':'heart-lost'}.webp" alt="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" draggable="false">`).join('');lifeEl.title=`หัวใจ ${hearts} จาก 3 ดวง`;lifeEl.setAttribute('aria-label',`หัวใจ ${hearts} จาก 3 ดวง`);}
+ if(lifeEl){lifeEl.innerHTML=Array.from({length:3},(_,i)=>`<img class="hand-life-heart ${i<hearts?'is-alive':'is-lost'}" src="/assets/ui/${i<hearts?'heart-alive':'heart-lost'}.webp" alt="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" draggable="false" onerror="this.style.display='none'">`).join('');lifeEl.title=`หัวใจ ${hearts} จาก 3 ดวง`;lifeEl.setAttribute('aria-label',`หัวใจ ${hearts} จาก 3 ดวง`);}
  const available=Math.max(1,el.clientWidth||el.parentElement?.clientWidth||960);
  const handHeight=Math.max(120,el.clientHeight||el.parentElement?.clientHeight||220);
  const cardWidth=count?Math.max(92,Math.min(142,Math.round((handHeight-8)*2/3))):142;
