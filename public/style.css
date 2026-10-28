@@ -2589,3 +2589,87 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
 @media(prefers-reduced-motion:reduce){
   #gameScreen #hand .hand-card{transition:none!important;}
 }
+
+/* v2.3.55 — Thai lotus medallion seats; remove the old crossed/radial frame and reserve vivid red for the local player's turn. */
+#gameScreen:not(.hidden) .players-ring .player-row{
+  position:absolute!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;
+  width:clamp(82px,8.2vw,118px)!important;height:clamp(82px,8.2vw,118px)!important;
+  min-width:clamp(82px,8.2vw,118px)!important;min-height:clamp(82px,8.2vw,118px)!important;max-width:none!important;max-height:none!important;
+  padding:8px 5px 5px!important;gap:2px!important;overflow:visible!important;isolation:isolate!important;box-sizing:border-box!important;
+  border:2px solid #b98b4b!important;border-radius:50%!important;
+  background:radial-gradient(ellipse at 50% 35%,#2d1719 0%,#160d11 66%,#0a0709 100%)!important;
+  box-shadow:0 0 0 2px #3b241c,0 0 0 4px #b98b4b55,inset 0 0 0 2px #5e3d27,inset 0 0 16px #000c,0 6px 16px #000b!important;
+  color:#fff0d9!important;transform:translate(-50%,-50%)!important;animation:none!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row::before{
+  content:'❀'!important;position:absolute!important;left:50%!important;top:-12px!important;transform:translateX(-50%)!important;
+  display:grid!important;place-items:center!important;width:24px!important;height:24px!important;border-radius:50%!important;
+  color:#f4d18c!important;font-size:17px!important;line-height:1!important;text-shadow:0 1px 3px #000,0 0 8px #d7a14b55!important;
+  background:radial-gradient(circle,#3c251b 0%,#160d0d 72%)!important;border:1px solid #b98b4b!important;box-shadow:0 2px 5px #000a!important;
+  pointer-events:none!important;z-index:3!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row::after{
+  content:'❧'!important;position:absolute!important;left:50%!important;bottom:-9px!important;transform:translateX(-50%) rotate(180deg)!important;
+  color:#c9a064!important;font-size:15px!important;line-height:1!important;text-shadow:0 1px 3px #000!important;pointer-events:none!important;z-index:3!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-avatar{
+  display:grid!important;place-items:center!important;flex:0 0 auto!important;width:clamp(27px,2.3vw,36px)!important;height:clamp(27px,2.3vw,36px)!important;
+  min-width:0!important;min-height:0!important;margin:0!important;border-radius:50%!important;border:2px solid #b98b4b!important;
+  background:radial-gradient(circle at 40% 30%,#67442c,#1a0c0c 78%)!important;box-shadow:inset 0 0 0 2px #160b0a,0 2px 5px #000a!important;
+  font-size:clamp(16px,1.4vw,22px)!important;line-height:1!important;overflow:hidden!important;z-index:1!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta{
+  display:flex!important;flex:0 1 auto!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;min-height:0!important;text-align:center!important;overflow:hidden!important;gap:2px!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta b,
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta strong{
+  display:block!important;width:100%!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+  font-size:clamp(8px,.72vw,11px)!important;line-height:1.15!important;font-weight:800!important;color:#fff0d9!important;text-shadow:0 1px 3px #000!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .player-meta small{
+  display:block!important;max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;
+  font-size:clamp(7px,.62vw,9px)!important;line-height:1.1!important;color:#e6c37d!important;text-shadow:0 1px 2px #000!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .hearts{
+  display:flex!important;align-items:center!important;justify-content:center!important;gap:2px!important;width:100%!important;height:auto!important;min-height:12px!important;
+  margin:1px 0 0!important;font-size:10px!important;line-height:1!important;letter-spacing:0!important;overflow:visible!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row .hearts .life-heart{display:block!important;width:clamp(10px,.95vw,14px)!important;height:clamp(10px,.95vw,14px)!important;object-fit:contain!important;filter:drop-shadow(0 1px 2px #000b)!important}
+#gameScreen:not(.hidden) .players-ring .player-row .seat-turn{display:none!important}
+/* Other players stay subdued; a bot's turn never receives the local player's red highlight. */
+#gameScreen:not(.hidden) .players-ring .player-row.active-player:not(.my-turn){
+  border-color:#b98b4b!important;box-shadow:0 0 0 2px #3b241c,0 0 0 4px #b98b4b55,inset 0 0 0 2px #5e3d27,inset 0 0 16px #000c,0 6px 16px #000b!important;
+  background:radial-gradient(ellipse at 50% 35%,#2d1719 0%,#160d11 66%,#0a0709 100%)!important;animation:none!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player:not(.my-turn)::before{color:#f4d18c!important;border-color:#b98b4b!important;box-shadow:0 2px 5px #000a!important}
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn{
+  border:2px solid #ff4a55!important;
+  background:radial-gradient(ellipse at 50% 35%,#471216 0%,#260b10 65%,#12070a 100%)!important;
+  box-shadow:0 0 0 2px #ff3232cc,0 0 0 5px #ff292966,0 0 16px 7px #ff1b27cc,0 0 34px 12px #ff172a88,inset 0 0 0 2px #ffb0a8,inset 0 0 18px #ff242455!important;
+  animation:banpee-local-red-medallion 1.2s ease-in-out infinite alternate!important;z-index:80!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn::before{
+  color:#fff2d4!important;border-color:#ff4a55!important;background:radial-gradient(circle,#9d1826,#31090e 75%)!important;
+  box-shadow:0 0 0 2px #ff4848aa,0 0 13px 5px #ff1b2acc,0 0 22px #ff2932!important;text-shadow:0 0 7px #fff!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn::after{color:#ff7378!important;text-shadow:0 0 8px #ff1a28,0 1px 3px #000!important}
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn .player-avatar{
+  border-color:#ff6268!important;background:radial-gradient(circle at 40% 30%,#9b2730,#26090d 78%)!important;
+  box-shadow:0 0 0 2px #ff323277,0 0 12px #ff2932cc,inset 0 0 0 2px #3d080c!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn .player-meta b{color:#fff!important;text-shadow:0 0 8px #ff3b45,0 1px 3px #000!important}
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn .player-meta small{color:#ffe0a3!important}
+#gameScreen:not(.hidden) .players-ring .player-row.dead-player{filter:grayscale(1)!important;opacity:.52!important}
+@keyframes banpee-local-red-medallion{
+  from{filter:brightness(1);box-shadow:0 0 0 2px #ff3232aa,0 0 0 4px #ff292955,0 0 13px 5px #ff1b27aa,0 0 25px 8px #ff172a66,inset 0 0 0 2px #ff8b8b,inset 0 0 16px #ff242433}
+  to{filter:brightness(1.24);box-shadow:0 0 0 3px #ff4545ee,0 0 0 7px #ff292988,0 0 24px 9px #ff1b27ee,0 0 42px 15px #ff172a99,inset 0 0 0 2px #fff0dc,inset 0 0 22px #ff242477}
+}
+@media(max-width:760px){
+ #gameScreen:not(.hidden) .players-ring .player-row{width:clamp(60px,13vw,84px)!important;height:clamp(60px,13vw,84px)!important;min-width:clamp(60px,13vw,84px)!important;min-height:clamp(60px,13vw,84px)!important;padding:6px 3px 4px!important;gap:1px!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-avatar{width:clamp(20px,4.4vw,27px)!important;height:clamp(20px,4.4vw,27px)!important;font-size:clamp(12px,3vw,17px)!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-meta b{font-size:clamp(6px,1.5vw,8px)!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .player-meta small{font-size:clamp(5px,1.25vw,7px)!important}
+ #gameScreen:not(.hidden) .players-ring .player-row .hearts .life-heart{width:clamp(8px,1.8vw,11px)!important;height:clamp(8px,1.8vw,11px)!important}
+}
+@media(prefers-reduced-motion:reduce){#gameScreen:not(.hidden) .players-ring .player-row.my-turn{animation:none!important;filter:brightness(1.2)!important}}

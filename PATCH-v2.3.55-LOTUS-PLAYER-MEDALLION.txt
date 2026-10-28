@@ -1,0 +1,14 @@
+BanPeeThai v2.3.55 — Lotus Player Medallion
+
+Visual changes
+- Replaced the old circular player token treatment with a clean Thai lotus medallion frame: double gold rim, centered avatar, player name, key progress, and life-heart row.
+- Removed the previous crossed/radial decoration from the player frame; decorative lotus details sit above and below the circle instead of crossing the content.
+- The local player's own turn (.my-turn) gets a bright pulsing crimson rim, red halo, and brighter avatar.
+- Other players retain a subdued gold/black frame. A bot or remote player's active turn does not trigger the local red highlight.
+- Added compact mobile sizing and reduced-motion fallback.
+
+QA performed
+- JavaScript syntax checks: node --check public/app.js and server.js.
+- Parsed package.json and public/cards.json; verified unique card IDs and all locally referenced card art exists.
+- Verified ZIP archive integrity and CSS brace balance.
+- Visual browser interaction QA was not available in this runtime; please test the active-turn highlight at desktop and mobile sizes after opening/deploying the package.
