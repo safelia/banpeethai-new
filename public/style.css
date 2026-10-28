@@ -2937,3 +2937,64 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
   #gameScreen:not(.hidden) #hand.hand>.hand-card:first-child{margin-left:0!important;}
 }
 @media(prefers-reduced-motion:reduce){#gameScreen:not(.hidden) .players-ring .player-row.my-turn{animation:none!important;}}
+
+
+/* v2.3.64 — calibrated desktop chair anchors + stage-relative zoom lock.
+   All positions are percentages of the same fixed 16:9 stage that paints the background.
+   Landscape uses these anchors even when browser zoom changes CSS viewport width; portrait
+   mobile retains the previously approved phone-specific positions. */
+@media (orientation: landscape) {
+  #gameScreen:not(.hidden) > .game-layout.ritual-layout,
+  #gameScreen:not(.hidden) > .game-top {
+    width: var(--stage-w) !important;
+    height: var(--stage-h) !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    transform-origin: center center !important;
+    zoom: 1 !important;
+  }
+  #gameScreen:not(.hidden) .ritual-scene {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: none !important;
+    translate: none !important;
+    scale: none !important;
+    zoom: 1 !important;
+  }
+  #gameScreen:not(.hidden) #playersList.players-ring {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    transform: none !important;
+    transform-origin: top left !important;
+    zoom: 1 !important;
+    overflow: visible !important;
+  }
+  /* Chair-seat centers measured against the scene: near-left, far-left,
+     head chair, far-right, near-right. The human stays in seat-1. */
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-1 {
+    left: 20.5% !important; top: 46% !important; right: auto !important; bottom: auto !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-2 {
+    left: 29% !important; top: 33% !important; right: auto !important; bottom: auto !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-3 {
+    left: 52% !important; top: 15% !important; right: auto !important; bottom: auto !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-4 {
+    left: 77% !important; top: 33% !important; right: auto !important; bottom: auto !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-5 {
+    left: 86% !important; top: 46% !important; right: auto !important; bottom: auto !important;
+    transform: translate(-50%, -50%) !important;
+  }
+}
