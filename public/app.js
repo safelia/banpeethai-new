@@ -358,8 +358,14 @@ function renderHand(hand,canPlay){
  const handHeight=Math.max(120,el.clientHeight||el.parentElement?.clientHeight||220);
  // Fan/stack the hand: keep cards readable and progressively overlap them as the hand grows.
  // Never make the hand horizontally scroll; size the cards and overlap to fit the available width.
- const cardWidth=count?Math.max(76,Math.min(138,Math.floor(available/Math.max(1,1+Math.max(0,count-1)*0.32)))):138;
- const overlap=count>1?Math.max(0,Math.min(cardWidth-18,Math.ceil(cardWidth-(available-cardWidth)/(count-1)))):0;
+ const isCompactHand=window.matchMedia('(max-width: 760px)').matches;
+ // Mobile: compute the exposed slice from the actual hand-panel width so the final card
+ // never crosses the frame, even with a large hand or a narrow phone viewport.
+ const cardWidth=count?(isCompactHand
+   ?Math.min(available,Math.max(52,Math.min(118,Math.floor(available*0.42))))
+   :Math.max(76,Math.min(138,Math.floor(available/Math.max(1,1+Math.max(0,count-1)*0.32))))):138;
+ const exposedStep=count>1?Math.max(1,Math.min(cardWidth,(available-cardWidth)/(count-1))):cardWidth;
+ const overlap=count>1?Math.max(0,Math.ceil(cardWidth-exposedStep)):0;
  const gap=0;
  const sideCount=$('sideHandCount');if(sideCount)sideCount.textContent=`${count} ใบ`;
  el.style.setProperty('--hand-count',String(count));

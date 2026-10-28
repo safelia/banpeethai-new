@@ -2998,3 +2998,23 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
     transform: translate(-50%, -50%) !important;
   }
 }
+
+
+/* v2.3.65 — final desktop chair-center correction + strict mobile hand-frame fit.
+   Desktop anchors are calibrated to the visible seat cushions in the supplied 1640x809
+   screenshot relative to the centered 16:9 stage. Mobile seat anchors remain unchanged. */
+@media (min-width:761px) and (orientation:landscape){
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-1{left:22.8%!important;top:53.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-2{left:28.2%!important;top:37.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-3{left:54.8%!important;top:24.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-4{left:84.0%!important;top:37.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-5{left:92.3%!important;top:53.5%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+}
+/* Mobile hand: the panel clips its children and the JS calculates overlap against the
+   measured inner width; keep all card boxes inside that exact content rectangle. */
+@media(max-width:760px){
+  #gameScreen:not(.hidden) .hand-zone,
+  #gameScreen:not(.hidden) .hand-content-layout{min-width:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box!important;overflow:hidden!important;}
+  #gameScreen:not(.hidden) #hand.hand{display:flex!important;flex-flow:row nowrap!important;justify-content:flex-start!important;align-items:stretch!important;gap:0!important;padding:0!important;margin:0!important;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;overflow:hidden!important;}
+  #gameScreen:not(.hidden) #hand.hand>.hand-card{flex-shrink:0!important;min-width:0!important;box-sizing:border-box!important;margin-right:0!important;}
+}
