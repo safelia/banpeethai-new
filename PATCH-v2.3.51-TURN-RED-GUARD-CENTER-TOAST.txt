@@ -1,0 +1,9 @@
+PATCH v2.3.51 — TURN INDICATOR, QUIET OUT-OF-TURN ACTIONS, CENTERED NOTICES
+
+- Highlights the active player's entire player frame with a red border and glow.
+- Table-side last-drawn card preview is constrained to the left-side scene frame and uses contain sizing.
+- Out-of-turn draw attempts are rejected before sound playback or socket emission.
+- Out-of-turn end-turn and escape attempts are rejected without click sounds or game-state changes.
+- Card preview/play attempts are rejected out of turn.
+- Invalid-action notices are centered in the viewport for desktop and mobile.
+- Preserves hand overlap behavior and central reveal behavior.

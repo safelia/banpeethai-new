@@ -327,10 +327,11 @@ function renderPlayers(state, local=false){
  list.classList.add(`count-${Math.max(1,Math.min(5,players.length))}`);
  list.innerHTML=players.map((p,index)=>{
   const isTurn=players[state.turn]?.id===p.id;
+  const isMyTurn=isTurn&&(local?p.id==='human':p.id===socket?.id);
   const hearts=Math.max(0,Number(p.hearts)||0);
   const keys=playerKeyCount(p);
   const heartIcons=Array.from({length:3},(_,i)=>`<img class="life-heart ${i<hearts?'life-heart-alive':'life-heart-lost'}" src="/assets/ui/${i<hearts?'heart-alive':'heart-lost'}.webp" alt="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" title="${i<hearts?'หัวใจที่เหลือ':'หัวใจที่เสียไป'}" draggable="false">`).join('');
-  return `<div class="player-row seat-${index+1} ${isTurn?'active-player':''} ${p.alive===false?'dead-player':''}" style="--seat-index:${index}"><div class="player-avatar">${p.id==='human'?'🧑':p.bot?'👻':'🧑‍🚀'}</div><div class="player-meta"><b>${esc(p.name)} ${p.id==='human'?'(คุณ)':''}</b><small>🗝️ ${keys}/3 กุญแจ ${p.alive===false?'• ออกจากเกม':''}</small><span class="hearts" role="img" aria-label="หัวใจ ${hearts} จาก 3 ดวง">${heartIcons}</span></div>${isTurn?'<span class="seat-turn">◀ ถึงตา</span>':''}</div>`;
+  return `<div class="player-row seat-${index+1} ${isTurn?'active-player':''} ${isMyTurn?'my-turn':''} ${p.alive===false?'dead-player':''}" style="--seat-index:${index}"><div class="player-avatar">${p.id==='human'?'🧑':p.bot?'👻':'🧑‍🚀'}</div><div class="player-meta"><b>${esc(p.name)} ${p.id==='human'?'(คุณ)':''}</b><small>🗝️ ${keys}/3 กุญแจ ${p.alive===false?'• ออกจากเกม':''}</small><span class="hearts" role="img" aria-label="หัวใจ ${hearts} จาก 3 ดวง">${heartIcons}</span></div>${isTurn?'<span class="seat-turn">◀ ถึงตา</span>':''}</div>`;
  }).join('');
 }
 function renderHand(hand,canPlay){
@@ -438,6 +439,7 @@ function renderLocal(){
  if($('sidePlayersCount'))$('sidePlayersCount').textContent=`${g.players.filter(x=>x.alive!==false).length}/${g.players.length}`;if($('sideRoundCount'))$('sideRoundCount').textContent=String(g.round);if($('sideCurrentTurn'))$('sideCurrentTurn').textContent=g.over?'เกมจบ':(g.players[g.turn]?.name||'—');
  const myTurn=g.turn===0&&!g.over&&!g.pending&&g.phase==='draw';
  const ownTurn=g.turn===0&&!g.over&&!g.pending;
+ $('hand')?.classList.toggle('hand-not-your-turn',!ownTurn);
  syncLocalDrawTimer(g,myTurn);syncLocalEndTimer(g,ownTurn&&g.phase==='afterdraw');
  $('drawCard').disabled=!myTurn;$('tableDeck').disabled=!myTurn;$('endTurn').disabled=!(ownTurn&&g.phase==='afterdraw'); $('tableDeck').classList.toggle('turn-glow',myTurn);$('drawCard').classList.toggle('turn-glow',myTurn);$('endTurn').classList.toggle('endturn-glow',ownTurn&&g.phase==='afterdraw');$('escapeBtn').disabled=!(g.turn===0&&!g.over&&!g.pending);
  if(g.over){show('gameOver');$('resultTitle').textContent=g.winner==='human'?'คุณหนีออกมาได้!':g.winner?`${g.players.find(x=>x.id===g.winner)?.name||'ผู้เล่น'} ชนะ!`:'เกมจบแล้ว';$('resultText').textContent=g.logs[0]||'การผจญภัยสิ้นสุดลง';}
@@ -450,6 +452,7 @@ function renderOnline(){
  const surrenderBtn=$('leaveGame');if(surrenderBtn){const living=(s.players||[]).filter(p=>p.alive!==false).length;surrenderBtn.disabled=!!(mode==='online'&&living<=2);surrenderBtn.title=living<=2?'ออนไลน์ต้องมีผู้เล่นที่ยังอยู่มากกว่า 2 คนจึงยอมแพ้ได้':'ยอมแพ้และออกจากเกม';}
  $('deckCount').textContent=`เหลือ ${s.deckCount} ใบ`;$('tableDeckCount').textContent=`${s.deckCount} ใบ`;if($('sideDeckCount'))$('sideDeckCount').textContent=`${s.deckCount} ใบ`;$('roundCount').textContent=s.round||1;updateNightOmen(s.round||1);
  const myTurn=s.players[s.turn]?.id===socket?.id;
+ $('hand')?.classList.toggle('hand-not-your-turn',!myTurn||!!s.over);
  $('turnBanner').textContent=s.over?'เกมจบแล้ว':s.pending?(s.pending.playerId===socket?.id?'ผีปรากฏตัว! เลือกว่าจะป้องกันหรือไม่':'มีผู้เล่นเจอผี!'):myTurn?'ถึงตาคุณแล้ว — จั่วการ์ด 1 ใบ':`ถึงตา ${s.players[s.turn]?.name||'ผู้เล่น'}`;
  $('tableMessage').textContent=s.over?'การผจญภัยสิ้นสุดลง':s.pending?'มีวิญญาณปรากฏตัว!':myTurn?'จั่วการ์ดเพื่อสำรวจบ้าน':'กำลังรอผู้เล่น...';
  renderLastDrawPreview(s.lastDraw,Array.isArray(s.discard)?s.discard[s.discard.length-1]:s.discard);
@@ -546,7 +549,11 @@ function chooseTarget(players,filter=()=>true){
  });
 }
 function previewHandCard(index){
- const hand=mode==='online'?(onlineState?.players||[]).find(p=>p.id===socket?.id)?.hand:(localGame?.players||[])[0]?.hand;
+ const mine=mode==='online'
+  ? !!onlineState&&onlineState.players?.[onlineState.turn]?.id===socket?.id&&!onlineState.over&&!onlineState.pending
+  : !!localGame&&localGame.players?.[localGame.turn]?.id==='human'&&!localGame.over&&!localGame.pending;
+ if(!mine){toast('ยังไม่ถึงตาคุณ รอให้ผู้เล่นปัจจุบันเล่นจบก่อน');return;}
+ const hand=mode==='online'?(onlineState?.players||[]).find(p=>p.id===socket?.id)?.hand:(localGame?.players||[]).find(p=>p.id==='human')?.hand;
  const c=hand?.[index];if(!c)return;
  const phase=mode==='online'?(onlineState?.phase||'draw'):(localGame?.phase||'draw');
  const canPlay=(phase==='draw'?['skip-next','gecko','owl'].includes(c.id):phase==='afterdraw'&&!['protection','lucky-flower','key','skip-next'].includes(c.id));
@@ -582,6 +589,7 @@ function previewHandCard(index){
 async function playHandCard(index){
  if(mode==='online'){
   if(!onlineRoom||!socket?.connected)return;
+  if(!onlineState||onlineState.players?.[onlineState.turn]?.id!==socket?.id||onlineState.over||onlineState.pending){toast('ยังไม่ถึงตาคุณ รอให้ผู้เล่นปัจจุบันเล่นจบก่อน');return;}
   const me=onlineState?.players.find(p=>p.id===socket.id);const c=me?.hand?.[index];if(!c)return;
   if(onlineState?.phase==='draw'&&c.id==='skip-next'){socket.emit('skip-draw',{room:onlineRoom});return;}
   if(onlineState?.phase==='afterdraw'&&c.id==='skip-next')return toast('การ์ดข้ามการจั่วใช้ได้ก่อนจั่วเท่านั้น');
@@ -596,7 +604,7 @@ async function playHandCard(index){
   if(c.id==='eye'){const t=await chooseTarget(others,p=>(p.handCount||0)>0);if(!t)return toast('ไม่มีผู้เล่นอื่นที่มีไพ่ในมือ');targetId=t.id;}
   socket.emit('play-card',{room:onlineRoom,index,targetId});return;
  }
- const g=localGame,p=g?.players[0];if(!g||g.over||g.turn!==0||g.pending)return;const c=p.hand[index];if(!c)return;
+ const g=localGame,p=g?.players?.find(x=>x.id==='human');if(!g||!p||g.over||g.players?.[g.turn]?.id!=='human'||g.pending){toast('ยังไม่ถึงตาคุณ รอให้ผู้เล่นปัจจุบันเล่นจบก่อน');return;}const c=p.hand[index];if(!c)return;
  if(g.phase==='afterdraw'&&c.id==='skip-next')return toast('การ์ดข้ามการจั่วใช้ได้ก่อนจั่วเท่านั้น');
  if(g.phase==='draw'&&c.id==='skip-next'){p.hand.splice(index,1);g.discard.push(c);logLocal(`${p.name} ใช้การ์ดข้ามการจั่ว`);localNext();return;}
  if(g.phase==='draw'&&!['gecko','owl'].includes(c.id))return toast('ก่อนจั่วใช้ได้เฉพาะจิ้งจกทักหรือเสียงนก');
@@ -658,12 +666,21 @@ function showEffectCard(message,card){
 }
 
 function draw(){
- if(mode==='online'){if(!onlineRoom||!socket?.connected)return toast('ยังไม่ได้เชื่อมต่อห้อง');playDrawSound();socket.emit('draw-card',{room:onlineRoom});return;}
- if(!localGame)return toast('เริ่มเกมก่อน');playDrawSound();localDraw(localGame.players[0]);
+ // Ignore out-of-turn clicks before playing any sound or sending an action.
+ if(mode==='online'){
+  if(!onlineRoom||!socket?.connected)return toast('ยังไม่ได้เชื่อมต่อห้อง');
+  const mine=!!onlineState&&onlineState.players?.[onlineState.turn]?.id===socket?.id&&!onlineState.over&&!onlineState.pending;
+  if(!mine||onlineState?.phase!=='draw')return toast('ยังไม่ถึงตาคุณ รอให้ผู้เล่นปัจจุบันเล่นจบก่อน');
+  playDrawSound();socket.emit('draw-card',{room:onlineRoom});return;
+ }
+ if(!localGame)return toast('เริ่มเกมก่อน');
+ const mine=localGame.players?.[localGame.turn]?.id==='human'&&!localGame.over&&!localGame.pending;
+ if(!mine||localGame.phase!=='draw')return toast('ยังไม่ถึงตาคุณ รอให้ผู้เล่นปัจจุบันเล่นจบก่อน');
+ playDrawSound();localDraw(localGame.players.find(p=>p.id==='human'));
 }
 function escape(){
  if(mode==='online'){const me=onlineState?.players?.find(x=>x.id===socket?.id);if(!me||!onlineState||onlineState.over||onlineState.players[onlineState.turn]?.id!==socket?.id||onlineState.pending)return toast('ยังไม่ใช่เทิร์นของคุณ');if(playerKeyCount(me)<3)return toast(`กุญแจยังไม่ครบ (${playerKeyCount(me)}/3) ต้องสะสมให้ครบ 3 ดอกก่อนจึงจะออกได้`);socket?.emit('escape-room',{room:onlineRoom});return;}
- const g=localGame,p=g?.players[0];if(!p||!g||g.over||g.turn!==0||g.pending)return;if(playerKeyCount(p)<3)return toast(`กุญแจยังไม่ครบ (${playerKeyCount(p)}/3) ต้องสะสมให้ครบ 3 ดอกก่อนจึงจะออกได้`);localFinish(p,`${p.name} หนีออกจากบ้านผีไทยได้สำเร็จ!`);
+ const g=localGame,p=g?.players?.find(x=>x.id==='human');if(!p||!g)return;if(g.over||g.pending||g.players?.[g.turn]?.id!=='human')return toast('ยังไม่ถึงตาคุณ รอให้ผู้เล่นปัจจุบันเล่นจบก่อน');if(playerKeyCount(p)<3)return toast(`กุญแจยังไม่ครบ (${playerKeyCount(p)}/3) ต้องสะสมให้ครบ 3 ดอกก่อนจึงจะออกได้`);localFinish(p,`${p.name} หนีออกจากบ้านผีไทยได้สำเร็จ!`);
 }
 function leaveGame(){
  if(!confirm('ยืนยันยอมแพ้และออกจากเกมหรือไม่?'))return;
@@ -780,15 +797,15 @@ function init(){
    refHotspotDraw: () => draw(),
    refHotspotEscape: () => escape(),
    refHotspotEndTurn: () => {
+     const mine=mode==='bot'
+      ? !!localGame&&localGame.players?.[localGame.turn]?.id==='human'&&localGame.phase==='afterdraw'&&!localGame.pending&&!localGame.over
+      : !!onlineRoom&&!!onlineState&&onlineState.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'&&!onlineState.pending&&!onlineState.over;
+     if(!mine){toast('ยังไม่ถึงจังหวะจบรอบของคุณ');return;}
      playClickSound();
-     if(mode==='bot'&&localGame&&localGame.turn===0&&localGame.phase==='afterdraw'&&!localGame.pending&&!localGame.over){
+     if(mode==='bot'&&localGame){
        if(localEndTimer)clearTimeout(localEndTimer);
        localEndTimer=null;localEndTimerKey='';localNext();
-     } else if(mode==='online'&&onlineRoom&&onlineState?.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'&&!onlineState.pending&&!onlineState.over){
-       socket.emit('end-turn',{room:onlineRoom});
-     } else {
-       toast('ต้องจั่วไพ่ก่อน แล้วกดจบรอบ');
-     }
+     } else if(mode==='online'&&onlineRoom) socket.emit('end-turn',{room:onlineRoom});
    }
  };
  Object.entries(hotspotActions).forEach(([id,action])=>{
@@ -809,7 +826,15 @@ function init(){
  $('createRoomBtn')?.addEventListener('click',createRoom);$('joinRoomBtn')?.addEventListener('click',joinRoom);$('startOnlineGame')?.addEventListener('click',startOnline);
  $('copyRoomCode')?.addEventListener('click',()=>{const code=$('createdRoomCode').textContent;navigator.clipboard?.writeText(code).then(()=>toast('คัดลอกรหัสห้องแล้ว')).catch(()=>toast(`รหัสห้อง: ${code}`));});
  $('drawCard')?.addEventListener('click',draw);$('tableDeck')?.addEventListener('click',draw);$('escapeBtn')?.addEventListener('click',escape);
- $('endTurn')?.addEventListener('click',()=>{playClickSound();if(mode==='bot'&&localGame&&localGame.turn===0&&localGame.phase==='afterdraw'&&!localGame.pending){if(localEndTimer)clearTimeout(localEndTimer);localEndTimer=null;localEndTimerKey='';localNext();}else if(mode==='online'&&onlineRoom&&onlineState?.players?.[onlineState.turn]?.id===socket?.id&&onlineState.phase==='afterdraw'){socket.emit('end-turn',{room:onlineRoom});}else toast('จบเทิร์นได้หลังจั่วการ์ดแล้ว');});
+ $('endTurn')?.addEventListener('click',()=>{
+  const mine=mode==='online'
+   ? !!onlineRoom&&!!onlineState&&onlineState.players?.[onlineState.turn]?.id===socket?.id&&!onlineState.over&&!onlineState.pending&&onlineState.phase==='afterdraw'
+   : !!localGame&&localGame.players?.[localGame.turn]?.id==='human'&&!localGame.over&&!localGame.pending&&localGame.phase==='afterdraw';
+  if(!mine){toast('ยังไม่ถึงจังหวะจบรอบของคุณ');return;}
+  playClickSound();
+  if(mode==='bot'&&localGame){if(localEndTimer)clearTimeout(localEndTimer);localEndTimer=null;localEndTimerKey='';localNext();}
+  else if(mode==='online'&&onlineRoom)socket.emit('end-turn',{room:onlineRoom});
+ });
  $('leaveGame')?.addEventListener('click',leaveGame);
  const exitResultScreen=()=>{hide('gameOver');hide('gameScreen');hide('drawReveal');hide('gameOptionsPanel');localGame=null;onlineState=null;onlineRoom='';isHost=false;openSetup();};
  $('closeGameOver')?.addEventListener('click',exitResultScreen);

@@ -1,0 +1,6 @@
+BanPeeThai v2.3.52 — Hand Card Turn State
+
+- Cards in the local player's hand are dimmed while it is another player's turn.
+- Cards return to normal brightness when the local player owns the turn.
+- Added for both bot/local and online modes.
+- This is a visual state only; existing turn rules and card actions are unchanged.

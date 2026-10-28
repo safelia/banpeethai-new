@@ -2523,3 +2523,69 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
 /* v2.3.50: move the life-heart row farther down so it clears the top border. */
 #gameScreen .hand-zone .hand-heading-title #handLifeCount{top:calc(50% + 20px)!important;}
 @media(max-width:700px){#gameScreen .hand-zone .hand-heading-title #handLifeCount{top:calc(50% + 17px)!important;}}
+
+
+/* v2.3.51 — clear active turn, quiet invalid actions, centered notices, fitted table preview. */
+/* Highlight the currently active player's entire seat frame in red. */
+#gameScreen:not(.hidden) .players-ring .player-row.active-player{
+  border:2px solid #ff3434!important;
+  box-shadow:0 0 0 2px #ff343477,0 0 18px #ff1616bb,inset 0 0 0 1px #ff7777!important;
+  background:linear-gradient(135deg,#351010f2,#180d0ef2)!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.active-player .player-avatar{
+  border-color:#ff5b5b!important;
+  box-shadow:0 0 0 2px #ff343466,0 0 14px #ff2424aa,inset 0 0 0 2px #4d0808!important;
+}
+#toast.toast{
+  left:50%!important;right:auto!important;top:50%!important;bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  width:max-content!important;max-width:min(90vw,560px)!important;
+  text-align:center!important;white-space:normal!important;
+  padding:14px 22px!important;font-size:clamp(15px,1.35vw,20px)!important;
+  line-height:1.45!important;border:1px solid #dba65d!important;
+  background:linear-gradient(145deg,#3b201b,#160d0c)!important;color:#ffedcf!important;
+  box-shadow:0 10px 40px #000d,0 0 18px #b72525aa!important;
+  z-index:2147483600!important;pointer-events:none!important;
+}
+/* Keep the small table-side card preview inside its intended scene frame. */
+#gameScreen:not(.hidden) #discardTop.discard-pile{
+  width:7.4%!important;height:16.8%!important;
+  overflow:hidden!important;box-sizing:border-box!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:2px!important;
+}
+#gameScreen:not(.hidden) #discardTop .discard-preview{
+  width:100%!important;height:100%!important;object-fit:contain!important;
+  object-position:center!important;background:transparent!important;
+}
+@media(max-width:760px){
+  #gameScreen:not(.hidden) #discardTop.discard-pile{width:8.5%!important;height:17.5%!important;}
+  #toast.toast{max-width:88vw!important;padding:12px 17px!important;}
+}
+
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn{
+  border:2px solid #ff2929!important;
+  box-shadow:0 0 0 3px #ff343477,0 0 22px #ff1616cc,inset 0 0 0 1px #ff8b8b!important;
+  background:linear-gradient(135deg,#421010f5,#180d0ef5)!important;
+  animation:myTurnRedPulse 1.35s ease-in-out infinite alternate!important;
+}
+@keyframes myTurnRedPulse{
+  from{box-shadow:0 0 0 2px #ff343455,0 0 12px #ff161688,inset 0 0 0 1px #ff7777}
+  to{box-shadow:0 0 0 4px #ff343499,0 0 24px #ff1616dd,inset 0 0 0 1px #ffaaaa}
+}
+
+
+/* v2.3.52 — dim cards in hand until it is the local player's turn. */
+#gameScreen:not(.hidden) #hand.hand.hand-not-your-turn .hand-card{
+  filter:brightness(.38) saturate(.55)!important;
+  opacity:.82!important;
+  transition:filter .22s ease,opacity .22s ease!important;
+}
+#gameScreen:not(.hidden) #hand.hand:not(.hand-not-your-turn) .hand-card{
+  filter:brightness(1) saturate(1)!important;
+  opacity:1!important;
+  transition:filter .22s ease,opacity .22s ease!important;
+}
+@media(prefers-reduced-motion:reduce){
+  #gameScreen #hand .hand-card{transition:none!important;}
+}
