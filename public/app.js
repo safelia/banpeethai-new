@@ -72,7 +72,7 @@ function playCardEventSound(card){
 function scheduleCardEventSound(card){
  if(pendingCardSoundTimer)clearTimeout(pendingCardSoundTimer);
  // The draw SFX is 0.432 s long; wait slightly longer so the reveal sound never overlaps it.
- pendingCardSoundTimer=setTimeout(()=>{pendingCardSoundTimer=null;playCardEventSound(card);},0);
+ pendingCardSoundTimer=setTimeout(()=>{pendingCardSoundTimer=null;playCardEventSound(card);},450);
 }
 function updateSoundForScreen(){
  const inGame=!!$('gameScreen')&&!$('gameScreen').classList.contains('hidden');
@@ -384,28 +384,43 @@ function syncLocalDrawTimer(g,myTurn){
   }
  },Math.max(0,10000-(Date.now()-started)));
 }
-function syncLocalEndTimer(g,active){ if(localEndTimer){clearTimeout(localEndTimer);localEndTimer=null;} localEndTimerKey=''; }
+function syncLocalEndTimer(g,active){
+ if(!active){if(localEndTimer){clearTimeout(localEndTimer);localEndTimer=null;}localEndTimerKey='';return;}
+ const key=`${g.round}-${g.turn}-${g.afterDrawStartedAt||0}`;
+ if(localEndTimerKey===key)return;
+ if(localEndTimer)clearTimeout(localEndTimer);
+ localEndTimerKey=key;
+ const started=g.afterDrawStartedAt||Date.now();
+ localEndTimer=setTimeout(()=>{
+  localEndTimer=null;localEndTimerKey='';
+  if(localGame===g&&!g.over&&!g.pending&&g.turn===0&&g.phase==='afterdraw'&&(g.afterDrawStartedAt||0)===started){
+   toast('หมดเวลา 25 วินาที ระบบจบเทิร์นให้อัตโนมัติ');localNext();
+  }
+ },Math.max(0,25000-(Date.now()-started)));
+}
 
 function updateDrawCountdown(){
  const banner=$('turnBanner');if(!banner)return;
- let started=0, active=false;
- let phase='draw';
- if(mode==='bot'&&localGame&&!localGame.over&&!localGame.pending&&localGame.turn===0&&localGame.phase==='draw'){
-  phase=localGame.phase;started=localGame.turnStartedAt||Date.now();active=true;
+ let started=0, active=false, phase='draw';
+ if(mode==='bot'&&localGame&&!localGame.over&&!localGame.pending&&localGame.turn===0){
+  phase=localGame.phase||'draw';
+  if(phase==='draw'){started=localGame.turnStartedAt||Date.now();active=true;}
+  else if(phase==='afterdraw'){started=localGame.afterDrawStartedAt||Date.now();active=true;}
  }else if(mode==='online'&&onlineState&&!onlineState.over&&!onlineState.pending&&onlineState.players?.[onlineState.turn]){
-  phase=onlineState.phase||'draw';if(phase==='draw'){started=onlineState.turnStartedAt||Date.now();active=true;}
+  phase=onlineState.phase||'draw';
+  if(phase==='draw'){started=onlineState.turnStartedAt||Date.now();active=true;}
+  else if(phase==='afterdraw'){started=onlineState.afterDrawStartedAt||Date.now();active=true;}
  }
  if(active){
-  const secs=Math.max(0,Math.ceil((10000-(Date.now()-started))/1000));
+  const duration=phase==='afterdraw'?25000:10000;
+  const secs=Math.max(0,Math.ceil((duration-(Date.now()-started))/1000));
   const current=mode==='online'?onlineState.players[onlineState.turn]:localGame?.players?.[localGame.turn];
   const mine=mode==='bot'?current?.id==='human':current?.id===socket?.id;
-  const action='จั่วการ์ด';
+  const action=phase==='afterdraw'?'จบรอบ':'จั่วการ์ด';
   banner.textContent=mine?`ถึงตาคุณแล้ว — ${action}ใน ${secs} วินาที`:`ถึงตา ${current?.name||'ผู้เล่น'} — ${action}ใน ${secs} วินาที`;
   banner.classList.add('turn-countdown');
  }else{
-  banner?.classList.remove('turn-countdown');
-  const g=currentState();
-  if(g&&!g.over&&!g.pending&&g.phase==='afterdraw'&&g.players?.[g.turn]){const mine=mode==='bot'?g.players[g.turn].id==='human':g.players[g.turn].id===socket?.id;banner.textContent=mine?'จั่วแล้ว — กด “จบรอบ” เมื่อพร้อม':`ถึงตา ${g.players[g.turn].name} — รอกดจบรอบ`;}
+  banner.classList.remove('turn-countdown');
  }
 }
 if(!countdownInterval)countdownInterval=setInterval(updateDrawCountdown,1000);
@@ -759,8 +774,8 @@ function bindSocket(){
  socket.on('disconnect',()=>toast('การเชื่อมต่อหลุด กำลังพยายามเชื่อมต่อใหม่…'));
 }
 async function loadCards(){
- try{const res=await fetch('/cards.json?v=2.3.53-card-mapping');if(!res.ok)throw new Error('failed');const data=await res.json();cards.push(...data);}
- catch(e){try{const data=await fetch('/cards.json?v=2.3.53-card-mapping').then(r=>r.json());cards.push(...data);}catch(_){toast('โหลดรายการการ์ดไม่ได้');}}
+ try{const res=await fetch('/cards.json?v=2.3.54-card-mapping');if(!res.ok)throw new Error('failed');const data=await res.json();cards.push(...data);}
+ catch(e){try{const data=await fetch('/cards.json?v=2.3.54-card-mapping').then(r=>r.json());cards.push(...data);}catch(_){toast('โหลดรายการการ์ดไม่ได้');}}
  renderCatalog();
 }
 function init(){

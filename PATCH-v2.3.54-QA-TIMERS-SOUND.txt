@@ -1,0 +1,25 @@
+BanPeeThai v2.3.54 — QA follow-up fixes
+
+1) Card event sound timing
+- Draw sound asset duration verified at 0.432 seconds.
+- Delayed card-specific reveal sound by 450 ms so it does not overlap the draw sound.
+
+2) 25-second end-turn timeout
+- Restored the 25-second after-draw countdown for local/bot mode. If the human player does not end the turn, the game advances automatically after 25 seconds.
+- Added the same 25-second after-draw auto-end on the server for online games.
+- Countdown text reflects the current phase (10 seconds to draw; 25 seconds to end turn).
+- Timer callbacks verify game, turn/phase, and timestamp tokens before advancing, preventing stale timers from ending a later turn.
+
+3) Preserved v2.3.53 card mapping and duplicate-card fixes
+- Canonical ghost-card mappings remain in public/cards.json.
+- Ordinary drawn cards are kept in hand and not duplicated in discard.
+- Ghost-resolution announcements use canonical card IDs.
+
+Validation performed
+- node --check public/app.js: PASS
+- node --check server.js: PASS
+- public/cards.json parsed: PASS (27 cards, unique IDs)
+- referenced card image files: PASS (no missing local image paths)
+- draw-card.mp3 duration: 0.432 seconds; reveal sound delay: 450 ms
+- Automated browser interaction could not be completed in this environment because Chromium navigation to the local test server was blocked by the runtime administrator policy.
+- Multiplayer runtime behavior and visual animation timing therefore remain pending real-browser QA after deployment.

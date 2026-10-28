@@ -60,10 +60,21 @@ function nextTurn(r){
 function scheduleTurnAutoDraw(r){
  const g=r?.game;if(!g||g.over||g.pending)return;
  if(r.turnTimer){clearTimeout(r.turnTimer);r.turnTimer=null;}
- // Only drawing has a timeout. After drawing, the active player must press End Round.
  const phase=g.phase||'draw';
- if(phase!=='draw')return;
  const token=g.turnToken||0;
+ if(phase==='afterdraw'){
+  const started=g.afterDrawStartedAt||Date.now();
+  r.turnTimer=setTimeout(()=>{
+   const current=r.game;
+   if(!current||current.over||current.pending||(current.turnToken||0)!==token||current.phase!=='afterdraw'||(current.afterDrawStartedAt||0)!==started)return;
+   const p=current.players[current.turn];
+   if(!p||!p.alive){nextTurn(r);return;}
+   log(current,`${p.name} ไม่จบเทิร์นภายใน 25 วินาที ระบบจบเทิร์นให้อัตโนมัติ`);
+   nextTurn(r);
+  },Math.max(0,25000-(Date.now()-started)));
+  return;
+ }
+ if(phase!=='draw')return;
  r.turnTimer=setTimeout(()=>{
   const current=r.game;
   if(!current||current.over||current.pending||(current.turnToken||0)!==token||current.phase!=='draw')return;
