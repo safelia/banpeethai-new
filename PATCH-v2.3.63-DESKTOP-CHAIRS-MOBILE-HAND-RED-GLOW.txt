@@ -1,0 +1,9 @@
+BanPeeThai v2.3.63 — targeted screenshot fixes
+
+- Recalibrated desktop seat anchors to the five visible chair centers. Portrait/mobile seat coordinates were left unchanged per user feedback.
+- Removed the dashed border from the table-side discard/preview slot.
+- Strengthened full-frame red glow for the local player's active turn; opponent active-turn gold rules remain in place.
+- Mobile hand cards overlap progressively and are clipped within the hand frame instead of overflowing horizontally.
+- package.json version synchronized to 2.3.63.
+
+QA limitation: static checks and automated source-level checks only; no live browser/e2e gameplay was available in this environment.

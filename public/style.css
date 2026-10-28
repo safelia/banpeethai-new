@@ -2879,3 +2879,61 @@ body.escape-menu-open #gameScreen .game-stage,body.escape-menu-open #gameScreen 
   .topbar .sound-toggle{min-width:84px!important;max-width:96px!important;height:34px!important;padding:0 6px!important;font-size:10px!important;}
   .topbar .profile{max-width:42px!important;}
 }
+
+
+/* v2.3.63 — final targeted fixes from the supplied screenshots.
+   Desktop seat anchors are calibrated to the visible chair centers in the 1513x568 scene.
+   Portrait/mobile seat anchors are intentionally left unchanged because the user confirmed they are correct. */
+@media (min-width:761px){
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-1{left:17.5%!important;top:68.0%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-2{left:33.0%!important;top:46.0%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-3{left:50.8%!important;top:36.0%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-4{left:71.5%!important;top:46.0%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+  #gameScreen:not(.hidden) .players-ring .player-row.seat-5{left:87.0%!important;top:68.0%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;}
+}
+/* Remove the dashed placeholder frame from the left-side table card slot. */
+#gameScreen:not(.hidden) #discardTop.discard-pile{
+  border:0!important;outline:0!important;box-shadow:none!important;background:transparent!important;
+  border-radius:0!important;padding:0!important;
+}
+/* Own active turn: the complete medallion frame and ornaments glow red. Opponent styling stays gold. */
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn{
+  border:2px solid #ff3038!important;border-color:#ff3038!important;
+  background:radial-gradient(ellipse at 50% 35%,#521015 0%,#2b090c 68%,#100607 100%)!important;
+  box-shadow:0 0 0 3px #ff303899,0 0 0 6px #ff202066,0 0 20px 8px #ff1717cc,0 0 38px 13px #f20d0d88,inset 0 0 0 2px #ffb4b4,inset 0 0 18px #ff252566!important;
+  animation:banpee-own-red-medallion 1.25s ease-in-out infinite alternate!important;z-index:90!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn::before,
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn::after{
+  color:#fff0f0!important;border-color:#ff343b!important;
+  background:radial-gradient(circle,#a81420,#31070b 76%)!important;
+  box-shadow:0 0 0 2px #ff303899,0 0 12px 5px #ff2020cc,0 0 23px #ff3333!important;
+  text-shadow:0 0 8px #ff1717!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn .player-avatar{
+  border-color:#ff3b43!important;box-shadow:0 0 0 2px #ff292988,0 0 15px 6px #ff2020cc,inset 0 0 0 2px #650b11!important;
+}
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn .player-meta b,
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn .player-meta small,
+#gameScreen:not(.hidden) .players-ring .player-row.my-turn .hearts{color:#fff0f0!important;text-shadow:0 0 7px #ff2525!important;}
+@keyframes banpee-own-red-medallion{
+  from{box-shadow:0 0 0 2px #ff303877,0 0 0 5px #ff202044,0 0 15px 5px #ff171799, inset 0 0 0 2px #ffb4b4,inset 0 0 14px #ff252544;}
+  to{box-shadow:0 0 0 4px #ff4444cc,0 0 0 8px #ff202077,0 0 28px 11px #ff1717ee,0 0 42px 15px #f20d0daa,inset 0 0 0 2px #fff0f0,inset 0 0 22px #ff252588;}
+}
+/* Mobile: keep every card inside the framed hand panel; overlap cards progressively instead of overflowing. */
+@media(max-width:760px){
+  #gameScreen:not(.hidden) .hand-zone,
+  #gameScreen:not(.hidden) .hand-content-layout{min-width:0!important;max-width:100%!important;overflow:hidden!important;}
+  #gameScreen:not(.hidden) #hand.hand{
+    display:flex!important;flex-flow:row nowrap!important;justify-content:flex-start!important;align-items:stretch!important;
+    gap:0!important;padding:0!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:pan-y!important;
+    width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+  }
+  #gameScreen:not(.hidden) #hand.hand>.hand-card{
+    flex:0 0 var(--hand-card-width,90px)!important;width:var(--hand-card-width,90px)!important;
+    min-width:0!important;max-width:var(--hand-card-width,90px)!important;
+    margin-left:var(--hand-overlap-negative,0px)!important;position:relative!important;box-sizing:border-box!important;
+  }
+  #gameScreen:not(.hidden) #hand.hand>.hand-card:first-child{margin-left:0!important;}
+}
+@media(prefers-reduced-motion:reduce){#gameScreen:not(.hidden) .players-ring .player-row.my-turn{animation:none!important;}}
