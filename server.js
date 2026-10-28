@@ -191,7 +191,7 @@ io.on('connection',socket=>{
  socket.on('resolve-ghost',({room,useProtection}={})=>{
   const r=rooms.get(String(room||'').toUpperCase()),g=r?.game,p=findPlayer(r,socket.id);
   if(!g||!p||!g.pending||g.pending.playerId!==p.id||g.over)return;
-  const c=g.pending.card;g.discard.push(c);
+  const drawnCard=g.pending.card;const c=cardById(drawnCard.id)||drawnCard;g.discard.push(drawnCard);
   if(useProtection){
    if((p.shields||0)>0){p.shields--;const msg=`${p.name} ใช้เครื่องรางที่เตรียมไว้ ป้องกัน ${c.name} ได้สำเร็จ`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ใช้การ์ดป้องกัน',message:msg,kind:'ward'});}
    else {const i=p.hand.findIndex(x=>['protection','blessed-rice','lucky-flower','holy-water'].includes(x.id));if(i>=0){const ward=p.hand.splice(i,1)[0];g.discard.push(ward);const msg=`${p.name} ใช้การ์ด “${ward.name}” ป้องกัน ${c.name} ได้สำเร็จ`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ใช้การ์ดป้องกัน',message:msg,kind:'ward'});}else{hurt(r,p,`ถูก ${c.name} หลอก`);const msg=`${p.name} ไม่มีการ์ดป้องกัน เสียหัวใจ 1 ดวง`;log(g,msg);io.to(r.code).emit('table-announcement',{title:'ผีหลอกสำเร็จ',message:msg,kind:'danger'});}}

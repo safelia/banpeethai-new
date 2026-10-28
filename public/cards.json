@@ -8,7 +8,7 @@
     "copies": 6,
     "desc": "สาวนักศึกษาที่ปรากฏตัวในคืนฝนตก",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-pob.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-student-card.webp",
     "kind": "ghost",
     "fullArt": true
   },
@@ -21,7 +21,7 @@
     "copies": 5,
     "desc": "วิญญาณหญิงสาวที่ปรากฏตัวกลางสายน้ำยามค่ำคืน",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-student.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-phrai-card.webp",
     "kind": "ghost",
     "fullArt": true
   },
@@ -34,7 +34,7 @@
     "copies": 3,
     "desc": "แสงวูบวาบลอยผ่านหน้าต่างในคืนเดือนมืด",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-phraya.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-krasue-card.webp",
     "kind": "ghost",
     "fullArt": true
   },
@@ -47,7 +47,7 @@
     "copies": 3,
     "desc": "หญิงสาวลึกลับที่ซ่อนตัวอยู่ใต้ต้นกล้วย",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-krasue.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-nang-tani-card.webp",
     "kind": "ghost",
     "fullArt": true
   },
@@ -60,7 +60,7 @@
     "copies": 3,
     "desc": "หญิงผมหยุ่งผู้เดินเร่ร่อนยามค่ำคืน",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-widow-spider.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-pob-card.webp",
     "kind": "ghost",
     "fullArt": true
   },
@@ -163,7 +163,7 @@
     "copies": 3,
     "desc": "แมงมุมแม่ม่ายเฝ้าห้องใต้หลังคา",
     "effect": "เมื่อจั่วเจอ เสียหัวใจ 1 ดวง เว้นแต่ใช้การ์ดป้องกัน",
-    "image": "/assets/cards/finished-ghosts/ghost-nang-tani.webp",
+    "image": "/assets/cards/finished-ghosts/ghost-spider-card.webp",
     "kind": "ghost",
     "fullArt": true
   },

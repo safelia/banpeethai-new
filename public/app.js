@@ -272,13 +272,13 @@ function localDraw(p){
  }
  if(c.id==='kumarn'){p.skip=true;localGame.discard.push(c);logLocal(`${p.name} จั่วได้กุมารชวนไปเล่น จึงต้องอดเล่นรอบถัดไปทันที`);showReveal(localGame.lastDraw,false);localGame.phase='afterdraw';localGame.afterDrawStartedAt=Date.now();localDrawTimerKey='';renderLocal();return;}
  if(c.kind==='ghost'||c.type==='ผีอันตราย'){localGame.pending={playerId:p.id,card:c};localGame.phase='resolve';renderLocal();showReveal(localGame.lastDraw,true);return;}
- p.hand.push(c);localGame.discard.push(c);
+ p.hand.push(c);
  if(playerKeyCount(p)>=3){showReveal(localGame.lastDraw,false);localFinish(p,`${p.name} มีกุญแจครบ 3 ดอกแล้ว หนีออกจากบ้านผีไทยได้สำเร็จ!`);return;}
  showReveal(localGame.lastDraw,false);localGame.phase='afterdraw';localGame.afterDrawStartedAt=Date.now();localDrawTimerKey='';renderLocal();
 }
 function resolveLocalGhost(useProtection){
  const g=localGame,p=g?.players.find(p=>p.id===g.pending?.playerId);if(!g||!p)return;
- const c=g.pending.card;g.discard.push(c);
+ const drawnCard=g.pending.card;const c=byId(drawnCard.id)?.id?{...drawnCard,...byId(drawnCard.id)}:drawnCard;g.discard.push(drawnCard);
  if(useProtection){if((p.shields||0)>0){p.shields--;logLocal(`${p.name} ใช้เครื่องรางที่เตรียมไว้ป้องกันผี`);announceTable(`${p.name} ใช้เครื่องรางป้องกัน ${c.name} ได้สำเร็จ`,'ป้องกันผีสำเร็จ');}else{const i=p.hand.findIndex(x=>['protection','blessed-rice','lucky-flower','holy-water'].includes(x.id));if(i>=0){const prot=p.hand.splice(i,1)[0];g.discard.push(prot);logLocal(`${p.name} ใช้ ${prot.name} ป้องกันผี`);announceTable(`${p.name} ใช้การ์ด “${prot.name}” ป้องกัน ${c.name} ได้สำเร็จ`,'ใช้การ์ดป้องกัน');}else localHurt(p,`ถูก ${c.name} หลอก`);}}
  else localHurt(p,`ถูก ${c.name} หลอก`);
  g.pending=null;hide('drawReveal');
@@ -307,7 +307,7 @@ function botTurn(){
  }else if(c.id==='lucky-flower'){
   if((p.hearts||0)<3){p.hearts=Math.min(3,(p.hearts||0)+1);g.discard.push(c);logLocal(`${p.name} จั่วได้ดอกบัวนำโชค ฟื้นหัวใจ 1 ดวง`);}
   else{p.hand.push(c);logLocal(`${p.name} หัวใจเต็ม เก็บดอกบัวนำโชคไว้ป้องกันผี`);}
- }else{p.hand.push(c);g.discard.push(c);}
+ }else{p.hand.push(c);}
  // Check key victory after every draw, including the third key entering a bot's hand.
  if(p.alive && playerKeyCount(p)>=3){
   localFinish(p,`${p.name} มีกุญแจครบ 3 ดอกแล้ว หนีออกจากบ้านผีไทยได้สำเร็จ!`);
@@ -759,8 +759,8 @@ function bindSocket(){
  socket.on('disconnect',()=>toast('การเชื่อมต่อหลุด กำลังพยายามเชื่อมต่อใหม่…'));
 }
 async function loadCards(){
- try{const res=await fetch('/cards.json');if(!res.ok)throw new Error('failed');const data=await res.json();cards.push(...data);}
- catch(e){try{const data=await fetch('/cards.json').then(r=>r.json());cards.push(...data);}catch(_){toast('โหลดรายการการ์ดไม่ได้');}}
+ try{const res=await fetch('/cards.json?v=2.3.53-card-mapping');if(!res.ok)throw new Error('failed');const data=await res.json();cards.push(...data);}
+ catch(e){try{const data=await fetch('/cards.json?v=2.3.53-card-mapping').then(r=>r.json());cards.push(...data);}catch(_){toast('โหลดรายการการ์ดไม่ได้');}}
  renderCatalog();
 }
 function init(){

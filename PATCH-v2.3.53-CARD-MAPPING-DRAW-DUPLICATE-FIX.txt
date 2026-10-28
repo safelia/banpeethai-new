@@ -1,0 +1,29 @@
+BanPeeThai v2.3.53 — QA Critical Fixes
+
+1) Card artwork mapping
+- Added semantic filenames for the six ghost cards, each filename now matches the title printed inside its artwork.
+- Updated public/cards.json to use the semantic paths:
+  * ผีนักศึกษาสาว -> ghost-student-card.webp
+  * ผีพราย -> ghost-phrai-card.webp
+  * ผีกระสือ -> ghost-krasue-card.webp
+  * ผีนางตานี -> ghost-nang-tani-card.webp
+  * ผีปอบ -> ghost-pob-card.webp
+  * แมงมุมแม่ม่าย -> ghost-spider-card.webp
+- Updated cards.json fetch URL and app.js/style.css query strings to force browsers to fetch the corrected build.
+- The canonical card name/effect remain sourced from the same card object through draw and ghost resolution.
+
+2) Duplicate card in hand and discard
+- Fixed local human draw: ordinary non-ghost cards are now added to the player's hand only, not simultaneously to discard.
+- Fixed bot draw: ordinary non-ghost cards are now added to the bot's hand only, not simultaneously to discard.
+- Cards that are consumed immediately, dangerous ghosts, resolved ghosts, and played cards still enter discard through their existing logic.
+
+Validation performed:
+- node --check public/app.js
+- node --check server.js
+- Parsed public/cards.json (27 cards)
+- Checked every referenced card image exists
+- Checked six semantic ghost-art mappings
+- Checked normal draw code no longer pushes the same card into both hand and discard
+
+Note: Browser-based gameplay and multiplayer runtime QA still need to be performed after deployment.
+- Ghost-resolution announcement names now resolve from the canonical card catalog by card ID on both bot/local and online/server flows, preventing a stale or mutated card object from producing the wrong ghost name in the protection message.
